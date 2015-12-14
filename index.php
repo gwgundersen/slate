@@ -10,7 +10,7 @@
 <body>
 <div class='page'>
     <h1>Slate</h1>
-    <form>
+    <form action='save.php' method='post'>
         <div>
             <label for='cost'>Cost ($)</label>
             <input name='cost' type='text' autocomplete='off'/>
