@@ -4,21 +4,20 @@
 	<meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
 	<meta content='width=device-width, initial-scale=1' name='viewport'/>
 	<title>Slate</title>
-    <link rel='stylesheet' href='slate.css'/>
+    <link rel='stylesheet' href='main.css'/>
 	<script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>
+    <script src='main.js'></script>
 </head>
 <body>
 <div class='page'>
     <h1>Slate</h1>
-    <form action='save.php' method='post'>
+    <form>
         <div>
-            <label for='cost'>Cost ($)</label>
-            <input name='cost' type='text' autocomplete='off'/>
+            <input name='cost' type='text' placeholder='Cost ($)' autocomplete='off'/>
         </div>
         <div>
-            <label for='category'>Category</label>
             <select name='category' autocomplete='off'>
-                <option value='select'>(Select)</option>
+                <option value='select'>(Category)</option>
                 <option value='food-in'>Food (In)</option>
                 <option value='food-out'>Food (Out)</option>
                 <option value='alcohol'>Alcohol</option>
@@ -29,10 +28,14 @@
             </select>
         </div>
         <div>
-            <label for='comment'>Comment</label>
-            <input name='comment' type='text' autocomplete='off'/>
+            <input name='comment' type='text' placeholder='Comment' autocomplete='off'/>
         </div>
-        <button>Add</button>
+        <div>
+            <input id='pw' type='text' placeholder='Password'/>
+        </div>
+        <div>
+            <button>Add</button>
+        </div>
     </form>
 </div>
 </body>
