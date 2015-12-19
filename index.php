@@ -37,12 +37,12 @@
                     <input class='form-control' id='pw' type='password' placeholder='Password'/>
                 </div>
                 <div class='form-group'>
-                    <button class='form-control' class='btn btn-default'>Add</button>
+                    <button id='add' class='form-control' class='btn btn-default'>Add</button>
                 </div>
             </form>
         </div>
         <div class='col-sm-3'>
-            <a href='/slate/view.php'>View Report</a>
+            <button id='view'>View Report</button>
         </div>
     </div>
 </div>

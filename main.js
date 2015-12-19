@@ -2,16 +2,21 @@ $(function() {
     
     var pw = localStorage.getItem('slate'),
         $form = $('form'),
-        $add = $('button'),
+        $add = $('button#add'),
+        $view = $('button#view'),
         $pw = $('#pw');
 
     if (pw) {
         $pw.val(pw);
     }
 
+    $pw.change(function() {
+        localStorage.setItem('slate', $pw.val());
+    });
+
     $add.click(function(evt) {
         evt.preventDefault();
-        var pw = $('#pw').val(),
+        var pw = $pw.val(),
             payload = {
                 cost: $('input[name="cost"]').val(),
                 category: $('select[name="category"]').val(),
@@ -19,10 +24,8 @@ $(function() {
                 pw: $pw.val()
             };
         
-        console.log(payload);
         if (isValid(payload)) {
-            localStorage.setItem('slate', $pw.val());
-            $.post('/slate/save.php', payload, function(resp) {
+            $.post('/slate/add', payload, function(resp) {
                 if (resp === 'success') {
                     $form[0].reset();
                     alert('Success!');
@@ -31,6 +34,11 @@ $(function() {
                 alert(data.responseText);
             });
         }
+    });
+
+    $view.click(function(evt) {
+        evt.preventDefault();
+        $.post('/slate/view', { pw: $pw.val() });
     });
 
     function isValid(data) {
