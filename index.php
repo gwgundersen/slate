@@ -34,7 +34,7 @@
                     <input class='form-control' name='comment' type='text' placeholder='Comment' autocomplete='off'/>
                 </div>
                 <div class='form-group'>
-                    <input class='form-control' id='pw' type='text' placeholder='Password'/>
+                    <input class='form-control' id='pw' type='password' placeholder='Password'/>
                 </div>
                 <div class='form-group'>
                     <button class='form-control' class='btn btn-default'>Add</button>
