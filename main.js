@@ -4,6 +4,7 @@ $(function() {
         $form = $('form'),
         $add = $('button#add'),
         $view = $('button#view'),
+        $report = $('#report'),
         $pw = $('#pw');
 
     if (pw) {
@@ -38,7 +39,15 @@ $(function() {
 
     $view.click(function(evt) {
         evt.preventDefault();
-        $.post('/slate/view', { pw: $pw.val() });
+        $.get('/slate/view', { pw: $pw.val() }, function(data) {
+            if (data.indexOf('incorrect password') > 0) {
+                alert('Incorrect password');
+            } else {
+                $report.html(data);
+                $form.hide();
+                $view.hide();
+            }
+        });
     });
 
     function isValid(data) {

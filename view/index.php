@@ -1,14 +1,11 @@
 <!DOCTYPE HTML PUBLIC=''>
 <html>
-<?php include 'header.php'; ?>
 <body>
-    <div class='container'>
-        <h1>Report</h1>
     <?php
 
     date_default_timezone_set('America/New_York');
 
-    $lines = file('../db.conf');
+    $lines = file(dirname(__FILE__) . '/../db.conf');
     $db = trim($lines[0]);
     $user = trim($lines[1]);
     $dbpw = trim($lines[2]);
@@ -18,11 +15,10 @@
     or die ('I cannot connect to the database.');
     mysql_select_db($db); 
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         
-        $candidate_userpw = $_POST['pw'];
+        $candidate_userpw = $_GET['pw'];
         if ($userpw != $candidate_userpw) {
-            header('HTTP/1.0 401 Unauthorized');
             echo 'incorrect password';
         } else {
             $query = 'SELECT amount FROM surplus;';
@@ -33,7 +29,7 @@
             $spent = floatval(mysql_fetch_array($result)[0]);
             $delta = $amount - $spent;
 
-            $output = '<div>';
+            $output .= '<div>';
             $output .= '<a href="/slate">Back</a>';
             $output .= '<p class="highlight">' . $delta .'</p>';
             $output .= '</div>';
@@ -61,6 +57,5 @@
     mysql_close($conn);
 
     ?>
-    </div>
 </body>
 </html>

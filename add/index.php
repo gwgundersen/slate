@@ -2,7 +2,7 @@
 
 date_default_timezone_set('America/New_York');
 
-$lines = file('../db.conf');
+$lines = file(dirname(__FILE__) . '/../db.conf');
 $db = trim($lines[0]);
 $user = trim($lines[1]);
 $dbpw = trim($lines[2]);
