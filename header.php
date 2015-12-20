@@ -6,4 +6,5 @@
 	<script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>
     <link rel='stylesheet' href='main.css'/>
     <script src='main.js'></script>
+    <link rel="apple-touch-icon" href="images/iphone-icon.png">
 </head>
