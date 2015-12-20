@@ -27,7 +27,6 @@ $(function() {
         
         if (isValid(payload)) {
             $.post('/slate/add/index.php', payload, function(resp) {
-                debugger;
                 if (resp === 'success') {
                     $form[0].reset();
                     alert('Success!');
