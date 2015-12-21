@@ -13,6 +13,7 @@ or die ('I cannot connect to the database.');
 mysql_select_db($db); 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    # There is nothing truly secure about this. Someone would have to care enough.
     $candidate_userpw = mysql_real_escape_string($_POST['pw']);
     if ($userpw != $candidate_userpw) {
         header('HTTP/1.0 401 Unauthorized');

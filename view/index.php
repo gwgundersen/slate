@@ -18,6 +18,7 @@
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         
         $candidate_userpw = $_GET['pw'];
+        # There is nothing truly secure about this. Someone would have to care enough.
         if ($userpw != $candidate_userpw) {
             echo 'incorrect password';
         } else {
