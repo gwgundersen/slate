@@ -26,10 +26,9 @@ $(function() {
             };
         
         if (isValid(payload)) {
-            $.post('/slate/add/index.php', payload, function(resp) {
+            $.post('add', payload, function(resp) {
                 if (resp === 'success') {
                     $form[0].reset();
-                    alert('Success!');
                 }
             }).error(function(data) {
                 alert(data.responseText);

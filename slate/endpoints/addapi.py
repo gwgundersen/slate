@@ -2,10 +2,10 @@
 """
 
 
-from flask import Blueprint
+from flask import Blueprint, request
+import datetime
 
-from slate.config import config
-from slate import db_connection_args
+from slate import db
 
 
 add_api = Blueprint('add_api',
@@ -13,7 +13,14 @@ add_api = Blueprint('add_api',
                     url_prefix='/add')
 
 
-@add_api.route('/', methods=['GET', 'POST'])
+@add_api.route('', methods=['POST'])
 def add():
-    import pdb; pdb.set_trace()
+    """Adds expense.
+    """
+    cost = request.form.get('cost')
+    category = request.form.get('category')
+    comment = request.form.get('comment')
+    datetime_ = datetime.datetime.now()
+    db.save_expense(cost, category, datetime_, comment)
+    return 'success'
 
