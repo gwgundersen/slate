@@ -3,6 +3,7 @@
 
 
 from flask import Blueprint, render_template
+from flask.ext.login import login_required
 
 from slate import db
 from slate.config import config
@@ -14,6 +15,7 @@ view_page = Blueprint('view_page',
 
 
 @view_page.route('/', methods=['GET'])
+@login_required
 def view_default():
     """Views expenses by current month.
     """
@@ -24,6 +26,7 @@ def view_default():
                            expenses=expenses)
 
 @view_page.route('/<category>', methods=['GET'])
+@login_required
 def view_by_category(category):
     """Views expenses by current month and category.
     """
