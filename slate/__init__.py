@@ -3,6 +3,7 @@
 
 
 from flask import Flask
+import MySQLdb
 
 from slate.endpoints.indexpage import index_page
 from slate.config import config
