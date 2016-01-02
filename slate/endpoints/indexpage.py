@@ -14,7 +14,5 @@ index_page = Blueprint('index_page',
 
 @index_page.route('/', methods=['GET'])
 def index():
-    r = db.session.query('SELECT * FROM expense')
-    import pdb; pdb.set_trace()
     return render_template('index.html')
 
