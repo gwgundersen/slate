@@ -5,11 +5,12 @@
 from flask import Blueprint, render_template
 
 from slate import db
+from slate.config import config
 
 
 view_page = Blueprint('view_page',
                       __name__,
-                      url_prefix='/view')
+                      url_prefix='%s/view' % config.get('url', 'base'))
 
 
 @view_page.route('/', methods=['GET'])

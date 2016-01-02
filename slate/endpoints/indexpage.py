@@ -3,6 +3,7 @@
 
 
 from flask import Blueprint, render_template
+from flask.ext.login import current_user
 import MySQLdb
 
 from slate.config import config
@@ -10,27 +11,14 @@ from slate.config import config
 
 index_page = Blueprint('index_page',
                        __name__,
-                       url_prefix='/%s' % config.get('url', 'base'))
+                       url_prefix=config.get('url', 'base'))
 
 
 @index_page.route('/', methods=['GET'])
 def index():
-    """
-    db_connection_args = {
-        'user': config.get('db', 'user'),
-        'passwd': config.get('db', 'passwd'),
-        'db': config.get('db', 'db'),
-        'host': config.get('db', 'host')
-    }
-    try:
-        conn = MySQLdb.connect(**db_connection_args)
-        cur = conn.cursor()
-        cur.execute('SELECT * FROM expense')
-        return str(cur.fetchall())
-    except Exception as e:
-        print(e)
-    finally:
-        conn.close()
-    """
-    return render_template('index.html')
+    if current_user.is_authenticated:
+        auth_message = '%s is logged in.' % current_user.name
+    else:
+        auth_message = 'No user logged in.'
+    return render_template('index.html', auth_message=auth_message)
 

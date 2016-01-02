@@ -1,10 +1,39 @@
+/* Reset
+ * ----- */
+html,
+body {
+  margin: 0;
+}
+/* Sticky Footer. Do not change.
+ * ----------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  margin-bottom: 60px;
+}
+#footer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 60px;
+  width: 100%;
+}
+
+/* General
+ * ------- */
 h1 {
-    border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+h1 span {
+  color: #aaa;
+  font-size: 12px;
 }
 button {
-    background-color: #eee !important;
-    width: 100%;
+  background-color: #eee !important;
+  width: 100%;
 }
 .highlight {
-    color: red;
+  color: red;
 }

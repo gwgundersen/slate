@@ -8,6 +8,31 @@ import MySQLdb
 from slate.config import db_connection_args
 
 
+# User transactions
+# -----------------
+
+def get_user(username):
+    """Gets user based on username.
+    """
+    with closing(connection()) as conn:
+        with closing(conn.cursor()) as cur:
+            sql = 'SELECT id, name, password FROM user WHERE name = "%s"' % (
+                      username
+                  )
+            cur.execute(sql)
+            return cur.fetchone()
+
+
+def get_user_by_id(id_):
+    """Gets user based on user ID.
+    """
+    with closing(connection()) as conn:
+        with closing(conn.cursor()) as cur:
+            sql = 'SELECT id, name, password FROM user WHERE id = %s' % (id_)
+            cur.execute(sql)
+            return cur.fetchone()
+
+
 # Saving expenses
 # ---------------
 
