@@ -18,8 +18,9 @@ db = MySQLdb.connect(host='localhost',
                      user=config.get('db', 'user'),
                      passwd=config.get('db', 'passwd'),
                      db=config.get('db', 'db'))
-db.init_app(app)
 
+cur = db.cursor()
+cur.execute("SELECT * FROM expense")
 
 # Server endpoints
 app.register_blueprint(index_page)
