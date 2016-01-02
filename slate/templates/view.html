@@ -1,0 +1,28 @@
+<!DOCTYPE HTML PUBLIC=''>
+<html>
+
+{% include 'head.html' %}
+
+<body>
+<div class='container'>
+    <h1>Expenses</h1>
+    <ul>
+    {% for category in categories %}
+        <li><a href="{{ category }}">{{ category }}</a></li>
+    {% endfor %}
+    </ul>
+    <table class='table'>
+        {% for expense in expenses %}
+
+        <tr>
+            <td>{{ expense.cost }}</td>
+            <td>{{ expense.comment }}</td>
+            <td>{{ expense.category }}</td>
+            <td>{{ expense.datetime }}</td>
+        </tr>
+
+        {% endfor %}
+    </table>
+</div>
+</body>
+</html>
