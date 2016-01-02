@@ -5,7 +5,7 @@
 <div class='container'>
     <h1>Slate</h1>
     <div class='row'>
-        <div class='col-sm-3'>
+        <div class='col-sx-3 col-sm-4 col-md-4'>
             <form>
                 <div class='form-group'>
                     <input class='form-control' name='cost' type='text' placeholder='Cost ($)' autocomplete='off'/>

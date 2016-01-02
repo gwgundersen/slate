@@ -40,7 +40,7 @@
             if (!$result) {
                 die('Invalid query: ' . mysql_error());
             }
-            $output .= '<table class="table">';
+            $output .= '<div class="table-responsive"><table class="table">';
             $output .= '<thead><tr><td>Date</td><td>Cost</td><td>Category</td><td>Comment</td></tr></thead>';
             while($row = mysql_fetch_array($result)) {
                 $output .= '<tr>';
@@ -50,7 +50,7 @@
                 $output .= '<td>' . $row['comment'] . '</td>';
                 $output .= '</tr>';
             }
-            $output .= '</table>';
+            $output .= '</table></div>';
             echo $output;
         }
     }
