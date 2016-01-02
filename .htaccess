@@ -3,4 +3,3 @@ AddHandler fcgid-script .fcgi
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !=/home1/gregoso6/public_html/slate/slate.fcgi
 RewriteRule ^(.*)$ slate.fcgi/$1 [QSA,L]
-
