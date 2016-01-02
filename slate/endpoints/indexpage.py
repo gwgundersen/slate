@@ -2,7 +2,7 @@
 """
 
 
-from flask import Blueprint
+from flask import Blueprint, render_template
 
 from slate.config import config
 
@@ -14,5 +14,7 @@ index_page = Blueprint('index_page',
 
 @index_page.route('/', methods=['GET'])
 def index():
-    return 'Hello World!'
+    r = db.session.query('SELECT * FROM expense')
+    import pdb; pdb.set_trace()
+    return render_template('index.html')
 

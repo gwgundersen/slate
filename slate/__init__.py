@@ -9,6 +9,17 @@ from slate.config import config
 
 
 app = Flask(__name__, static_url_path='/slate/static', static_folder='static')
-app.register_blueprint(index_page)
 
+mode = config.get('general', 'mode')
+
+# Database configuration
+db = MySQLdb.connect(host='localhost',
+                     user=config.get('db', 'user'),
+                     passwd=config.get('db', 'passwd'),
+                     db=config.get('db', 'db'))
+db.init_app(app)
+
+
+# Server endpoints
+app.register_blueprint(index_page)
 
