@@ -10,7 +10,6 @@
     
     <h3>Expenses</h3>
     <div>
-        <a href='/slate'>Back</a>
         <ul class='list-inline'>
             <li><a href="/slate/expenses">all</a></li>
         {% for category in categories %}
@@ -21,18 +20,20 @@
             <p class='highlight'>Sum: {{ category_sum }}</p>
         {% endif %}
     </div>
-    <table class='table'>
-        {% for expense in expenses %}
+    <div class='table-responsive'>
+        <table class='table'>
+            {% for expense in expenses %}
 
-        <tr>
-            <td>{{ expense.cost }}</td>
-            <td>{{ expense.comment }}</td>
-            <td>{{ expense.category }}</td>
-            <td>{{ expense.datetime }}</td>
-        </tr>
+            <tr>
+                <td>{{ expense.cost }}</td>
+                <td>{{ expense.comment }}</td>
+                <td>{{ expense.category }}</td>
+                <td>{{ expense.datetime }}</td>
+            </tr>
 
-        {% endfor %}
-    </table>
+            {% endfor %}
+        </table>
+    </div>
 
     {% include 'footer.html' %}
 
