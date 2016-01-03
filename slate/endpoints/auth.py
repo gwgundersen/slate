@@ -9,12 +9,12 @@ from slate.user import User
 from slate.config import config
 
 
-auth_api = Blueprint('auth_api',
-                     __name__,
-                     url_prefix=config.get('url', 'base'))
+auth = Blueprint('auth',
+                 __name__,
+                 url_prefix=config.get('url', 'base'))
 
 
-@auth_api.route('/login', methods=['GET', 'POST'])
+@auth.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
         return render_template('login.html')
@@ -29,11 +29,12 @@ def login():
 
     login_user(registered_user)
     next_ = request.args.get('next')
-    return redirect(next_ or url_for('index_page.index'))
+    return redirect(next_ or url_for('index.index_page'))
 
 
-@auth_api.route('/logout', methods=['GET'])
+@auth.route('/logout', methods=['GET'])
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('index_page.index'))
+    return redirect(url_for('index.index_page'))
+

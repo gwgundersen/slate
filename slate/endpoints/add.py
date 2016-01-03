@@ -10,14 +10,14 @@ from slate import db
 from slate.config import config
 
 
-add_api = Blueprint('add_api',
-                    __name__,
-                    url_prefix='%s/add' % config.get('url', 'base'))
+add = Blueprint('add',
+                __name__,
+                url_prefix=config.get('url', 'base'))
 
 
-@add_api.route('', methods=['POST'])
+@add.route('/add', methods=['POST'])
 @login_required
-def add():
+def add_api():
     """Adds expense.
     """
     error_messages = []
@@ -37,9 +37,9 @@ def add():
 
     if len(error_messages) > 0:
         auth_message = '%s is logged in.' % current_user.name
-        return redirect(url_for('index_page.index'))
+        return redirect(url_for('index.index_page'))
 
     datetime_ = datetime.datetime.now()
     db.save_expense(cost, category, datetime_, comment)
-    return redirect(url_for('view_page.view_default'))
+    return redirect(url_for('expenses.expenses_default'))
 

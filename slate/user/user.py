@@ -2,7 +2,7 @@
 """
 
 
-import bcrypt
+import hashlib, uuid
 
 from slate import db
 
@@ -31,22 +31,22 @@ class User(object):
         tpl = db.get_user(username)
         if tpl is None:
             return None
-        id_, username, hashed_password = tpl
-        if cls.correct_password(plain_password, hashed_password):
+        id_, username, hashed_password, salt = tpl
+        if cls.correct_password(plain_password, hashed_password, salt):
             return cls(id_, username)
         return None
 
     @classmethod
-    def correct_password(cls, plain_text_password, hashed_password):
+    def correct_password(cls, plain_text, hashed, salt):
         """Check hashed password.
         """
-        # Using bcrypt, the salt is saved into the hash itself.
-        return bcrypt.checkpw(plain_text_password, hashed_password)
+        return hashlib.sha512(plain_text + salt).hexdigest() == hashed
 
     @classmethod
-    def hash_password(cls, plain_text_password):
+    def hash_password(cls, password):
         """Hash a password for the first time.
         """
-        # Using bcrypt, the salt is saved into the hash itself.
-        return bcrypt.hashpw(plain_text_password, bcrypt.gensalt())
+        salt = uuid.uuid4().hex
+        hashed = hashlib.sha512(password + salt).hexdigest()
+        return hashed, salt
 

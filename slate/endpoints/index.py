@@ -9,13 +9,13 @@ import MySQLdb
 from slate.config import config
 
 
-index_page = Blueprint('index_page',
-                       __name__,
-                       url_prefix=config.get('url', 'base'))
+index = Blueprint('index',
+                  __name__,
+                  url_prefix=config.get('url', 'base'))
 
 
-@index_page.route('/', methods=['GET'])
-def index():
+@index.route('/', methods=['GET'])
+def index_page():
     if current_user.is_authenticated:
         auth_message = '%s is logged in.' % current_user.name
     else:

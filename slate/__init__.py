@@ -4,30 +4,30 @@
 
 from flask import Flask, render_template
 from flask.ext.login import LoginManager
+import uuid
 
-from slate.endpoints.authapi import auth_api
-from slate.endpoints.addapi import add_api
-from slate.endpoints.indexpage import index_page
-from slate.endpoints.viewpage import view_page
+from slate.endpoints.auth import auth
+from slate.endpoints.add import add
+from slate.endpoints.expenses import expenses
+from slate.endpoints.index import index
 from slate.config import config
 from slate import db
 from slate.user import User
 
 
-BASE = '%s/static' % config.get('url', 'base')
-print(BASE)
 app = Flask(__name__,
-            static_url_path=BASE,
+            static_url_path='%s/static' % config.get('url', 'base'),
             static_folder='static')
 
+app.secret_key = uuid.uuid4().hex
+
 # Server endpoints
-app.register_blueprint(add_api)
-app.register_blueprint(auth_api)
-app.register_blueprint(index_page)
-app.register_blueprint(view_page)
+app.register_blueprint(add)
+app.register_blueprint(auth)
+app.register_blueprint(expenses)
+app.register_blueprint(index)
 
 # Login session management
-app.secret_key = 'many random bytes'
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -38,7 +38,7 @@ def load_user(user_id):
     return User(user_id, tpl[1], tpl[2])
 
 
-login_manager.login_view = 'auth_api.login'
+login_manager.login_view = 'auth.login'
 
 
 @app.errorhandler(404)

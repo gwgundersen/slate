@@ -5,8 +5,11 @@
 
 <body>
 <div class='container'>
-    <h1>Slate</h1>
+
+    {% include 'header.html' %}
+    
     {{ message }}
+
     <div class='row'>
         <div class='col-md-4'>
             <form action='/slate/login' method='POST'>

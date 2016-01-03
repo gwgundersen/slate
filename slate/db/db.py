@@ -16,9 +16,8 @@ def get_user(username):
     """
     with closing(connection()) as conn:
         with closing(conn.cursor()) as cur:
-            sql = 'SELECT id, name, password FROM user WHERE name = "%s"' % (
-                      username
-                  )
+            sql = 'SELECT id, name, password, salt '\
+                  'FROM user WHERE name = "%s"' % (username)
             cur.execute(sql)
             return cur.fetchone()
 
@@ -108,16 +107,6 @@ def get_expenses_by_category(category):
 
 # Utility functions
 # -----------------
-
-def get_category_fk(category):
-    """Gets category ID based on category name.
-    """
-    with closing(connection()) as conn:
-        with closing(conn.cursor()) as cur:
-            sql = 'SELECT id FROM category WHERE name = "%s"' % category
-            cur.execute(sql)
-            return cur.fetchone()[0]
-
 
 def get_categories():
     """Gets all categories from database.
