@@ -30,9 +30,11 @@ def expenses_default():
 def expenses_by_category(category):
     """Views expenses by current month and category.
     """
-    expenses = db.get_expenses_by_category(category)
+    sum_, expenses = db.get_expenses_by_category(category)
+    print(sum_)
     categories = db.get_categories()
     return render_template('expenses.html',
                            categories=categories,
+                           category_sum=sum_,
                            expenses=expenses)
 

@@ -102,7 +102,18 @@ def get_expenses_by_category(category):
                     'datetime': r[2],
                     'comment': r[3],
                 })
-            return expenses
+
+            cur.execute(''\
+                'SELECT SUM(ex.cost) '\
+                'FROM expense ex '\
+                '  JOIN category cat ON cat.id = ex.category_fk '\
+                'WHERE YEAR(ex.datetime) = YEAR(NOW()) ' \
+                '  AND MONTH(ex.datetime) = MONTH(NOW()) ' \
+                '  AND cat.name = "%s"' % category)
+
+            sum_ = cur.fetchone()[0]
+
+            return sum_, expenses
 
 
 # Utility functions

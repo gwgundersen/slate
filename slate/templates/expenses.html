@@ -9,13 +9,18 @@
     {% include 'header.html' %}
     
     <h3>Expenses</h3>
-    <a href='/slate'>Back</a>
-    <ul class='list-inline'>
-        <li><a href="/slate/view">all</a></li>
-    {% for category in categories %}
-        <li><a href="{{ category }}">{{ category }}</a></li>
-    {% endfor %}
-    </ul>
+    <div>
+        <a href='/slate'>Back</a>
+        <ul class='list-inline'>
+            <li><a href="/slate/expenses">all</a></li>
+        {% for category in categories %}
+            <li><a href="{{ category }}">{{ category }}</a></li>
+        {% endfor %}
+        </ul>
+        {% if category_sum %}
+            <p class='highlight'>Sum: {{ category_sum }}</p>
+        {% endif %}
+    </div>
     <table class='table'>
         {% for expense in expenses %}
 

@@ -28,8 +28,12 @@ def login():
                                message='Incorrect credentials.')
 
     login_user(registered_user)
-    next_ = request.args.get('next')
-    return redirect(next_ or url_for('index.index_page'))
+    
+    # TODO: The 'next' argument is not being detected by Flask. Why?
+    #next_ = request.args.get('next')
+    #return redirect(next_ or url_for('index.index_page'))
+    
+    return redirect(url_for('index.index_page'))
 
 
 @auth.route('/logout', methods=['GET'])
