@@ -77,7 +77,9 @@ def get_expenses():
                     'comment': r[3],
                 })
 
-            return expenses
+            sum_ = sum([x['cost'] for x in expenses])
+
+            return sum_, expenses
 
 
 def get_expenses_by_category(category):
@@ -111,7 +113,7 @@ def get_expenses_by_category(category):
                 '  AND MONTH(ex.datetime) = MONTH(NOW()) ' \
                 '  AND cat.name = "%s"' % category)
 
-            sum_ = cur.fetchone()[0]
+            sum_ = sum([x['cost'] for x in expenses])
 
             return sum_, expenses
 

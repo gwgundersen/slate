@@ -20,9 +20,10 @@ def expenses_default():
     """Views expenses by current month.
     """
     categories = db.get_categories()
-    expenses = db.get_expenses()
+    sum_, expenses = db.get_expenses()
     return render_template('expenses.html',
                            categories=categories,
+                           category_sum=sum_,
                            expenses=expenses)
 
 @expenses.route('/<category>', methods=['GET'])
@@ -30,9 +31,8 @@ def expenses_default():
 def expenses_by_category(category):
     """Views expenses by current month and category.
     """
-    sum_, expenses = db.get_expenses_by_category(category)
-    print(sum_)
     categories = db.get_categories()
+    sum_, expenses = db.get_expenses_by_category(category)
     return render_template('expenses.html',
                            categories=categories,
                            category_sum=sum_,
