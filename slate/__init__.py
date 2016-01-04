@@ -5,13 +5,10 @@
 from flask import Flask, session, render_template
 from flask.ext.login import LoginManager
 
-from slate.endpoints.auth import auth
-from slate.endpoints.add import add
-from slate.endpoints.expenses import expenses
-from slate.endpoints.index import index
 from slate.config import config
 from slate import db
 from slate.user import User
+from slate.logger import handler
 
 
 app = Flask(__name__,
@@ -20,11 +17,17 @@ app = Flask(__name__,
 
 app.secret_key = 'Section.80'
 
+# Logging
+if app.debug:
+    app.logger.addHandler(handler)
+
 # Server endpoints
-app.register_blueprint(add)
-app.register_blueprint(auth)
-app.register_blueprint(expenses)
-app.register_blueprint(index)
+# Import endpoints after configuring logger to avoid circular imports
+from slate import endpoints
+app.register_blueprint(endpoints.add)
+app.register_blueprint(endpoints.auth)
+app.register_blueprint(endpoints.expenses)
+app.register_blueprint(endpoints.index)
 
 # Login session management
 login_manager = LoginManager()

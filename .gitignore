@@ -5,3 +5,4 @@ db.conf
 venv/
 slate/config.ini
 *.pyc
+info.log
