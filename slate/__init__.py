@@ -18,8 +18,8 @@ app = Flask(__name__,
 app.secret_key = 'Section.80'
 
 # Logging
-if app.debug:
-    app.logger.addHandler(handler)
+#if app.debug:
+app.logger.addHandler(handler)
 
 # Server endpoints
 # Import endpoints after configuring logger to avoid circular imports
