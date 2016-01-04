@@ -33,6 +33,8 @@ app.register_blueprint(endpoints.index)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+app.logging.info('BEGIN Application has started')
+
 
 @login_manager.user_loader
 def load_user(user_id):
