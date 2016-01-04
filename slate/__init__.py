@@ -4,16 +4,11 @@
 
 from flask import Flask, session, render_template
 from flask.ext.login import LoginManager
-import logging
-from logging.handlers import RotatingFileHandler
 
 from slate.config import config
 from slate import db
+from slate import endpoints
 from slate.user import User
-
-
-handler = RotatingFileHandler('info.log', maxBytes=10000, backupCount=1)
-handler.setLevel(logging.INFO)
 
 
 app = Flask(__name__,
@@ -22,13 +17,7 @@ app = Flask(__name__,
 
 app.secret_key = 'Section.80'
 
-# Logging
-#if app.debug:
-app.logger.addHandler(handler)
-
 # Server endpoints
-# Import endpoints after configuring logger to avoid circular imports
-from slate import endpoints
 app.register_blueprint(endpoints.add)
 app.register_blueprint(endpoints.auth)
 app.register_blueprint(endpoints.expenses)
@@ -37,8 +26,6 @@ app.register_blueprint(endpoints.index)
 # Login session management
 login_manager = LoginManager()
 login_manager.init_app(app)
-
-app.logger.info('BEGIN Application has started')
 
 
 @login_manager.user_loader

@@ -2,7 +2,7 @@
 """
 
 
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request
 from flask.ext.login import login_required
 
 from slate import db
@@ -19,6 +19,7 @@ expenses = Blueprint('expenses',
 def expenses_default():
     """Views expenses by current month.
     """
+    #cat = request.args['category']
     distinct_months = db.get_month_years()
     categories = db.get_categories()
     sum_, expenses = db.get_expenses()
@@ -27,6 +28,7 @@ def expenses_default():
                            category_sum=sum_,
                            distinct_months=distinct_months,
                            expenses=expenses)
+
 
 @expenses.route('/<category>', methods=['GET'])
 @login_required
