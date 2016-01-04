@@ -4,11 +4,17 @@
 
 from flask import Flask, session, render_template
 from flask.ext.login import LoginManager
+import logging
+from logging.handlers import RotatingFileHandler
 
 from slate.config import config
 from slate import db
 from slate.user import User
-from slate.logger import handler
+
+
+handler = RotatingFileHandler('info.log', maxBytes=10000, backupCount=1)
+handler.setLevel(logging.INFO)
+
 
 
 app = Flask(__name__,
@@ -33,7 +39,7 @@ app.register_blueprint(endpoints.index)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-app.logging.info('BEGIN Application has started')
+app.logger.info('BEGIN Application has started')
 
 
 @login_manager.user_loader

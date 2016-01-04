@@ -20,7 +20,7 @@ add = Blueprint('add',
 def add_api():
     """Adds expense.
     """
-    app.logging.info('BEGIN adding expense.')
+    app.logger.info('BEGIN adding expense.')
     error_messages = []
     try:
         cost = request.form['cost']
@@ -37,12 +37,12 @@ def add_api():
         error_messages.append('Comment is required')
 
     if len(error_messages) > 0:
-        app.logging.warning('ERROR when adding expenses: %s' % str(error_messages))
+        app.logger.warning('ERROR when adding expenses: %s' % str(error_messages))
         auth_message = '%s is logged in.' % current_user.name
         return redirect(url_for('index.index_page'))
 
     datetime_ = datetime.datetime.now()
     db.save_expense(cost, category, datetime_, comment)
-    app.logging.info('SUCCESS ad adding expense.')
+    app.logger.info('SUCCESS ad adding expense.')
     return redirect(url_for('expenses.expenses_default'))
 
