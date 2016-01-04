@@ -14,15 +14,17 @@ expenses = Blueprint('expenses',
                      url_prefix='%s/expenses' % config.get('url', 'base'))
 
 
-@expenses.route('/', methods=['GET'])
+@expenses.route('', methods=['GET'])
 @login_required
 def expenses_default():
     """Views expenses by current month.
     """
-    #cat = request.args['category']
+    category = request.args.get('category')
+    year = request.args.get('year')
+    month = request.args.get('month')
     distinct_months = db.get_month_years()
     categories = db.get_categories()
-    sum_, expenses = db.get_expenses()
+    sum_, expenses = db.get_expenses(category, year, month)
     return render_template('expenses.html',
                            categories=categories,
                            category_sum=sum_,

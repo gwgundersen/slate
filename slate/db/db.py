@@ -54,20 +54,35 @@ def save_expense(cost, category, datetime, comment):
 # Viewing expenses
 # ----------------
 
-def get_expenses():
+def get_expenses(category, year, month):
     """Gets all expenses by current month from database.
     """
     conn = connection()
     with closing(connection()) as conn:
         with closing(conn.cursor()) as cur:
-            cur.execute(''\
-                'SELECT ex.cost, cat.name, ex.datetime, ex.comment '\
-                'FROM expense ex '\
-                '  JOIN category cat ON cat.id = ex.category_fk '\
-                'WHERE YEAR(ex.datetime) = YEAR(NOW()) '\
-                '  AND MONTH(ex.datetime) = MONTH(NOW())'\
-                'ORDER BY ex.datetime DESC'
-            )
+            sql = ''\
+                  'SELECT ex.cost, cat.name, ex.datetime, ex.comment '\
+                  'FROM expense ex '\
+                  '  JOIN category cat ON cat.id = ex.category_fk '
+
+            if category:
+                sql += 'WHERE cat.name = "%s" AND ' % category
+            else:
+                sql += 'WHERE '
+
+            # The AND or WHERE is handled above.
+            if year and month:
+                sql += 'YEAR(ex.datetime) = %s '\
+                       '  AND MONTH(ex.datetime) = %s ' % (
+                           year, month
+                       )
+            else:
+                sql += 'YEAR(ex.datetime) = YEAR(NOW()) '\
+                       '  AND MONTH(ex.datetime) = MONTH(NOW()) '
+
+            sql += 'ORDER BY ex.datetime DESC '
+            print(sql)
+            cur.execute(sql)
 
             expenses = []
             for r in cur.fetchall():
