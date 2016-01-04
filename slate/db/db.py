@@ -65,7 +65,8 @@ def get_expenses():
                 'FROM expense ex '\
                 '  JOIN category cat ON cat.id = ex.category_fk '\
                 'WHERE YEAR(ex.datetime) = YEAR(NOW()) '\
-                '  AND MONTH(ex.datetime) = MONTH(NOW())'
+                '  AND MONTH(ex.datetime) = MONTH(NOW())'\
+                'ORDER BY ex.datetime DESC'
             )
 
             expenses = []
@@ -93,7 +94,8 @@ def get_expenses_by_category(category):
                 '  JOIN category cat ON cat.id = ex.category_fk '\
                 'WHERE YEAR(ex.datetime) = YEAR(NOW()) ' \
                 '  AND MONTH(ex.datetime) = MONTH(NOW()) ' \
-                '  AND cat.name = "%s"' % category
+                '  AND cat.name = "%s"'\
+                'ORDER BY ex.datetime DESC' % category
             )
 
             expenses = []
@@ -120,6 +122,19 @@ def get_expenses_by_category(category):
 
 # Utility functions
 # -----------------
+
+def get_month_years():
+    """Gets all distinct month-year combinations.
+    """
+    with closing(connection()) as conn:
+        with closing(conn.cursor()) as cur:
+            cur.execute(
+                'SELECT DISTINCT CONCAT(MONTHNAME(datetime), " ", '\
+                'YEAR(datetime)) FROM expense'
+            )
+            year_months = [c[0] for c in cur.fetchall()]
+            return year_months
+  
 
 def get_categories():
     """Gets all categories from database.

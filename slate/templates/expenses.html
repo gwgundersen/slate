@@ -10,12 +10,20 @@
     
     <h3>Expenses</h3>
     <div>
+        
+        <select>
+        {% for month_year in distinct_months %}
+            <option>{{ month_year }}</option>
+        {% endfor %}
+        </select>
+
         <ul class='list-inline'>
             <li><a href="/slate/expenses">all</a></li>
         {% for category in categories %}
             <li><a href="{{ category }}">{{ category }}</a></li>
         {% endfor %}
         </ul>
+        
         <p class='highlight'>Sum: {{ category_sum }}</p>
     </div>
     <div class='table-responsive'>

@@ -19,11 +19,13 @@ expenses = Blueprint('expenses',
 def expenses_default():
     """Views expenses by current month.
     """
+    distinct_months = db.get_month_years()
     categories = db.get_categories()
     sum_, expenses = db.get_expenses()
     return render_template('expenses.html',
                            categories=categories,
                            category_sum=sum_,
+                           distinct_months=distinct_months,
                            expenses=expenses)
 
 @expenses.route('/<category>', methods=['GET'])

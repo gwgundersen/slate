@@ -16,7 +16,6 @@ handler = RotatingFileHandler('info.log', maxBytes=10000, backupCount=1)
 handler.setLevel(logging.INFO)
 
 
-
 app = Flask(__name__,
             static_url_path='%s/static' % config.get('url', 'base'),
             static_folder='static')
