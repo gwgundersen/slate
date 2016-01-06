@@ -1,14 +1,6 @@
 window.plot = function(data) {
 
-    /*var mod_data = [];
-    for (var i = 0; i < data.length; i++) {
-        var obj = data[i];
-        mod_data.push([
-            Date.UTC(obj[0][0], obj[0][1], obj[0][2]),
-            obj[1]
-        ]);
-    }*/
-
+    // We might want this in the future. For now, it really skews the plot.
     delete data['rent'];
 
     function transform(data) {
@@ -16,7 +8,7 @@ window.plot = function(data) {
         for (var i = 0; i < data.length; i++) {
             var obj = data[i];
             results.push([
-                Date.UTC(obj.datetime[0], obj.datetime[1], obj.datetime[2]),
+                Date.UTC(obj.datetime[0], obj.datetime[1]-1, obj.datetime[2]),
                 obj.cost
             ]);
         }
