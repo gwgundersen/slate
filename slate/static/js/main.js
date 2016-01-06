@@ -59,7 +59,7 @@ window.plot = function(data) {
         },
         tooltip: {
             headerFormat: '<b>{series.name}</b><br>',
-            pointFormat: '{point.category}, {point.x:%e. %b}: {point.y:.2f} m'
+            pointFormat: '{point.x:%e. %b}: ${point.y:.2f}'
         },
         plotOptions: {
             spline: {
