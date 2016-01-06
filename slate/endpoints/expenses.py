@@ -1,6 +1,7 @@
 """Manages expense endpoints.
 """
 
+import calendar
 import datetime
 import json
 
@@ -25,8 +26,10 @@ def expenses_default():
     year = request.args.get('year')
     month = request.args.get('month')
     if year and month:
+        month_str = '%s %s' % (calendar.month_name[int(month)], year)
         query_string = '?year=%s&month=%s&' % (year, month)
     else:
+        month_str = ''
         query_string = '?'
     categories = db.get_categories()
     sum_, expenses = db.get_expenses(category, year, month)
@@ -34,6 +37,7 @@ def expenses_default():
                            categories=categories,
                            category_sum=sum_,
                            expenses=expenses,
+                           month_str=month_str,
                            query_string=query_string)
 
 

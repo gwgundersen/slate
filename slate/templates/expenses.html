@@ -10,7 +10,7 @@
     
     <h3>Expenses</h3>
     <div>
-        
+        <p>{{ month_str }}</p>
         <ul class='list-inline'>
             <li>
                 <a class='btn btn-primary' href='/slate/expenses/all'>View All Reports</a>
@@ -25,7 +25,6 @@
         <li><a class='btn btn-default' href='/slate/expenses{{ query_string }}category={{ category }}'>{{ category }}</a></li>
         {% endfor %}
         </ul>
-        
         <p class='highlight'>Sum: {{ category_sum }}</p>
     </div>
     <div class='table-responsive'>
