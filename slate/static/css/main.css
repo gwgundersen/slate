@@ -21,8 +21,8 @@ body {
   width: 100%;
 }
 
-/* General
- * ------- */
+/* Tag and general class selectors.
+ * -------------------------------- */
 h1 {
   border-bottom: 1px solid #eee;
 }
@@ -41,6 +41,11 @@ button {
 }
 .highlight {
   color: red;
+}
+/* Element selectors.
+ * ------------------ */
+#category-list li {
+  margin-bottom: 10px;
 }
 #footer {
   background-color: #eee;

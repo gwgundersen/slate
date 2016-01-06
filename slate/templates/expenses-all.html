@@ -1,0 +1,27 @@
+<!DOCTYPE HTML PUBLIC=''>
+<html>
+
+{% include 'head.html' %}
+
+<body>
+<div class='container'>
+    
+    {% include 'header.html' %}
+    
+    <h3>Expenses</h3>
+    <ul class='list-unstyled'>
+    {% for exp_month in expenses_all %}
+        <li>
+            <a class='btn btn-default'
+               href='/slate/expenses?year={{ exp_month.year_num }}&month={{ exp_month.month_num }}'>
+                {{ exp_month.view }}
+            </a>
+        </li>
+    {% endfor %}
+    </ul>
+
+    {% include 'footer.html' %}
+
+</div>
+</body>
+</html>

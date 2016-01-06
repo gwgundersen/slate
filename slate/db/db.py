@@ -55,100 +55,103 @@ def save_expense(cost, category, datetime, comment):
 # ----------------
 
 def get_expenses(category, year, month):
+    """Single entry point for viewing expenses.
+    """
+    if category and not (year and month):
+        return _get_current_expenses_by_category(category)
+    if year and month:
+        return _get_expenses_by_month(year, month)
+    # Default view is current expenses without a category filter.
+    return _get_current_expenses()
+
+
+def _get_current_expenses():
     """Gets all expenses by current month from database.
     """
-    conn = connection()
     with closing(connection()) as conn:
         with closing(conn.cursor()) as cur:
-            sql = ''\
-                  'SELECT ex.cost, cat.name, ex.datetime, ex.comment '\
-                  'FROM expense ex '\
-                  '  JOIN category cat ON cat.id = ex.category_fk '
-
-            if category:
-                sql += 'WHERE cat.name = "%s" AND ' % category
-            else:
-                sql += 'WHERE '
-
-            # The AND or WHERE is handled above.
-            if year and month:
-                sql += 'YEAR(ex.datetime) = %s '\
-                       '  AND MONTH(ex.datetime) = %s ' % (
-                           year, month
-                       )
-            else:
-                sql += 'YEAR(ex.datetime) = YEAR(NOW()) '\
-                       '  AND MONTH(ex.datetime) = MONTH(NOW()) '
-
-            sql += 'ORDER BY ex.datetime DESC '
-            print(sql)
-            cur.execute(sql)
-
-            expenses = []
-            for r in cur.fetchall():
-                expenses.append({
-                    'cost': r[0],
-                    'category': r[1],
-                    'datetime': r[2],
-                    'comment': r[3],
-                })
-
+            cur.execute(
+                'SELECT ex.cost, cat.name, ex.datetime, ex.comment '\
+                '  FROM expense ex '\
+                'JOIN category cat ON cat.id = ex.category_fk '\
+                'WHERE YEAR(ex.datetime) = YEAR(NOW()) '\
+                '  AND MONTH(ex.datetime) = MONTH(NOW()) '\
+                'ORDER BY ex.datetime DESC'
+            )
+            expenses = _expense_objects_from_cursor(cur)
             sum_ = sum([x['cost'] for x in expenses])
-
             return sum_, expenses
 
 
-def get_expenses_by_category(category):
+def _get_current_expenses_by_category(category):
     """Gets all expenses by current month and category from database.
     """
     with closing(connection()) as conn:
         with closing(conn.cursor()) as cur:
-            cur.execute(''\
+            cur.execute(
                 'SELECT ex.cost, cat.name, ex.datetime, ex.comment '\
-                'FROM expense ex ' \
-                '  JOIN category cat ON cat.id = ex.category_fk '\
+                '  FROM expense ex ' \
+                'JOIN category cat ON cat.id = ex.category_fk '\
                 'WHERE YEAR(ex.datetime) = YEAR(NOW()) ' \
                 '  AND MONTH(ex.datetime) = MONTH(NOW()) ' \
                 '  AND cat.name = "%s"'\
-                'ORDER BY ex.datetime DESC' % category
+                'ORDER BY ex.datetime DESC' % (category,)
             )
-
-            expenses = []
-            for r in cur.fetchall():
-                expenses.append({
-                    'cost': r[0],
-                    'category': r[1],
-                    'datetime': r[2],
-                    'comment': r[3],
-                })
-
-            cur.execute(''\
-                'SELECT SUM(ex.cost) '\
-                'FROM expense ex '\
-                '  JOIN category cat ON cat.id = ex.category_fk '\
-                'WHERE YEAR(ex.datetime) = YEAR(NOW()) ' \
-                '  AND MONTH(ex.datetime) = MONTH(NOW()) ' \
-                '  AND cat.name = "%s"' % category)
-
+            expenses = _expense_objects_from_cursor(cur)
             sum_ = sum([x['cost'] for x in expenses])
+            return sum_, expenses
 
+
+def _get_expenses_by_month(year, month):
+    """Gets all expenses by a given month.
+    """
+    with closing(connection()) as conn:
+        with closing(conn.cursor()) as cur:
+            cur.execute(
+                'SELECT ex.cost, cat.name, ex.datetime, ex.comment '\
+                '  FROM expense ex ' \
+                'JOIN category cat ON cat.id = ex.category_fk '\
+                'WHERE YEAR(ex.datetime) = %s ' \
+                '  AND MONTH(ex.datetime) = %s ' \
+                'ORDER BY ex.datetime DESC' % (year, month,)
+            )
+            expenses = _expense_objects_from_cursor(cur)
+            sum_ = sum([x['cost'] for x in expenses])
             return sum_, expenses
 
 
 # Utility functions
 # -----------------
 
-def get_month_years():
-    """Gets all distinct month-year combinations.
+def _expense_objects_from_cursor(cur):
+    """Returns list of expense objects from database connection cursor.
+    """
+    expenses = []
+    for r in cur.fetchall():
+        expenses.append({
+            'cost': r[0],
+            'category': r[1],
+            'datetime': r[2],
+            'comment': r[3],
+        })
+    return expenses
+
+
+def get_previous_months():
+    """Gets all previous months with recorded transactions.
     """
     with closing(connection()) as conn:
         with closing(conn.cursor()) as cur:
             cur.execute(
-                'SELECT DISTINCT CONCAT(MONTHNAME(datetime), " ", '\
-                'YEAR(datetime)) FROM expense'
+                'SELECT DISTINCT '\
+                '  CONCAT(MONTHNAME(datetime), " ", YEAR(datetime)), '\
+                '  MONTH(datetime), '\
+                '  YEAR(datetime) FROM expense'
             )
-            year_months = [c[0] for c in cur.fetchall()]
-            return year_months
+            return [{
+                'view': c[0],
+                'month_num': c[1],
+                'year_num': c[2]} for c in cur.fetchall()]
   
 
 def get_categories():
