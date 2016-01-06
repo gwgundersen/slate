@@ -11,13 +11,18 @@
     <h3>Expenses</h3>
     <div>
         
-        <p>
-            <a class='btn btn-primary' href='expenses/all'>View All Reports</a>
-        </p>
+        <ul class='list-inline'>
+            <li>
+                <a class='btn btn-primary' href='/slate/expenses/all'>View All Reports</a>
+            </li>
+            <li>
+                <a class='btn btn-primary' href='/slate/expenses/plot'>View Plot</a>
+            </li>
+        </ul>
         <ul id='category-list' class='list-inline'>
-            <li><a class='btn btn-default' href="expenses">all</a></li>
+            <li><a class='btn btn-default' href="/slate/expenses">all</a></li>
         {% for category in categories %}
-            <li><a class='btn btn-default' href="expenses?category={{ category }}">{{ category }}</a></li>
+            <li><a class='btn btn-default' href="/slate/expenses?category={{ category }}">{{ category }}</a></li>
         {% endfor %}
         </ul>
         
