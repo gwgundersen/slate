@@ -40,14 +40,11 @@ def save_expense(cost, category, datetime, comment):
     """
     with closing(connection()) as conn:
         with closing(conn.cursor()) as cur:
-            sql = 'INSERT INTO expense (cost, category_fk, datetime, comment) '\
-                  '  VALUES (%s, (%s), "%s", "%s")' % (
-                      cost,
-                      'SELECT id FROM category WHERE name = "%s"' % category,
-                      datetime,
-                      comment
-                  )
-            cur.execute(sql)
+            cur.execute(
+                'INSERT INTO expense (cost, category_fk, datetime, comment) '\
+                '  VALUES (%s, (SELECT id FROM category WHERE name = %s), '\
+                '          %s, %s)', (cost, category, datetime, comment,)
+            )
             conn.commit()
 
 
@@ -119,7 +116,7 @@ def _get_current_expenses_by_category(category):
                 'JOIN category cat ON cat.id = ex.category_fk '\
                 'WHERE YEAR(ex.datetime) = YEAR(NOW()) ' \
                 '  AND MONTH(ex.datetime) = MONTH(NOW()) ' \
-                '  AND cat.name = "%s"'\
+                '  AND cat.name = %s'\
                 'ORDER BY ex.datetime DESC', (category,)
             )
             expenses = _expense_objects_from_cursor(cur)
