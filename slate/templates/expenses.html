@@ -20,9 +20,9 @@
             </li>
         </ul>
         <ul id='category-list' class='list-inline'>
-            <li><a class='btn btn-default' href="/slate/expenses">all</a></li>
+            <li><a class='btn btn-default' href='/slate/expenses'>all</a></li>
         {% for category in categories %}
-            <li><a class='btn btn-default' href="/slate/expenses?category={{ category }}">{{ category }}</a></li>
+        <li><a class='btn btn-default' href='/slate/expenses{{ query_string }}category={{ category }}'>{{ category }}</a></li>
         {% endfor %}
         </ul>
         
@@ -37,6 +37,12 @@
                 <td>{{ expense.comment }}</td>
                 <td>{{ expense.category }}</td>
                 <td>{{ expense.datetime }}</td>
+                <td>
+                    <form action='expenses/delete' method='post'>
+                        <input type='hidden' name='expense_id' value='{{ expense.id }}'>
+                        <input class='btn btn-danger' type='submit' value='Delete' name='submit'>
+                    </form>
+                </td>
             </tr>
 
             {% endfor %}

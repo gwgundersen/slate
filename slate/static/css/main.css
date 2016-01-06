@@ -44,6 +44,7 @@ button {
 }
 /* Element selectors.
  * ------------------ */
+#months-list li,
 #category-list li {
   margin-bottom: 10px;
 }

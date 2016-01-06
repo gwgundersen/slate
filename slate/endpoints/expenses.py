@@ -1,10 +1,10 @@
-"""Views expenses.
+"""Manages expense endpoints.
 """
 
 import datetime
 import json
 
-from flask import Blueprint, render_template, request
+from flask import Blueprint, redirect, render_template, request, url_for
 from flask.ext.login import login_required
 
 from slate import db
@@ -24,12 +24,17 @@ def expenses_default():
     category = request.args.get('category')
     year = request.args.get('year')
     month = request.args.get('month')
+    if year and month:
+        query_string = '?year=%s&month=%s&' % (year, month)
+    else:
+        query_string = '?'
     categories = db.get_categories()
     sum_, expenses = db.get_expenses(category, year, month)
     return render_template('expenses.html',
                            categories=categories,
                            category_sum=sum_,
-                           expenses=expenses)
+                           expenses=expenses,
+                           query_string=query_string)
 
 
 @expenses.route('/all', methods=['GET'])
@@ -53,8 +58,16 @@ def plot_previous_expenses():
                            data=expenses_all)
 
 
+@expenses.route('/delete', methods=['POST'])
+@login_required
+def delete_expense():
+    id_ = request.form.to_dict()['expense_id']
+    db.delete_expense(id_)
+    return redirect(url_for('expenses.expenses_default'))
+
+
 def _date_handler(date):
-    """
+    """Formats date for JSON.
     """
     return [date.year, date.month, date.day]
 
