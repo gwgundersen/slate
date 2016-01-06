@@ -1,6 +1,8 @@
 """Views expenses.
 """
 
+import datetime
+import json
 
 from flask import Blueprint, render_template, request
 from flask.ext.login import login_required
@@ -35,7 +37,24 @@ def expenses_default():
 def previous_expenses_list():
     """Renders a list of all expenses by month.
     """
-    expenses_all = db.get_previous_months()
+    months_all = db.get_previous_months()
     return render_template('expenses-all.html',
-                           expenses_all=expenses_all)
+                           months_all=months_all)
+
+
+@expenses.route('/plot', methods=['GET'])
+@login_required
+def plot_previous_expenses():
+    """Plots a time series of all previous expenses.
+    """
+    expenses_all = db.get_all_expenses_by_category()
+    expenses_all = json.dumps(expenses_all, default=_date_handler)
+    return render_template('expenses-plot.html',
+                           data=expenses_all)
+
+
+def _date_handler(date):
+    """
+    """
+    return [date.year, date.month, date.day]
 

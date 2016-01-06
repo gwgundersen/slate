@@ -16,9 +16,10 @@ def get_user(username):
     """
     with closing(connection()) as conn:
         with closing(conn.cursor()) as cur:
-            sql = 'SELECT id, name, password, salt '\
-                  'FROM user WHERE name = "%s"' % (username)
-            cur.execute(sql)
+            cur.execute(
+                'SELECT id, name, password, salt '\
+                'FROM user WHERE name = %s', (username,)
+            )
             return cur.fetchone()
 
 
@@ -27,8 +28,7 @@ def get_user_by_id(id_):
     """
     with closing(connection()) as conn:
         with closing(conn.cursor()) as cur:
-            sql = 'SELECT id, name, password FROM user WHERE id = %s' % (id_)
-            cur.execute(sql)
+            cur.execute('SELECT id, name, password FROM user WHERE id = %s', (id_,))
             return cur.fetchone()
 
 
@@ -65,6 +65,31 @@ def get_expenses(category, year, month):
     return _get_current_expenses()
 
 
+def get_all_expenses_by_category():
+    """Returns all expenses in the database.
+    """
+    categories = {}
+    for category in get_categories():
+        if category not in categories:
+            categories[category] = []
+        data = _get_all_expenses_for_category(category)
+        categories[category].append(data)
+    return categories
+
+
+def _get_all_expenses_for_category(category):
+    with closing(connection()) as conn:
+        with closing(conn.cursor()) as cur:
+            cur.execute(
+                'SELECT ex.cost, cat.name, ex.datetime, ex.comment '\
+                '  FROM expense ex '\
+                'JOIN category cat ON cat.id = ex.category_fk '\
+                '  WHERE cat.name = %s '\
+                'ORDER BY ex.datetime DESC', (category,)
+            )
+            return _expense_objects_from_cursor(cur)
+
+
 def _get_current_expenses():
     """Gets all expenses by current month from database.
     """
@@ -95,7 +120,7 @@ def _get_current_expenses_by_category(category):
                 'WHERE YEAR(ex.datetime) = YEAR(NOW()) ' \
                 '  AND MONTH(ex.datetime) = MONTH(NOW()) ' \
                 '  AND cat.name = "%s"'\
-                'ORDER BY ex.datetime DESC' % (category,)
+                'ORDER BY ex.datetime DESC', (category,)
             )
             expenses = _expense_objects_from_cursor(cur)
             sum_ = sum([x['cost'] for x in expenses])
@@ -113,7 +138,7 @@ def _get_expenses_by_month(year, month):
                 'JOIN category cat ON cat.id = ex.category_fk '\
                 'WHERE YEAR(ex.datetime) = %s ' \
                 '  AND MONTH(ex.datetime) = %s ' \
-                'ORDER BY ex.datetime DESC' % (year, month,)
+                'ORDER BY ex.datetime DESC', (year, month,)
             )
             expenses = _expense_objects_from_cursor(cur)
             sum_ = sum([x['cost'] for x in expenses])
