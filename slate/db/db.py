@@ -9,7 +9,7 @@ from slate.config import db_connection_args
 
 
 # Saving, editing, deleting expenses
-# ----------------------------------
+# ----------------------------------------------------------------------------
 
 def get_expense(id_):
     """Returns expense based on ID.
@@ -60,7 +60,7 @@ def delete_expense(id_):
 
 
 # User transactions
-# -----------------
+# ----------------------------------------------------------------------------
 
 def get_user(username):
     """Gets user based on username.
@@ -84,7 +84,7 @@ def get_user_by_id(id_):
 
 
 # Viewing expenses
-# ----------------
+# ----------------------------------------------------------------------------
 
 def get_expenses(category, year, month):
     """Single entry point for viewing expenses.
@@ -191,7 +191,7 @@ def _get_expenses_by_month(year, month):
 
 
 # Utility functions
-# -----------------
+# ----------------------------------------------------------------------------
 
 def _expense_objects_from_cursor(cur):
     """Returns list of expense objects from database connection cursor.
