@@ -35,10 +35,6 @@ h1 span {
   color: #aaa;
   font-size: 12px;
 }
-button {
-  background-color: #eee !important;
-  width: 100%;
-}
 .highlight {
   color: red;
 }
@@ -55,8 +51,15 @@ button {
 #footer {
   background-color: #eee;
 }
+#index-page a.btn {
+  width: 100%;
+}
 #expenses-page select {
   margin-bottom: 10px;
+}
+#expenses-page #expense-controls button,
+#expenses-page #expense-controls a.btn {
+  width: 100%;
 }
 #footer .container {
   padding-top: 10px;

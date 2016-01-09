@@ -4,12 +4,12 @@
 {% include 'head.html' %}
 
 <body>
-<div class='container'>
+<div id='expenses-page' class='container'>
     
     {% include 'header.html' %}
     
     <h3>Expenses</h3>
-    <div id='expenses-page' class='row'>
+    <div id='expense-controls' class='row'>
         <div class='col-md-2'>
             {% if month_str %}
                 <p>{{ month_str }}</p>
@@ -28,19 +28,12 @@
                         <option>{{ category }}</option>
                         {% endfor %}
                     </select>
-                    <button class='btn btn-default'>View category</button>
+                    <button class='btn btn-info'>View category</button>
                 </div>
             </form>
         </div>
         <div class='col-md-2'>
-            <ul class='list-inline'>
-                <li>
-                    <a class='btn btn-primary' href='/slate/expenses/all'>View all months</a>
-                </li>
-                <!--<li>
-                    <a class='btn btn-primary' href='/slate/expenses/plot'>View yearly plot</a>
-                </li>-->
-            </ul>
+            <a class='btn btn-info' href='/slate/expenses/all'>View all months</a>
         </div>
     </div>
     <div class='table-responsive'>
@@ -55,7 +48,7 @@
                 <td>
                     <form action='expenses/edit' method='get'>
                         <input type='hidden' name='id' value='{{ expense.id }}'>
-                        <input class='btn btn-info' type='submit' value='Edit'>
+                        <input class='btn btn-primary' type='submit' value='Edit'>
                     </form>
                 </td>
                 <td>

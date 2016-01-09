@@ -4,7 +4,7 @@
 {% include 'head.html' %}
 
 <body>
-<div class='container'>
+<div id='edit-page' class='container'>
 
     {% include 'header.html' %}
    
@@ -34,12 +34,12 @@
                     <input class='form-control' name='comment' type='text' value='{{ expense.comment }}' autocomplete='off'/>
                 </div>
                 <div class='form-group'>
-                    <button type='submit' class='form-control' class='btn btn-default'>Submit Edit</button>
+                    <button type='submit' class='form-control btn btn-primary'>Submit Edit</button>
                 </div>
                 <input type='hidden' name='id' value='{{ expense.id }}'> 
             </form>
             <form action='/slate/expenses' method='get'>
-                <button type='submit' class='form-control' class='btn btn-default'>Cancel</button>
+                <button type='submit' class='form-control btn btn-info'>Cancel</button>
             </form>
         </div>
     </div>
