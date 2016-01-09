@@ -2,7 +2,7 @@
 """
 
 
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request
 from flask.ext.login import current_user
 import MySQLdb
 
@@ -18,11 +18,13 @@ index = Blueprint('index',
 @index.route('/', methods=['GET'])
 def index_page():
     categories = db.get_categories()
+    error = request.args.get('error')
     if current_user.is_authenticated:
         auth_message = '%s is logged in.' % current_user.name
     else:
         auth_message = 'No user logged in.'
     return render_template('index.html',
                            categories=categories,
+                           error=error,
                            auth_message=auth_message)
 

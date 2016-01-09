@@ -7,10 +7,14 @@
 <div class='container'>
 
     {% include 'header.html' %}
+
+    {% if error %}
+    <p class='highlight'>{{ error }}</p>
+    {% endif %}
     
     <div class='row'>
         <div class='col-md-4'>
-            <form action='add' method='POST'>
+            <form action='/slate/expenses/add' method='POST'>
                 <div class='form-group'>
                     <input class='form-control' name='cost' type='text' placeholder='Cost ($)' autocomplete='off'/>
                 </div>

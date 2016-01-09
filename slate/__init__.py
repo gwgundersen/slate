@@ -18,7 +18,6 @@ app = Flask(__name__,
 app.secret_key = config.get('cookies', 'secret_key')
 
 # Server endpoints
-app.register_blueprint(endpoints.add)
 app.register_blueprint(endpoints.auth)
 app.register_blueprint(endpoints.expenses)
 app.register_blueprint(endpoints.index)

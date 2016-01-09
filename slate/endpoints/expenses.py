@@ -17,6 +17,59 @@ expenses = Blueprint('expenses',
                      url_prefix='%s/expenses' % config.get('url', 'base'))
 
 
+# Add, edit, delete
+# ----------------------------------------------------------------------------
+
+@expenses.route('/add', methods=['POST'])
+@login_required
+def add_expense():
+    """Adds expense.
+    """
+    cost, category, comment, errors = _validate_expense(request)
+    if len(errors) > 0:
+        auth_message = '%s is logged in.' % current_user.name
+        return redirect(url_for('index.index_page', error=errors[0]))
+
+    datetime_ = datetime.datetime.now()
+    db.save_expense(cost, category, datetime_, comment)
+    return redirect(url_for('expenses.expenses_default'))
+
+
+@expenses.route('/edit', methods=['GET', 'POST'])
+@login_required
+def edit_expense():
+    id_ = request.args.get('id')
+    if request.method == 'GET':
+        categories = db.get_categories()
+        expense = db.get_expense(id_)
+        error = request.args.get('error')
+        return render_template('edit.html',
+                               categories=categories,
+                               error=error,
+                               expense=expense)
+    if request.method == 'POST':
+        id_ = request.form.get('id')
+        cost, category, comment, errors = _validate_expense(request)
+        if len(errors) > 0:
+            expense = db.get_expense(id_)
+            url = url_for('expenses.edit_expense', id=id_, error=errors[0])
+            return redirect(url)
+
+        db.edit_expense(id_, cost, category, comment)
+        return redirect(url_for('expenses.expenses_default'))
+
+
+@expenses.route('/delete', methods=['POST'])
+@login_required
+def delete_expense():
+    id_ = request.form.to_dict()['id']
+    db.delete_expense(id_)
+    return redirect(url_for('expenses.expenses_default'))
+
+
+# View and plot expenses
+# ----------------------------------------------------------------------------
+
 @expenses.route('', methods=['GET'])
 @login_required
 def expenses_default():
@@ -65,49 +118,28 @@ def plot_previous_expenses():
                            data=expenses_all)
 
 
-@expenses.route('/delete', methods=['POST'])
-@login_required
-def delete_expense():
-    id_ = request.form.to_dict()['id']
-    db.delete_expense(id_)
-    return redirect(url_for('expenses.expenses_default'))
+# Utility methods
+# ----------------------------------------------------------------------------
 
+def _validate_expense(request):
+    """Validates the arguments in a request to add or edit an expense.
+    """
+    errors = []
+    try:
+        cost = request.form['cost']
+        cost = float(cost)
+    except ValueError:
+        errors.append('Cost must be a float.')
 
-@expenses.route('/edit', methods=['GET', 'POST'])
-@login_required
-def edit_expense():
-    id_ = request.args.get('id')
-    if request.method == 'GET':
-        categories = db.get_categories()
-        expense = db.get_expense(id_)
-        return render_template('edit.html',
-                               categories=categories,
-                               expense=expense)
-    if request.method == 'POST':
-        id_ = request.form.get('id')
-        error_messages = []
-        
-        try:
-            cost = request.form['cost']
-            cost = float(cost)
-        except ValueError:
-            error_messages.append('Cost must be a float.')
+    category = request.form['category']
+    if category == 'select':
+        errors.append('Category is required.')
 
-        category = request.form['category']
-        if category == 'select':
-            error_messages.append('Category is required.')
+    comment = request.form.get('comment')
+    if not comment:
+        errors.append('Comment is required')
 
-        comment = request.form.get('comment')
-        if not comment:
-            error_messages.append('Comment is required')
-
-        if len(error_messages) > 0:
-            print(error_messages)
-            auth_message = '%s is logged in.' % current_user.name
-            return redirect(url_for('index.index_page'))
-
-        db.edit_expense(id_, cost, category, comment)
-        return redirect(url_for('expenses.expenses_default'))
+    return cost, category, comment, errors
 
 
 def _date_handler(date):

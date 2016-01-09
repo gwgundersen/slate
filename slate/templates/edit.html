@@ -7,8 +7,12 @@
 <div class='container'>
 
     {% include 'header.html' %}
+   
+    {% if error %}
+    <p class='highlight'>{{ error }}</p>
+    {% endif %}
 
-    <h4>Edit expense</h4>
+    <h3>Edit expense</h3>
     <div class='row'>
         <div class='col-md-4'>
             <form action='edit' method='POST'>
