@@ -8,6 +8,57 @@ import MySQLdb
 from slate.config import db_connection_args
 
 
+# Saving, editing, deleting expenses
+# ----------------------------------
+
+def get_expense(id_):
+    """Returns expense based on ID.
+    """
+    with closing(connection()) as conn:
+        with closing(conn.cursor()) as cur:
+            cur.execute(select() + ' WHERE ex.id = %s', (id_,))
+            return _expense_objects_from_cursor(cur)[0]
+
+
+def save_expense(cost, category, datetime, comment):
+    """Saves an expense.
+    """
+    with closing(connection()) as conn:
+        with closing(conn.cursor()) as cur:
+            cur.execute(
+                'INSERT INTO expense (cost, category_fk, datetime, comment) '\
+                '  VALUES (%s, (SELECT id FROM category WHERE name = %s), '\
+                '          %s, %s)', (cost, category, datetime, comment,)
+            )
+            conn.commit()
+
+
+def edit_expense(id_, cost, category, comment):
+    """Edits an expense.
+    """
+    with closing(connection()) as conn:
+        with closing(conn.cursor()) as cur:
+            cur.execute(
+                'UPDATE expense '\
+                'SET '\
+                '  cost = %s, '\
+                '  category_fk = (SELECT id FROM category WHERE name = %s),'\
+                '  comment = %s '\
+                'WHERE id = %s',
+                (cost, category, comment, int(id_),)
+            )
+            conn.commit()
+
+
+def delete_expense(id_):
+    """Deletes an expense.
+    """
+    with closing(connection()) as conn:
+        with closing(conn.cursor()) as cur:
+            cur.execute('DELETE ex FROM expense ex WHERE id = %s', (id_,))
+            conn.commit()
+
+
 # User transactions
 # -----------------
 
@@ -30,35 +81,6 @@ def get_user_by_id(id_):
         with closing(conn.cursor()) as cur:
             cur.execute('SELECT id, name, password FROM user WHERE id = %s', (id_,))
             return cur.fetchone()
-
-
-# Saving, editing, deleting expenses
-# ----------------------------------
-
-def save_expense(cost, category, datetime, comment):
-    """Saves an expense.
-    """
-    with closing(connection()) as conn:
-        with closing(conn.cursor()) as cur:
-            cur.execute(
-                'INSERT INTO expense (cost, category_fk, datetime, comment) '\
-                '  VALUES (%s, (SELECT id FROM category WHERE name = %s), '\
-                '          %s, %s)', (cost, category, datetime, comment,)
-            )
-            conn.commit()
-
-
-def edit_expense():
-    pass
-
-
-def delete_expense(id_):
-    """Deletes an expense.
-    """
-    with closing(connection()) as conn:
-        with closing(conn.cursor()) as cur:
-            cur.execute('DELETE ex FROM expense ex WHERE id = %s', (id_,))
-            conn.commit()
 
 
 # Viewing expenses
@@ -93,9 +115,7 @@ def _get_all_expenses_for_category(category):
     with closing(connection()) as conn:
         with closing(conn.cursor()) as cur:
             cur.execute(
-                'SELECT ex.id, ex.cost, cat.name, ex.datetime, ex.comment '\
-                '  FROM expense ex '\
-                'JOIN category cat ON cat.id = ex.category_fk '\
+                select() +
                 '  WHERE cat.name = %s '\
                 'ORDER BY ex.datetime DESC', (category,)
             )
@@ -108,9 +128,7 @@ def _get_current_expenses():
     with closing(connection()) as conn:
         with closing(conn.cursor()) as cur:
             cur.execute(
-                'SELECT ex.id, ex.cost, cat.name, ex.datetime, ex.comment '\
-                '  FROM expense ex '\
-                'JOIN category cat ON cat.id = ex.category_fk '\
+                select() +
                 'WHERE YEAR(ex.datetime) = YEAR(NOW()) '\
                 '  AND MONTH(ex.datetime) = MONTH(NOW()) '\
                 'ORDER BY ex.datetime DESC'
@@ -126,9 +144,7 @@ def _get_current_expenses_by_category(category):
     with closing(connection()) as conn:
         with closing(conn.cursor()) as cur:
             cur.execute(
-                'SELECT ex.id, ex.cost, cat.name, ex.datetime, ex.comment '\
-                '  FROM expense ex ' \
-                'JOIN category cat ON cat.id = ex.category_fk '\
+                select() + 
                 'WHERE YEAR(ex.datetime) = YEAR(NOW()) ' \
                 '  AND MONTH(ex.datetime) = MONTH(NOW()) ' \
                 '  AND cat.name = %s'\
@@ -145,9 +161,7 @@ def _get_expense_by_month_and_category(category, year, month):
     with closing(connection()) as conn:
         with closing(conn.cursor()) as cur:
             cur.execute(
-                'SELECT ex.id, ex.cost, cat.name, ex.datetime, ex.comment '\
-                '  FROM expense ex ' \
-                'JOIN category cat ON cat.id = ex.category_fk '\
+                select() +
                 'WHERE YEAR(ex.datetime) = %s ' \
                 '  AND MONTH(ex.datetime) = %s ' \
                 '  AND cat.name = %s'\
@@ -166,9 +180,7 @@ def _get_expenses_by_month(year, month):
     with closing(connection()) as conn:
         with closing(conn.cursor()) as cur:
             cur.execute(
-                'SELECT ex.id, ex.cost, cat.name, ex.datetime, ex.comment '\
-                '  FROM expense ex ' \
-                'JOIN category cat ON cat.id = ex.category_fk '\
+                select() +
                 'WHERE YEAR(ex.datetime) = %s ' \
                 '  AND MONTH(ex.datetime) = %s ' \
                 'ORDER BY ex.datetime DESC', (year, month,)
@@ -221,6 +233,14 @@ def get_categories():
             cur.execute('SELECT name FROM category')
             categories = [c[0] for c in cur.fetchall()]
             return categories
+
+def select():
+    """Utility method for consistently building SELECT statement.
+    """
+    return 'SELECT ex.id, ex.cost, cat.name, ex.datetime, ex.comment '\
+           '  FROM expense ex '\
+           'JOIN category cat ON cat.id = ex.category_fk '\
+
 
 
 def connection():

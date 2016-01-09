@@ -6,7 +6,7 @@ import datetime
 import json
 
 from flask import Blueprint, redirect, render_template, request, url_for
-from flask.ext.login import login_required
+from flask.ext.login import current_user, login_required
 
 from slate import db
 from slate.config import config
@@ -78,9 +78,36 @@ def delete_expense():
 def edit_expense():
     id_ = request.args.get('id')
     if request.method == 'GET':
+        categories = db.get_categories()
         expense = db.get_expense(id_)
-        print(expense)
-        return str(expense)
+        return render_template('edit.html',
+                               categories=categories,
+                               expense=expense)
+    if request.method == 'POST':
+        id_ = request.form.get('id')
+        error_messages = []
+        
+        try:
+            cost = request.form['cost']
+            cost = float(cost)
+        except ValueError:
+            error_messages.append('Cost must be a float.')
+
+        category = request.form['category']
+        if category == 'select':
+            error_messages.append('Category is required.')
+
+        comment = request.form.get('comment')
+        if not comment:
+            error_messages.append('Comment is required')
+
+        if len(error_messages) > 0:
+            print(error_messages)
+            auth_message = '%s is logged in.' % current_user.name
+            return redirect(url_for('index.index_page'))
+
+        db.edit_expense(id_, cost, category, comment)
+        return redirect(url_for('expenses.expenses_default'))
 
 
 def _date_handler(date):
