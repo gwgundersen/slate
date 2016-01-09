@@ -217,7 +217,8 @@ def get_previous_months():
                 'SELECT DISTINCT '\
                 '  CONCAT(MONTHNAME(datetime), " ", YEAR(datetime)), '\
                 '  MONTH(datetime), '\
-                '  YEAR(datetime) FROM expense'
+                '  YEAR(datetime) FROM expense '\
+                'ORDER BY datetime DESC'
             )
             return [{
                 'view': c[0],
