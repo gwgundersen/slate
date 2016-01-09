@@ -17,22 +17,18 @@ auth = Blueprint('auth',
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
+        print('hello')
         return render_template('login.html')
+    
     username = request.form['username']
     password = request.form['password']
     registered_user = User.get(username, password)
     if registered_user is None:
-        flash('Username or Password is invalid' , 'error')
         logout_user()
         return render_template('login.html',
-                               message='Incorrect credentials.')
+                               error='Username or password is invalid')
 
     login_user(registered_user)
-    
-    # TODO: The 'next' argument is not being detected by Flask. Why?
-    #next_ = request.args.get('next')
-    #return redirect(next_ or url_for('index.index_page'))
-    
     return redirect(url_for('index.index_page'))
 
 
