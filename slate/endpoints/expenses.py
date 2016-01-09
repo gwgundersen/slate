@@ -29,7 +29,8 @@ def expenses_default():
         month_str = '%s %s' % (calendar.month_name[int(month)], year)
         query_string = '?year=%s&month=%s&' % (year, month)
     else:
-        month_str = ''
+        now = datetime.datetime.now()
+        month_str = '%s %s' % (calendar.month_name[now.month], now.year)
         query_string = '?'
     categories = db.get_categories()
     sum_, expenses = db.get_expenses(category, year, month)

@@ -15,7 +15,7 @@ app = Flask(__name__,
             static_url_path='%s/static' % config.get('url', 'base'),
             static_folder='static')
 
-app.secret_key = 'Section.80'
+app.secret_key = config.get('cookies', 'secret_key')
 
 # Server endpoints
 app.register_blueprint(endpoints.add)
