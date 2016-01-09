@@ -38,6 +38,8 @@ def expenses_default():
                            categories=categories,
                            category_sum=sum_,
                            expenses=expenses,
+                           year=year,
+                           month=month,
                            month_str=month_str,
                            query_string=query_string)
 
@@ -66,9 +68,19 @@ def plot_previous_expenses():
 @expenses.route('/delete', methods=['POST'])
 @login_required
 def delete_expense():
-    id_ = request.form.to_dict()['expense_id']
+    id_ = request.form.to_dict()['id']
     db.delete_expense(id_)
     return redirect(url_for('expenses.expenses_default'))
+
+
+@expenses.route('/edit', methods=['GET', 'POST'])
+@login_required
+def edit_expense():
+    id_ = request.args.get('id')
+    if request.method == 'GET':
+        expense = db.get_expense(id_)
+        print(expense)
+        return str(expense)
 
 
 def _date_handler(date):

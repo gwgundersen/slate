@@ -18,10 +18,14 @@
         </div>
         <div class='col-md-2'>
             <form action='expenses' method='get'>
+                {% if year and month %}
+                <input type='hidden' name='year' value='{{ year }}'> 
+                <input type='hidden' name='month' value='{{ month }}'> 
+                {% endif %}
                 <div class='form-group'>
                     <select class='form-control' name='category'>
                         {% for category in categories %}
-                        <option><a class='btn btn-default' href='/slate/expenses{{ query_string }}category={{ category }}'>{{ category }}</a></li>
+                        <option>{{ category }}</option>
                         {% endfor %}
                     </select>
                     <button class='btn btn-default'>View category</button>
@@ -49,8 +53,14 @@
                 <td>{{ expense.category }}</td>
                 <td>{{ expense.datetime }}</td>
                 <td>
+                    <form action='expenses/edit' method='get'>
+                        <input type='hidden' name='id' value='{{ expense.id }}'>
+                        <input class='btn btn-info' type='submit' value='Edit'>
+                    </form>
+                </td>
+                <td>
                     <form action='expenses/delete' method='post' onclick='return confirm("Are you sure you want to delete this item?");'>
-                        <input type='hidden' name='expense_id' value='{{ expense.id }}'>
+                        <input type='hidden' name='id' value='{{ expense.id }}'>
                         <input class='btn btn-danger' type='submit' value='Delete' name='submit'>
                     </form>
                 </td>
