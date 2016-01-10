@@ -4,10 +4,11 @@
 {% include 'head.html' %}
 
 <body>
+
+{% include 'header.html' %}
+   
 <div id='edit-page' class='container'>
 
-    {% include 'header.html' %}
-   
     {% if error %}
     <p class='highlight'>{{ error }}</p>
     {% endif %}

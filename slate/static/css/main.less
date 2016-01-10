@@ -1,0 +1,143 @@
+/* Colors
+ * ------ */
+@color-navy: #17406B;
+@color-blue: #1689E5;
+@color-green: #7FB800;
+@color-red: #D40000;
+
+@font-family-accent: 'Roboto';
+@font-size-base: 13px;
+
+/* Reset
+ * ----- */
+html,
+body {
+  margin: 0;
+  font-size: @font-size-base;
+}
+
+/* Sticky Footer. Do not change.
+ * ----------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+#footer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 60px;
+  width: 100%;
+}
+
+/* Tag and general class selectors.
+ * -------------------------------- */
+a {
+  color: @color-blue;
+}
+
+h1 {
+  /*border-bottom: 1px solid #eee;*/
+  a,
+  a:hover,
+  a:focus,
+  a:active,
+  span {
+    color: white;
+    font-family: @font-family-accent;
+    font-weight: 100;
+    text-decoration: none;
+  }
+  span {
+    font-size: 12px;
+  }
+}
+
+.highlight {
+  color: @color-red;
+}
+
+.btn {
+  border: none;
+  //border-radius: 0;
+  &.btn-primary {
+    background-color: @color-blue;
+  }
+  &.btn-info {
+    background-color: @color-green;
+  }
+  &.btn-danger {
+    background-color: @color-red;
+  }
+}
+
+/* Element selectors.
+ * ------------------ */
+#header {
+  background-color: @color-navy;
+  a {
+    color: white;
+  }
+  h1 {
+    margin-top: 10px;
+  }
+}
+
+#months-list li,
+#category-list li {
+  margin-bottom: 10px;
+}
+
+#container {
+  height: 1000px;
+  width: 1000px;
+}
+
+#index-page {
+  margin-top: 20px;
+  a.btn {
+    width: 100%;
+  }
+}
+
+#expenses-page {
+  table {
+    font-size: @font-size-base;
+    td {
+      padding: 4px;
+      vertical-align: middle;
+    }
+    form {
+      margin-bottom: 0;
+    }
+    input {
+      font-size: @font-size-base;
+    }
+  }
+  select {
+    margin-bottom: 10px;
+  }
+  button,
+  a.btn {
+    width: 100%;
+  }
+  #expense-controls {
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+  }
+}
+
+#footer {
+  background-color: #f9f9f9;
+  border-top: 1px solid #eee;
+  .container {
+    margin-top: 20px;
+  }
+}

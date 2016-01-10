@@ -4,63 +4,69 @@
 {% include 'head.html' %}
 
 <body>
-<div id='expenses-page' class='container'>
     
-    {% include 'header.html' %}
+{% include 'header.html' %}
     
-    <h3>Expenses</h3>
-    <div id='expense-controls' class='row'>
-        <div class='col-md-2'>
-            {% if month_str %}
-                <p>{{ month_str }}</p>
-            {% endif %}
-            <p class='highlight'>Sum: {{ category_sum }}</p>
-        </div>
-        <div class='col-md-2'>
-            <form action='expenses' method='get'>
-                {% if year and month %}
-                <input type='hidden' name='year' value='{{ year }}'> 
-                <input type='hidden' name='month' value='{{ month }}'> 
-                {% endif %}
-                <div class='form-group'>
-                    <select class='form-control' name='category'>
-                        {% for category in categories %}
-                        <option>{{ category }}</option>
-                        {% endfor %}
-                    </select>
-                    <button class='btn btn-info'>View category</button>
+<div id='expenses-page'>
+    <div id='expense-controls' class='container-full'>
+        <div class='container'>
+            <h3>Expenses</h3>
+            <div class='row'>
+                <div class='col-md-2'>
+                    {% if month_str %}
+                        <p>{{ month_str }}</p>
+                    {% endif %}
+                    <p class='highlight'>Sum: {{ category_sum }}</p>
                 </div>
-            </form>
-        </div>
-        <div class='col-md-2'>
-            <a class='btn btn-info' href='/slate/expenses/all'>View all months</a>
+                <div class='col-md-2'>
+                    <form action='expenses' method='get'>
+                        {% if year and month %}
+                        <input type='hidden' name='year' value='{{ year }}'>
+                        <input type='hidden' name='month' value='{{ month }}'>
+                        {% endif %}
+                        <div class='form-group'>
+                            <select class='form-control' name='category'>
+                                {% for category in categories %}
+                                <option>{{ category|capitalize }}</option>
+                                {% endfor %}
+                            </select>
+                            <button class='btn btn-info'>View category</button>
+                        </div>
+                    </form>
+                </div>
+                <div class='col-md-2'>
+                    <a class='btn btn-info' href='/slate/expenses/all'>View all months</a>
+                </div>
+            </div>
         </div>
     </div>
-    <div class='table-responsive'>
-        <table class='table'>
-            {% for expense in expenses %}
+    <div class='container'>
+        <div class='table-responsive'>
+            <table class='table'>
+                {% for expense in expenses %}
 
-            <tr>
-                <td>{{ expense.cost }}</td>
-                <td>{{ expense.comment }}</td>
-                <td>{{ expense.category }}</td>
-                <td>{{ expense.datetime }}</td>
-                <td>
-                    <form action='expenses/edit' method='get'>
-                        <input type='hidden' name='id' value='{{ expense.id }}'>
-                        <input class='btn btn-primary' type='submit' value='Edit'>
-                    </form>
-                </td>
-                <td>
-                    <form action='expenses/delete' method='post' onclick='return confirm("Are you sure you want to delete this item?");'>
-                        <input type='hidden' name='id' value='{{ expense.id }}'>
-                        <input class='btn btn-danger' type='submit' value='Delete' name='submit'>
-                    </form>
-                </td>
-            </tr>
+                <tr>
+                    <td>{{ expense.cost }}</td>
+                    <td>{{ expense.comment }}</td>
+                    <td>{{ expense.category|capitalize }}</td>
+                    <td>{{ expense.datetime }}</td>
+                    <td>
+                        <form action='expenses/edit' method='get'>
+                            <input type='hidden' name='id' value='{{ expense.id }}'>
+                            <input class='btn btn-primary' type='submit' value='Edit'>
+                        </form>
+                    </td>
+                    <td>
+                        <form action='expenses/delete' method='post' onclick='return confirm("Are you sure you want to delete this item?");'>
+                            <input type='hidden' name='id' value='{{ expense.id }}'>
+                            <input class='btn btn-danger' type='submit' value='Delete' name='submit'>
+                        </form>
+                    </td>
+                </tr>
 
-            {% endfor %}
-        </table>
+                {% endfor %}
+            </table>
+        </div>
     </div>
 
     {% include 'footer.html' %}

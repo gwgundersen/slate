@@ -1,13 +1,11 @@
 """Handles logins and logouts.
 """
 
-
-from flask import Blueprint, request, redirect, render_template, url_for
 from flask.ext.login import login_user, logout_user, login_required
 
-from slate.user import User
+from flask import Blueprint, request, redirect, render_template, url_for
 from slate.config import config
-
+from slate.user import User
 
 auth = Blueprint('auth',
                  __name__,

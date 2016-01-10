@@ -4,11 +4,11 @@
 {% include 'head.html' %}
 
 <body>
+    
+{% include 'header.html' %}
+    
 <div class='container'>
-    
-    {% include 'header.html' %}
-    
-    <h3>Expenses</h3>
+    <h3>Previous expenses</h3>
     <ul id='months-list' class='list-unstyled'>
     {% for exp_month in months_all %}
         <li>

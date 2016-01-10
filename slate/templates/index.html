@@ -4,14 +4,15 @@
 {% include 'head.html' %}
 
 <body>
-<div id='index-page' class='container'>
 
-    {% include 'header.html' %}
+{% include 'header.html' %}
+    
+<div id='index-page' class='container'>
 
     {% if error %}
     <p class='highlight'>{{ error }}</p>
     {% endif %}
-    
+
     <div class='row'>
         <div class='col-md-4'>
             <form action='/slate/expenses/add' method='POST'>
@@ -22,7 +23,7 @@
                     <select class='form-control' name='category' autocomplete='off'>
                         <option value='select'>(category)</option>
                         {% for category in categories %}
-                            <option value='{{ category }}'>{{ category }}</option>
+                            <option value='{{ category }}'>{{ category|capitalize }}</option>
                         {% endfor %}
                         </select>
                 </div>

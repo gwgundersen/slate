@@ -6,3 +6,5 @@ venv/
 slate/config.ini
 *.pyc
 info.log
+.idea/
+*.css
