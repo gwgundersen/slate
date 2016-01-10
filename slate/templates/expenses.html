@@ -12,11 +12,13 @@
         <div class='container'>
             <h3>Expenses</h3>
             <div class='row'>
-                <div class='col-md-2'>
+                <div id='details' class='col-md-2'>
                     {% if month_str %}
-                        <p>{{ month_str }}</p>
+                        <p><strong>{{ month_str }}</strong></p>
                     {% endif %}
-                    <p class='highlight'>Sum: {{ category_sum }}</p>
+                    <p class='highlight'>
+                        <strong>Sum: ${{ category_sum }}</strong>
+                    </p>
                 </div>
                 <div class='col-md-2'>
                     <form action='expenses' method='get'>
@@ -46,10 +48,10 @@
                 {% for expense in expenses %}
 
                 <tr>
-                    <td>{{ expense.cost }}</td>
+                    <td>${{ expense.cost }}</td>
                     <td>{{ expense.comment }}</td>
                     <td>{{ expense.category|capitalize }}</td>
-                    <td>{{ expense.datetime }}</td>
+                    <td>{{ expense.datetime.strftime('%d %b %Y - %H:%M') }}</td>
                     <td>
                         <form action='expenses/edit' method='get'>
                             <input type='hidden' name='id' value='{{ expense.id }}'>

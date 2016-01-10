@@ -108,6 +108,11 @@ h1 {
 #expenses-page {
   table {
     font-size: @font-size-base;
+    tr:first-child {
+      td {
+        border-top: none;
+      }
+    }
     td {
       padding: 4px;
       vertical-align: middle;
@@ -129,8 +134,16 @@ h1 {
   #expense-controls {
     background-color: #f9f9f9;
     border-bottom: 1px solid #eee;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     padding-bottom: 10px;
+    h3 {
+      margin-top: 10px;
+    }
+    #details {
+      p {
+        margin: 0;
+      }
+    }
   }
 }
 
