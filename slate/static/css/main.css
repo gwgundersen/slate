@@ -1,0 +1,185 @@
+/* Colors
+ * ------ */
+/* Reset
+ * ----- */
+html,
+body {
+  margin: 0;
+  font-size: 13px;
+}
+/* Sticky Footer. Do not change.
+ * ----------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  margin-bottom: 40px;
+}
+#footer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 40px;
+  width: 100%;
+}
+/* Tag and general class selectors.
+ * -------------------------------- */
+a {
+  color: #1689E5;
+}
+h1 {
+  /*border-bottom: 1px solid #eee;*/
+}
+h1 a,
+h1 a:hover,
+h1 a:focus,
+h1 a:active,
+h1 span {
+  color: white;
+  font-family: 'Roboto';
+  font-weight: 100;
+  text-decoration: none;
+}
+h1 span {
+  font-size: 12px;
+}
+.highlight {
+  color: #D40000;
+}
+.btn {
+  border: none;
+}
+.btn.btn-primary {
+  background-color: #1689E5;
+}
+.btn.btn-primary:active {
+  background-color: #126db6;
+}
+.btn.btn-primary:hover {
+  background-color: #126db6;
+  -webkit-transition: background-color 200ms linear;
+  -moz-transition: background-color 200ms linear;
+  -o-transition: background-color 200ms linear;
+  -ms-transition: background-color 200ms linear;
+  transition: background-color 200ms linear;
+}
+.btn.btn-info {
+  background-color: #7FB800;
+}
+.btn.btn-info:active {
+  background-color: #5c8500;
+}
+.btn.btn-info:hover {
+  background-color: #4C6E00;
+  -webkit-transition: background-color 200ms linear;
+  -moz-transition: background-color 200ms linear;
+  -o-transition: background-color 200ms linear;
+  -ms-transition: background-color 200ms linear;
+  transition: background-color 200ms linear;
+}
+.btn.btn-danger {
+  background-color: #D40000;
+}
+.btn.btn-danger:active {
+  background-color: #a10000;
+}
+.btn.btn-danger:hover {
+  background-color: #a10000;
+  -webkit-transition: background-color 200ms linear;
+  -moz-transition: background-color 200ms linear;
+  -o-transition: background-color 200ms linear;
+  -ms-transition: background-color 200ms linear;
+  transition: background-color 200ms linear;
+}
+/* Element selectors.
+ * ------------------ */
+#header {
+  background-color: #17406B;
+}
+#header a {
+  color: white;
+}
+#header h1 {
+  margin-top: 10px;
+}
+#months-list li,
+#category-list li {
+  margin-bottom: 10px;
+}
+#container {
+  height: 1000px;
+  width: 1000px;
+}
+#index-page {
+  margin-top: 20px;
+}
+#index-page a.btn {
+  width: 100%;
+}
+#expenses-page table {
+  font-size: 13px;
+}
+#expenses-page table thead td {
+  font-weight: bold;
+}
+#expenses-page table td {
+  padding: 4px;
+  vertical-align: middle;
+}
+#expenses-page table form {
+  margin-bottom: 0;
+}
+#expenses-page table input {
+  font-size: 13px;
+}
+#expenses-page select {
+  margin-bottom: 10px;
+}
+#expenses-page button,
+#expenses-page a.btn {
+  width: 100%;
+}
+#expenses-page #expense-controls {
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #eee;
+  padding: 20px 0 10px;
+  margin-bottom: 10px;
+}
+#expenses-page #expense-controls h3 {
+  margin-top: 10px;
+}
+#expenses-page #expense-controls #details {
+  padding-bottom: 10px;
+}
+#expenses-page #expense-controls #details p {
+  margin: 0;
+}
+#expenses-page #expense-controls #previous-expenses {
+  border-right: 1px solid #ddd;
+}
+#expenses-all h3 {
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+#edit-page #delete-button {
+  border-top: 1px solid #ddd;
+  margin-top: 20px;
+  padding-top: 20px;
+}
+#edit-page #delete-button .btn {
+  width: 100%;
+}
+#login-page {
+  margin-top: 20px;
+}
+#login-page button {
+  width: 100%;
+}
+#footer {
+  background-color: #f9f9f9;
+  border-top: 1px solid #eee;
+}
+#footer .container {
+  margin-top: 10px;
+}
