@@ -156,7 +156,7 @@ def _get_current_expenses_by_category(category):
 
 
 def _get_expense_by_month_and_category(category, year, month):
-    """
+    """Gets expenses based on given month and category.
     """
     with closing(connection()) as conn:
         with closing(conn.cursor()) as cur:
