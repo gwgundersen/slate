@@ -10,6 +10,8 @@
 
 @dim-footer-height: 40px;
 
+@background-transition: background-color 200ms linear;
+
 /* Reset
  * ----- */
 html,
@@ -69,15 +71,45 @@ h1 {
   //border-radius: 0;
   &.btn-primary {
     background-color: @color-blue;
+    &:active {
+      background-color: #126db6;
+    }
+    &:hover {
+      background-color: #126db6;
+      -webkit-transition: @background-transition;
+      -moz-transition: @background-transition;
+      -o-transition: @background-transition;
+      -ms-transition: @background-transition;
+      transition: @background-transition;
+    }
   }
   &.btn-info {
     background-color: @color-green;
     &:active {
+      background-color: #5c8500;
+    }
+    &:hover {
       background-color: #4C6E00;
+      -webkit-transition: @background-transition;
+      -moz-transition: @background-transition;
+      -o-transition: @background-transition;
+      -ms-transition: @background-transition;
+      transition: @background-transition;
     }
   }
   &.btn-danger {
     background-color: @color-red;
+    &:active {
+      background-color: #a10000;
+    }
+    &:hover {
+      background-color: #a10000;
+      -webkit-transition: @background-transition;
+      -moz-transition: @background-transition;
+      -o-transition: @background-transition;
+      -ms-transition: @background-transition;
+      transition: @background-transition;
+    }
   }
 }
 
@@ -139,8 +171,8 @@ h1 {
   #expense-controls {
     background-color: #f9f9f9;
     border-bottom: 1px solid #eee;
+    padding: 20px 0 10px;
     margin-bottom: 10px;
-    padding-bottom: 10px;
     h3 {
       margin-top: 10px;
     }
@@ -153,6 +185,13 @@ h1 {
     #previous-expenses {
       border-right: 1px solid #ddd;
     }
+  }
+}
+
+#expenses-all {
+  h3 {
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 20px;
   }
 }
 
@@ -169,6 +208,9 @@ h1 {
 
 #login-page {
   margin-top: 20px;
+  button {
+    width: 100%;
+  }
 }
 
 #footer {

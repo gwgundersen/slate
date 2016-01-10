@@ -83,6 +83,8 @@ def expenses_default():
     """Renders expenses for current month.
     """
     category = request.args.get('category')
+    if category == 'all':
+        category = None
     year = request.args.get('year')
     month = request.args.get('month')
     auth_message = authutils.auth_message()
