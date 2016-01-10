@@ -47,8 +47,16 @@
     <div class='container'>
         <div class='table-responsive'>
             <table class='table'>
+                <thead>
+                    <tr>
+                        <td>Cost</td>
+                        <td>Comment</td>
+                        <td>Category</td>
+                        <td>Time</td>
+                        <td></td>
+                    </tr>
+                </thead>
                 {% for expense in expenses %}
-
                 <tr>
                     <td>${{ expense.cost }}</td>
                     <td>{{ expense.comment }}</td>
@@ -60,14 +68,7 @@
                             <input class='btn btn-primary' type='submit' value='Edit'>
                         </form>
                     </td>
-                    <td>
-                        <form action='expenses/delete' method='post' onclick='return confirm("Are you sure you want to delete this item?");'>
-                            <input type='hidden' name='id' value='{{ expense.id }}'>
-                            <input class='btn btn-danger' type='submit' value='Delete' name='submit'>
-                        </form>
-                    </td>
                 </tr>
-
                 {% endfor %}
             </table>
         </div>
