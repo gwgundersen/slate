@@ -10,6 +10,7 @@ from flask.ext.login import current_user, login_required
 
 from slate import db
 from slate.config import config
+from slate.endpoints import authutils
 
 
 expenses = Blueprint('expenses',
@@ -27,8 +28,10 @@ def add_expense():
     """
     cost, category, comment, errors = _validate_expense(request)
     if len(errors) > 0:
-        auth_message = '%s is logged in.' % current_user.name
-        return redirect(url_for('index.index_page', error=errors[0]))
+        auth_message = authutils.auth_message()
+        return redirect(url_for('index.index_page',
+                                auth_message=auth_message,
+                                error=errors[0]))
 
     datetime_ = datetime.datetime.now()
     db.save_expense(cost, category, datetime_, comment)
@@ -38,12 +41,14 @@ def add_expense():
 @expenses.route('/edit', methods=['GET', 'POST'])
 @login_required
 def edit_expense():
+    auth_message = authutils.auth_message()
     id_ = request.args.get('id')
     if request.method == 'GET':
         categories = db.get_categories()
         expense = db.get_expense(id_)
         error = request.args.get('error')
         return render_template('edit.html',
+                               auth_message=auth_message,
                                categories=categories,
                                error=error,
                                expense=expense)
@@ -51,8 +56,10 @@ def edit_expense():
         id_ = request.form.get('id')
         cost, category, comment, errors = _validate_expense(request)
         if len(errors) > 0:
-            expense = db.get_expense(id_)
-            url = url_for('expenses.edit_expense', id=id_, error=errors[0])
+            url = url_for('expenses.edit_expense',
+                          id=id_,
+                          auth_message=auth_message,
+                          error=errors[0])
             return redirect(url)
 
         db.edit_expense(id_, cost, category, comment)
@@ -78,6 +85,7 @@ def expenses_default():
     category = request.args.get('category')
     year = request.args.get('year')
     month = request.args.get('month')
+    auth_message = authutils.auth_message()
     if year and month:
         month_str = '%s %s' % (calendar.month_name[int(month)], year)
         query_string = '?year=%s&month=%s&' % (year, month)
@@ -88,6 +96,7 @@ def expenses_default():
     categories = db.get_categories()
     sum_, expenses = db.get_expenses(category, year, month)
     return render_template('expenses.html',
+                           auth_message=auth_message,
                            categories=categories,
                            category_sum=sum_,
                            expenses=expenses,
@@ -103,7 +112,9 @@ def previous_expenses_list():
     """Renders a list of all expenses by month.
     """
     months_all = db.get_previous_months()
+    auth_message = authutils.auth_message()
     return render_template('expenses-all.html',
+                           auth_message=auth_message,
                            months_all=months_all)
 
 
@@ -114,7 +125,9 @@ def plot_previous_expenses():
     """
     expenses_all = db.get_all_expenses_by_category()
     expenses_all = json.dumps(expenses_all, default=_date_handler)
+    auth_message = authutils.auth_message()
     return render_template('expenses-plot.html',
+                           auth_message=auth_message,
                            data=expenses_all)
 
 

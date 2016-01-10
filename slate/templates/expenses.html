@@ -4,9 +4,11 @@
 {% include 'head.html' %}
 
 <body>
-    
-{% include 'header.html' %}
-    
+
+{% with auth_message=auth_message %}
+    {% include 'header.html' %}
+{% endwith %}
+
 <div id='expenses-page'>
     <div id='expense-controls' class='container-full'>
         <div class='container'>
@@ -20,7 +22,7 @@
                         <strong>Sum: ${{ category_sum }}</strong>
                     </p>
                 </div>
-                <div class='col-md-2'>
+                <div id='previous-expenses' class='col-md-2'>
                     <form action='expenses' method='get'>
                         {% if year and month %}
                         <input type='hidden' name='year' value='{{ year }}'>
