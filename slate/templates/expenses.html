@@ -31,7 +31,7 @@
                             <select class='form-control' name='category'>
                                 <option value="all">All</option>
                                 {% for category in categories %}
-                                <option>{{ category|capitalize }}</option>
+                                <option>{{ category.name|capitalize }}</option>
                                 {% endfor %}
                             </select>
                             <button class='btn btn-info'>View category</button>
@@ -60,8 +60,8 @@
                 <tr>
                     <td>{{ '%0.2f'| format(expense.cost|float) }}</td>
                     <td>{{ expense.comment }}</td>
-                    <td>{{ expense.category|capitalize }}</td>
-                    <td>{{ expense.datetime.strftime('%d %b %Y - %H:%M') }}</td>
+                    <td>{{ expense.category.name|capitalize }}</td>
+                    <td>{{ expense.date_time.strftime('%d %b %Y - %H:%M') }}</td>
                     <td>
                         <form action='expenses/edit' method='get'>
                             <input type='hidden' name='id' value='{{ expense.id }}'>

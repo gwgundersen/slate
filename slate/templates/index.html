@@ -23,7 +23,7 @@
                     <select class='form-control' name='category' autocomplete='off'>
                         <option value='select'>(category)</option>
                         {% for category in categories %}
-                            <option value='{{ category }}'>{{ category|capitalize }}</option>
+                            <option value='{{ category.name }}'>{{ category.name|capitalize }}</option>
                         {% endfor %}
                         </select>
                 </div>

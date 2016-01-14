@@ -6,9 +6,11 @@ import datetime
 import json
 
 from flask import Blueprint, redirect, render_template, request, url_for
-from flask.ext.login import current_user, login_required
+from flask.ext.login import login_required
 
 from slate import db
+from slate import models
+from slate import dbutils
 from slate.config import config
 from slate.endpoints import authutils
 
@@ -26,15 +28,20 @@ expenses = Blueprint('expenses',
 def add_expense():
     """Adds expense.
     """
-    cost, category, comment, errors = _validate_expense(request)
+    cost, category_name, comment, errors = _validate_expense(request)
     if len(errors) > 0:
         auth_message = authutils.auth_message()
         return redirect(url_for('index.index_page',
                                 auth_message=auth_message,
                                 error=errors[0]))
 
-    datetime_ = datetime.datetime.now()
-    db.save_expense(cost, category, datetime_, comment)
+    category = db.session\
+        .query(models.Category)\
+        .filter(models.Category.name == category_name)\
+        .one()
+    expense = models.Expense(cost, category, comment)
+    db.session.add(expense)
+    db.session.commit()
     return redirect(url_for('expenses.expenses_default'))
 
 
@@ -44,8 +51,8 @@ def edit_expense():
     auth_message = authutils.auth_message()
     id_ = request.args.get('id')
     if request.method == 'GET':
-        categories = db.get_categories()
-        expense = db.get_expense(id_)
+        categories = db.session.query(models.Category).all()
+        expense = db.session.query(models.Expense).get(id_)
         error = request.args.get('error')
         return render_template('edit.html',
                                auth_message=auth_message,
@@ -62,7 +69,12 @@ def edit_expense():
                           error=errors[0])
             return redirect(url)
 
-        db.edit_expense(id_, cost, category, comment)
+        expense = db.session.query(models.Expense).get(id_)
+        expense.cost = cost
+        expense.category = category
+        expense.comment = comment
+        db.session.merge(expense)
+        db.session.commit()
         return redirect(url_for('expenses.expenses_default'))
 
 
@@ -70,7 +82,9 @@ def edit_expense():
 @login_required
 def delete_expense():
     id_ = request.form.to_dict()['id']
-    db.delete_expense(id_)
+    expense = db.session.query(models.Expense).get(id_)
+    db.session.delete(expense)
+    db.session.commit()
     return redirect(url_for('expenses.expenses_default'))
 
 
@@ -83,20 +97,34 @@ def expenses_default():
     """Renders expenses for current month.
     """
     category = request.args.get('category')
-    if category == 'all':
-        category = None
     year = request.args.get('year')
     month = request.args.get('month')
-    auth_message = authutils.auth_message()
+
+    query = db.session.query(models.Expense)
+    if category and category != 'all':
+        query = query\
+            .join(models.Category)\
+            .filter(models.Category.name == category.lower())
+
     if year and month:
         month_str = '%s %s' % (calendar.month_name[int(month)], year)
         query_string = '?year=%s&month=%s&' % (year, month)
+        query = query\
+            .filter(db.extract('year', models.Expense.date_time) == int(year))\
+            .filter(db.extract('month', models.Expense.date_time) == int(month))
     else:
         now = datetime.datetime.now()
         month_str = '%s %s' % (calendar.month_name[now.month], now.year)
         query_string = '?'
-    categories = db.get_categories()
-    sum_, expenses = db.get_expenses(category, year, month)
+        query = query\
+            .filter(db.extract('year', models.Expense.date_time) == now.year)\
+            .filter(db.extract('month', models.Expense.date_time) == now.month)
+
+    auth_message = authutils.auth_message()
+    categories = db.session.query(models.Category).all()
+
+    expenses = query.all()
+    sum_ = sum([e.cost for e in expenses])
     return render_template('expenses.html',
                            auth_message=auth_message,
                            categories=categories,
@@ -113,7 +141,7 @@ def expenses_default():
 def previous_expenses_list():
     """Renders a list of all expenses by month.
     """
-    months_all = db.get_previous_months()
+    months_all = dbutils.get_previous_months()
     auth_message = authutils.auth_message()
     return render_template('expenses-all.html',
                            auth_message=auth_message,

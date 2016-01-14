@@ -24,9 +24,9 @@
                     <select class='form-control' name='category' autocomplete='off'>
                         {% for category in categories %}
                             {% if category == expense.category %}
-                                <option selected='selected' value='{{ category }}'>{{ category }}</option>
+                                <option selected='selected' value='{{ category.name }}'>{{ category.name|capitalize }}</option>
                             {% else %}
-                                <option value='{{ category }}'>{{ category }}</option>
+                                <option value='{{ category.name }}'>{{ category.name|capitalize }}</option>
                             {% endif %}
                         {% endfor %}
                         </select>

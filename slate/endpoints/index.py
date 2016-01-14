@@ -1,12 +1,11 @@
 """Serves index page.
 """
 
-
 from flask import Blueprint, render_template, request
-from flask.ext.login import current_user
 
 from slate import db
 from slate.config import config
+from slate import models
 from slate.endpoints import authutils
 
 
@@ -17,7 +16,7 @@ index = Blueprint('index',
 
 @index.route('/', methods=['GET'])
 def index_page():
-    categories = db.get_categories()
+    categories = db.session.query(models.Category).all()
     error = request.args.get('error')
     auth_message = authutils.auth_message()
     return render_template('index.html',

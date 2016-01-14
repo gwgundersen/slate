@@ -5,7 +5,8 @@ from flask.ext.login import login_user, logout_user, login_required
 
 from flask import Blueprint, request, redirect, render_template, url_for
 from slate.config import config
-from slate.user import User
+from slate import db
+from slate import models
 from slate.endpoints import authutils
 
 auth = Blueprint('auth',
@@ -22,7 +23,7 @@ def login():
     
     username = request.form['username']
     password = request.form['password']
-    registered_user = User.get(username, password)
+    registered_user = models.User.get(username, password)
     if registered_user is None:
         logout_user()
         return render_template('login.html',
