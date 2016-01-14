@@ -5,7 +5,6 @@ from flask.ext.login import login_user, logout_user, login_required
 
 from flask import Blueprint, request, redirect, render_template, url_for
 from slate.config import config
-from slate import db
 from slate import models
 from slate.endpoints import authutils
 

@@ -154,6 +154,7 @@ h1 span {
 }
 #expenses-page #expense-controls #details p {
   margin: 0;
+  font-size: 18px;
 }
 #expenses-page #expense-controls #previous-expenses {
   border-right: 1px solid #ddd;

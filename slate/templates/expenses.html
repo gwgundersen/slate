@@ -15,7 +15,10 @@
             <div class='row'>
                 <div id='details' class='col-md-2'>
                     {% if month_str %}
-                        <p><strong>{{ month_str }}</strong></p>
+                        <p>{{ month_str }}</p>
+                    {% endif %}
+                    {% if category %}
+                        <p>{{ category }}</p>
                     {% endif %}
                     <p class='highlight'>
                         <strong>Sum: ${{ category_sum }}</strong>

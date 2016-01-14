@@ -6,7 +6,7 @@ import datetime
 import json
 
 from flask import Blueprint, redirect, render_template, request, url_for
-from flask.ext.login import login_required
+from flask.ext.login import current_user, login_required
 
 from slate import db
 from slate import models
@@ -97,11 +97,13 @@ def expenses_default():
     """Renders expenses for current month.
     """
     category = request.args.get('category')
+    if category == 'all':
+        category = None
     year = request.args.get('year')
     month = request.args.get('month')
 
     query = db.session.query(models.Expense)
-    if category and category != 'all':
+    if category:
         query = query\
             .join(models.Category)\
             .filter(models.Category.name == category.lower())
@@ -122,12 +124,12 @@ def expenses_default():
 
     auth_message = authutils.auth_message()
     categories = db.session.query(models.Category).all()
-
     expenses = query.all()
     sum_ = sum([e.cost for e in expenses])
     return render_template('expenses.html',
                            auth_message=auth_message,
                            categories=categories,
+                           category=category,
                            category_sum=sum_,
                            expenses=expenses,
                            year=year,
