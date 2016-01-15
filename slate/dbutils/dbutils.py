@@ -1,6 +1,8 @@
 """Utility functions for data that does not need a model.
 """
 
+import datetime
+
 from slate import db
 from slate import models
 
@@ -22,11 +24,19 @@ def get_previous_months():
         'year_num': c[2]} for c in results.fetchall()]
 
 
-def get_expenses_by_category():
-    """Returns all expenses in the database.
+def get_expense_totals_by_category(year=None, month=None):
+    """Returns total expenses per category, excluding rent.
     """
     result = {}
+    if not year or not month:
+        now = datetime.datetime.now()
+        year = now.year
+        month = now.month
     categories = db.session.query(models.Category).all()
+    categories = [c for c in categories if c.name != 'rent']
     for category in categories:
-        result[category.name] = category.current_expenses
+        expenses = [e.cost for e in category.expenses if
+                    e.date_time.year == year and
+                    e.date_time.month == month]
+        result[category.name.capitalize()] = round(sum(expenses), 2)
     return result

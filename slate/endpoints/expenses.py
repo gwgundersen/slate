@@ -101,6 +101,7 @@ def expenses_default():
     category = request.args.get('category')
     if category == 'all':
         category = None
+
     year = request.args.get('year')
     month = request.args.get('month')
 
@@ -128,6 +129,7 @@ def expenses_default():
     expenses = query\
         .order_by(models.Expense.date_time.desc())\
         .all()
+
     sum_ = sum([e.cost for e in expenses if e.category.name != 'rent'])
     return render_template('expenses.html',
                            auth_message=auth_message,
@@ -158,7 +160,7 @@ def previous_expenses_list():
 def plot_previous_expenses():
     """Plots a time series of all previous expenses.
     """
-    expenses_all = dbutils.get_expenses_by_category()
+    expenses_all = dbutils.get_expense_totals_by_category()
     expenses_all = json.dumps(expenses_all, default=_date_handler)
     auth_message = authutils.auth_message()
     return render_template('expenses-plot.html',
@@ -197,6 +199,8 @@ def _date_handler(date):
 
 
 def _categories():
+    """Returns all categories in descending order.
+    """
     return db.session\
         .query(models.Category)\
         .order_by(models.Category.name)\

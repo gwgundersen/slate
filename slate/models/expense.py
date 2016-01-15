@@ -20,3 +20,12 @@ class Expense(db.Model):
         self.category = category
         self.date_time = datetime.datetime.now()
         self.comment = comment
+
+    @property
+    def serialize(self):
+        return {
+            'cost': self.cost,
+            'category': self.category.name,
+            'date_time': str(self.date_time),
+            'comment': self.comment
+        }

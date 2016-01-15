@@ -9,6 +9,11 @@
     {% include 'header.html' %}
 {% endwith %}
 
+{% if not category %}
+    <script src="static/lib/highcharts.js"></script>
+    <script src="static/js/expenses.js"></script>
+{% endif %}
+
 <div id='expenses-page'>
     <div id='expense-controls' class='container-full'>
         <div class='container'>
@@ -47,6 +52,9 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class='container'>
+        <div id='bar-chart-container'></div>
     </div>
     <div class='container'>
         <div class='table-responsive'>
