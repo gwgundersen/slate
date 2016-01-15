@@ -6,7 +6,6 @@ from flask.ext.login import LoginManager
 from flask.ext.sqlalchemy import SQLAlchemy
 
 from slate.config import config
-#from slate import models
 
 
 app = Flask(__name__,
@@ -21,7 +20,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://%s:%s@%s:3306/%s' % (
     config.get('db', 'host'),
     config.get('db', 'db')
 )
-app.config['SQLALCHEMY_POOL_RECYCLE'] = 3600
+app.config['SQLALCHEMY_POOL_RECYCLE'] = 1800 # Recycle every 30 min.
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy()
@@ -57,4 +56,3 @@ def make_session_permanent():
     """Sets Flask session to 'permanent', meaning 31 days.
     """
     session.permanent = True
-

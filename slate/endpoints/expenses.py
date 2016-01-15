@@ -51,12 +51,11 @@ def edit_expense():
     auth_message = authutils.auth_message()
     id_ = request.args.get('id')
     if request.method == 'GET':
-        categories = db.session.query(models.Category).all()
         expense = db.session.query(models.Expense).get(id_)
         error = request.args.get('error')
         return render_template('edit.html',
                                auth_message=auth_message,
-                               categories=categories,
+                               categories=_categories(),
                                error=error,
                                expense=expense)
     if request.method == 'POST':
@@ -71,7 +70,10 @@ def edit_expense():
 
         expense = db.session.query(models.Expense).get(id_)
         expense.cost = cost
-        expense.category = category
+        expense.category = db.session\
+            .query(models.Category)\
+            .filter_by(name=category)\
+            .one()
         expense.comment = comment
         db.session.merge(expense)
         db.session.commit()
@@ -123,12 +125,13 @@ def expenses_default():
             .filter(db.extract('month', models.Expense.date_time) == now.month)
 
     auth_message = authutils.auth_message()
-    categories = db.session.query(models.Category).all()
-    expenses = query.all()
-    sum_ = sum([e.cost for e in expenses])
+    expenses = query\
+        .order_by(models.Expense.date_time.desc())\
+        .all()
+    sum_ = sum([e.cost for e in expenses if e.category.name != 'rent'])
     return render_template('expenses.html',
                            auth_message=auth_message,
-                           categories=categories,
+                           categories=_categories(),
                            category=category,
                            category_sum=sum_,
                            expenses=expenses,
@@ -155,7 +158,7 @@ def previous_expenses_list():
 def plot_previous_expenses():
     """Plots a time series of all previous expenses.
     """
-    expenses_all = db.get_all_expenses_by_category()
+    expenses_all = dbutils.get_expenses_by_category()
     expenses_all = json.dumps(expenses_all, default=_date_handler)
     auth_message = authutils.auth_message()
     return render_template('expenses-plot.html',
@@ -192,3 +195,9 @@ def _date_handler(date):
     """
     return [date.year, date.month, date.day]
 
+
+def _categories():
+    return db.session\
+        .query(models.Category)\
+        .order_by(models.Category.name)\
+        .all()

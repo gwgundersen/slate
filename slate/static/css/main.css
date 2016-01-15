@@ -156,6 +156,10 @@ h1 span {
   margin: 0;
   font-size: 18px;
 }
+#expenses-page #expense-controls #details p.note {
+  margin-top: 10px;
+  font-size: 12px;
+}
 #expenses-page #expense-controls #previous-expenses {
   border-right: 1px solid #ddd;
 }

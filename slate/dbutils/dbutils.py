@@ -2,6 +2,7 @@
 """
 
 from slate import db
+from slate import models
 
 
 def get_previous_months():
@@ -21,13 +22,11 @@ def get_previous_months():
         'year_num': c[2]} for c in results.fetchall()]
 
 
-# def get_all_expenses_by_category():
-#     """Returns all expenses in the database.
-#     """
-#     categories = {}
-#     for category in get_categories():
-#         if category not in categories:
-#             categories[category] = []
-#         data = _get_all_expenses_for_category(category)
-#         categories[category].append(data)
-#     return categories
+def get_expenses_by_category():
+    """Returns all expenses in the database.
+    """
+    result = {}
+    categories = db.session.query(models.Category).all()
+    for category in categories:
+        result[category.name] = category.current_expenses
+    return result
