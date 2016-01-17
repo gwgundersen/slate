@@ -7,7 +7,7 @@ from slate import db
 from slate import models
 
 
-def get_previous_months():
+def get_all_months():
     """Gets all previous months with recorded transactions.
     """
     conn = db.engine.connect()
@@ -24,7 +24,7 @@ def get_previous_months():
         'year_num': c[2]} for c in results.fetchall()]
 
 
-def get_expense_totals_by_category(year=None, month=None):
+def get_category_subtotals(year=None, month=None):
     """Returns total expenses per category, excluding rent.
     """
     result = {}
@@ -33,7 +33,8 @@ def get_expense_totals_by_category(year=None, month=None):
         year = now.year
         month = now.month
     categories = db.session.query(models.Category).all()
-    categories = [c for c in categories if c.name != 'rent']
+    categories = [c for c in categories
+                  if c.name != 'rent' and c.name != 'utilities']
     for category in categories:
         expenses = [e.cost for e in category.expenses if
                     e.date_time.year == year and

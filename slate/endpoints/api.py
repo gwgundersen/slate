@@ -17,9 +17,9 @@ def get_expense():
     if year and month:
         year = int(year)
         month = int(month)
-        expenses = dbutils.get_expense_totals_by_category(year, month)
+        expenses = dbutils.get_category_subtotals(year, month)
     else:
-        expenses = dbutils.get_expense_totals_by_category()
+        expenses = dbutils.get_category_subtotals()
     return jsonify({
         'expenses': expenses
     })

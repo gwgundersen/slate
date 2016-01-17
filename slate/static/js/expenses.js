@@ -37,7 +37,8 @@ $(function() {
 
         $('#bar-chart-container').highcharts({
             chart: {
-                type: 'bar'
+                type: 'bar',
+                height: 270
             },
             title: {
                 text: ''
@@ -71,7 +72,7 @@ $(function() {
             colors: ['#1689E5'],
             plotOptions: {
                 bar: {
-                    height: 10,
+                    //height: 10,
                     dataLabels: {
                         enabled: true
                     },
