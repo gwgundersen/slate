@@ -33,8 +33,7 @@ def get_category_subtotals(year=None, month=None):
         year = now.year
         month = now.month
     categories = db.session.query(models.Category).all()
-    categories = [c for c in categories
-                  if c.name != 'rent' and c.name != 'utilities']
+    categories = [c for c in categories if c.name != 'rent']
     for category in categories:
         expenses = [e.cost for e in category.expenses if
                     e.date_time.year == year and

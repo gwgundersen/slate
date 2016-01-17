@@ -3,7 +3,6 @@
 
 import calendar
 import datetime
-import json
 
 from flask import Blueprint, redirect, render_template, request, url_for
 from flask.ext.login import current_user, login_required
@@ -139,8 +138,7 @@ def expenses_default():
         .order_by(models.Expense.date_time.desc())\
         .all()
 
-    sum_ = sum([e.cost for e in expenses
-                if e.category.name != 'rent' and e.category.name != 'utilities'])
+    sum_ = sum([e.cost for e in expenses if e.category.name != 'rent'])
     return render_template('expenses.html',
                            auth_message=auth_message,
                            categories=_categories(),
