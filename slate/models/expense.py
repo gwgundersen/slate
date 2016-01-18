@@ -14,12 +14,14 @@ class Expense(db.Model):
     date_time = db.Column(db.Date)
     comment = db.Column(db.String(255))
     category_fk = db.Column(db.Integer, db.ForeignKey('category.id'))
+    user_fk = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-    def __init__(self, cost, category, comment):
+    def __init__(self, cost, category, comment, user):
         self.cost = cost
         self.category = category
         self.date_time = datetime.datetime.now()
         self.comment = comment
+        self.user = user
 
     @property
     def serialize(self):

@@ -2,10 +2,11 @@
 """
 
 from flask.ext.login import login_user, logout_user, login_required
+from sqlalchemy.orm.exc import NoResultFound
 
 from flask import Blueprint, request, redirect, render_template, url_for
 from slate.config import config
-from slate import models
+from slate import db, models
 from slate.endpoints import authutils
 
 auth = Blueprint('auth',
@@ -39,3 +40,37 @@ def logout():
     logout_user()
     return redirect(url_for('index.index_page'))
 
+
+@auth.route('/register', methods=['GET', 'POST'])
+def register():
+    auth_message = authutils.auth_message()
+    if request.method == 'GET':
+        return render_template('register.html',
+                               auth_message=auth_message)
+
+    username = request.form['username']
+    password = request.form['password']
+
+    no_user_by_that_name = False
+    try:
+        db.session.query(models.User)\
+            .filter(models.User.name == username)\
+            .one()
+    except NoResultFound:
+        no_user_by_that_name = True
+
+    if not no_user_by_that_name:
+        return render_template('register.html',
+                               auth_message=auth_message,
+                               error='Username already exists')
+
+    if not password:
+        return render_template('register.html',
+                               auth_message=auth_message,
+                               error='Password is required')
+
+    new_user = models.User(username, password)
+    db.session.add(new_user)
+    db.session.commit()
+    login_user(new_user)
+    return redirect(url_for('index.index_page'))

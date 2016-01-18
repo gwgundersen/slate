@@ -1,10 +1,14 @@
 """Represents application user.
 """
 
+import datetime
 import hashlib
 import uuid
 
+from sqlalchemy.orm.exc import NoResultFound
+
 from slate import db
+from slate.models import Category, Expense
 
 
 class User(db.Model):
@@ -14,9 +18,9 @@ class User(db.Model):
     name = db.Column(db.String(255))
     password = db.Column(db.String(255))
     salt = db.Column(db.String(255))
+    _expenses = db.relationship('Expense', backref=db.backref('user'))
 
-    def __init__(self, id, name, password, active=True):
-        self.id = id
+    def __init__(self, name, password, active=True):
         self.name = name
         hashed, salt = self.hash_password(password)
         self.password = hashed
@@ -35,10 +39,32 @@ class User(db.Model):
     def get_id(self):
         return self.id
 
+    def expenses(self, category=None, year=None, month=None):
+        query = db.session.query(Expense)\
+            .join(User)\
+            .filter(User.name == self.name)
+        if category:
+            query = query\
+                .join(Category)\
+                .filter(Category.name == category.lower())
+        if year and month:
+            query = query\
+                .filter(db.extract('year', Expense.date_time) == int(year))\
+                .filter(db.extract('month', Expense.date_time) == int(month))
+        else:
+            now = datetime.datetime.now()
+            query = query\
+                .filter(db.extract('year', Expense.date_time) == now.year)\
+                .filter(db.extract('month', Expense.date_time) == now.month)
+        return query\
+            .order_by(Expense.date_time.desc())\
+            .all()
+
     @classmethod
     def get(cls, username, candidate_pw):
-        user = db.session.query(cls).filter(cls.name == username).one()
-        if not user:
+        try:
+            user = db.session.query(cls).filter(cls.name == username).one()
+        except NoResultFound:
             return None
         if cls.correct_password(user.password, candidate_pw, user.salt):
             return user

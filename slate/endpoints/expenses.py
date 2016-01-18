@@ -27,9 +27,6 @@ expenses = Blueprint('expenses',
 def add_expense():
     """Adds expense.
     """
-    if current_user.name == 'guest':
-        return
-
     cost, category_name, comment, errors = _validate_expense(request)
     if len(errors) > 0:
         auth_message = authutils.auth_message()
@@ -41,7 +38,7 @@ def add_expense():
         .query(models.Category)\
         .filter(models.Category.name == category_name)\
         .one()
-    expense = models.Expense(cost, category, comment)
+    expense = models.Expense(cost, category, comment, current_user)
     db.session.add(expense)
     db.session.commit()
     return redirect(url_for('expenses.expenses_default'))
@@ -50,9 +47,6 @@ def add_expense():
 @expenses.route('/edit', methods=['GET', 'POST'])
 @login_required
 def edit_expense():
-    if current_user.name == 'guest':
-        return
-
     auth_message = authutils.auth_message()
     id_ = request.args.get('id')
     if request.method == 'GET':
@@ -88,9 +82,6 @@ def edit_expense():
 @expenses.route('/delete', methods=['POST'])
 @login_required
 def delete_expense():
-    if current_user.name == 'guest':
-        return
-
     id_ = request.form.to_dict()['id']
     expense = db.session.query(models.Expense).get(id_)
     db.session.delete(expense)
@@ -113,30 +104,16 @@ def expenses_default():
     year = request.args.get('year')
     month = request.args.get('month')
 
-    query = db.session.query(models.Expense)
-    if category:
-        query = query\
-            .join(models.Category)\
-            .filter(models.Category.name == category.lower())
-
     if year and month:
         month_str = '%s %s' % (calendar.month_name[int(month)], year)
         query_string = '?year=%s&month=%s&' % (year, month)
-        query = query\
-            .filter(db.extract('year', models.Expense.date_time) == int(year))\
-            .filter(db.extract('month', models.Expense.date_time) == int(month))
     else:
         now = datetime.datetime.now()
         month_str = '%s %s' % (calendar.month_name[now.month], now.year)
         query_string = '?'
-        query = query\
-            .filter(db.extract('year', models.Expense.date_time) == now.year)\
-            .filter(db.extract('month', models.Expense.date_time) == now.month)
 
     auth_message = authutils.auth_message()
-    expenses = query\
-        .order_by(models.Expense.date_time.desc())\
-        .all()
+    expenses = current_user.expenses(category, year, month)
 
     sum_ = sum([e.cost for e in expenses if e.category.name != 'rent'])
     return render_template('expenses.html',
