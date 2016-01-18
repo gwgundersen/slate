@@ -125,7 +125,8 @@ def expenses_default():
                            year=year,
                            month=month,
                            month_str=month_str,
-                           query_string=query_string)
+                           query_string=query_string,
+                           username=current_user.name)
 
 
 @expenses.route('/all', methods=['GET'])

@@ -24,7 +24,7 @@ def get_all_months():
         'year_num': c[2]} for c in results.fetchall()]
 
 
-def get_category_subtotals(year=None, month=None):
+def get_category_subtotals(username, year=None, month=None):
     """Returns total expenses per category, excluding rent.
     """
     result = {}
@@ -36,6 +36,7 @@ def get_category_subtotals(year=None, month=None):
     categories = [c for c in categories if c.name != 'rent']
     for category in categories:
         expenses = [e.cost for e in category.expenses if
+                    e.user.name == username and
                     e.date_time.year == year and
                     e.date_time.month == month]
         result[category.name.capitalize()] = round(sum(expenses), 2)

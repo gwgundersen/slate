@@ -1,29 +1,27 @@
-$(function() {
+window.plot = function(username) {
 
     var parts = window.location.href.split('?'),
         queryString,
-        url = '/slate/api/expenses';
+        url = '/slate/api/expenses/' + username;
 
     if (parts.length == 2) {
         queryString = parts[1];
         url += '?' + queryString
     }
 
-    console.log(url);
-
     $.ajax({
         url: url,
-        success: function(data) {
+        success: function (data) {
             plotExpenses(data['expenses']);
         }
     });
 
     function plotExpenses(rawData) {
 
-        var categories = $.map(rawData, function(val, key) {
+        var categories = $.map(rawData, function (val, key) {
             return key;
         });
-        var series = $.map(rawData, function(val, key) {
+        var series = $.map(rawData, function (val, key) {
             return val;
         });
 
@@ -92,5 +90,4 @@ $(function() {
             }]
         });
     }
-
-});
+};
