@@ -23,6 +23,7 @@ def login():
     
     username = request.form['username']
     password = request.form['password']
+
     registered_user = models.User.get(username, password)
     if registered_user is None:
         logout_user()
@@ -38,7 +39,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('index.index_page'))
+    return redirect(url_for('auth.login'))
 
 
 @auth.route('/register', methods=['GET', 'POST'])

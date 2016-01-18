@@ -3,6 +3,7 @@
 
 import calendar
 import datetime
+import json
 
 from flask import Blueprint, redirect, render_template, request, url_for
 from flask.ext.login import current_user, login_required
@@ -115,6 +116,8 @@ def expenses_default():
     auth_message = authutils.auth_message()
     expenses = current_user.expenses(category, year, month)
 
+    expenses_json = json.dumps(dbutils.get_category_subtotals(year, month))
+
     sum_ = sum([e.cost for e in expenses if e.category.name != 'rent'])
     return render_template('expenses.html',
                            auth_message=auth_message,
@@ -126,7 +129,7 @@ def expenses_default():
                            month=month,
                            month_str=month_str,
                            query_string=query_string,
-                           username=current_user.name)
+                           expenses_json=expenses_json)
 
 
 @expenses.route('/all', methods=['GET'])

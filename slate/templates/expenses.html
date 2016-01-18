@@ -89,7 +89,7 @@
     {% include 'footer.html' %}
 
     <script>
-        window.plot('{{ username }}');
+        window.plotExpenses({{ expenses_json|safe }});
     </script>
 
 </div>
