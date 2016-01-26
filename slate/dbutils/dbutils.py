@@ -15,10 +15,14 @@ def get_all_months():
     conn = db.engine.connect()
     results = conn.execute(
         'SELECT DISTINCT '\
-        '  CONCAT(MONTHNAME(date_time), " ", YEAR(date_time)), '\
+        '  CONCAT(MONTHNAME(date_time), " ", YEAR(date_time)) dt, '\
         '  MONTH(date_time), '\
-        '  YEAR(date_time) FROM expense '\
-        'ORDER BY date_time DESC'
+        '  YEAR(date_time) '
+        'FROM expense '\
+        'JOIN `user` '
+        '  ON `user`.id = expense.user_fk '\
+        'WHERE `user`.name = "%s" '\
+        'ORDER BY dt DESC' % current_user.name
     )
     return [{
         'view': c[0],
