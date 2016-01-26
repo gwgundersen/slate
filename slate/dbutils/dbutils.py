@@ -57,7 +57,7 @@ def get_category_subtotals(year=None, month=None):
 
 def get_sum_per_day(year, month):
     conn = db.engine.connect()
-    sql = 'SELECT DATE(date_time) as DATE, SUM(cost) '\
+    sql = 'SELECT DATE(date_time) as DATE, ROUND(SUM(cost), 2) '\
           '  FROM expense '\
           'JOIN `user` ' \
           '  ON `user`.id = expense.user_fk '\
