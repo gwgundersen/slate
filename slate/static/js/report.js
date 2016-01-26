@@ -7,16 +7,16 @@ window.plotExpenses = function(expensesData, perDayData) {
             }
         },
         colors: [
-            '#E74C3C', // alcohol
-            '#035D0E', // bills
-            '#004358', // clothing
+            '#D40000', // alcohol
+            '#395200', // bills
+            '#41a1ed', // clothing
             '#FFE11A', // entertainment
-            '#2C3E50', // food (in)
+            '#0b4370', // food (in)
             '#FD7400', // food (out)
-            '#BEDB39', // household
+            '#7FB800', // household
             '#1689E5', // medical
-            '#1F8A70',  // miscellaneous
-            '#3498DB', // transportation (away)
+            '#5c8500', // miscellaneous
+            '#0f5f9f', // transportation (away)
             '#2980B9'  // transportation (local)
         ]
     });
