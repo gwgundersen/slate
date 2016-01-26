@@ -33,17 +33,29 @@ def get_all_months():
 def get_category_subtotals(year=None, month=None):
     """Returns total expenses per category, excluding rent.
     """
-    result = {}
+    results = []
     if not year or not month:
         now = datetime.datetime.now()
         year = now.year
         month = now.month
-    categories = db.session.query(models.Category).all()
+    categories = get_categories()
     categories = [c for c in categories if c.name != 'rent']
     for category in categories:
         expenses = [e.cost for e in category.expenses if
                     e.user.name == current_user.name and
                     e.date_time.year == year and
                     e.date_time.month == month]
-        result[category.name.capitalize()] = round(sum(expenses), 2)
-    return result
+        results.append({
+            'category': category.name.capitalize(),
+            'subtotal': round(sum(expenses), 2)
+        })
+    return results
+
+
+def get_categories():
+    """Returns all categories in descending order.
+    """
+    return db.session\
+        .query(models.Category)\
+        .order_by(models.Category.name)\
+        .all()

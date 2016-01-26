@@ -55,7 +55,7 @@ def edit_expense():
         error = request.args.get('error')
         return render_template('edit.html',
                                auth_message=auth_message,
-                               categories=_categories(),
+                               categories=dbutils.get_categories(),
                                error=error,
                                expense=expense)
     if request.method == 'POST':
@@ -121,7 +121,7 @@ def expenses_default():
     sum_ = sum([e.cost for e in expenses if e.category.name != 'rent'])
     return render_template('expenses.html',
                            auth_message=auth_message,
-                           categories=_categories(),
+                           categories=dbutils.get_categories(),
                            category=category,
                            category_sum=sum_,
                            expenses=expenses,
@@ -172,12 +172,3 @@ def _date_handler(date):
     """Formats date for JSON.
     """
     return [date.year, date.month, date.day]
-
-
-def _categories():
-    """Returns all categories in descending order.
-    """
-    return db.session\
-        .query(models.Category)\
-        .order_by(models.Category.name)\
-        .all()

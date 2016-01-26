@@ -1,11 +1,15 @@
 window.plotExpenses = function(rawData) {
 
-    var categories = $.map(rawData, function (val, key) {
-        return key;
+    var categories = [],
+        series = [];
+
+    $.each(rawData, function (i, obj) {
+        categories.push(obj.category);
+        series.push(obj.subtotal);
     });
-    var series = $.map(rawData, function (val, key) {
-        return val;
-    });
+    //var series = $.map(rawData, function (val, key) {
+    //    return val;
+    //});
 
     Highcharts.setOptions({
         chart: {
