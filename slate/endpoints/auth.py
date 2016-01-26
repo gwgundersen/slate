@@ -50,7 +50,14 @@ def register():
                                auth_message=auth_message)
 
     username = request.form['username']
-    password = request.form['password']
+
+    if not username or not username.isalnum():
+        return render_template('register.html',
+                               auth_message=auth_message,
+                               error='Username must be alphanumeric')
+
+    password1 = request.form['password1']
+    password2 = request.form['password2']
 
     no_user_by_that_name = False
     try:
@@ -65,12 +72,17 @@ def register():
                                auth_message=auth_message,
                                error='Username already exists')
 
-    if not password:
+    if password1 != password2:
+        return render_template('register.html',
+                               auth_message=auth_message,
+                               error='Passwords do not match')
+
+    if not password1:
         return render_template('register.html',
                                auth_message=auth_message,
                                error='Password is required')
 
-    new_user = models.User(username, password)
+    new_user = models.User(username, password1)
     db.session.add(new_user)
     db.session.commit()
     login_user(new_user)
