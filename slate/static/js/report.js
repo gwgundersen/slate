@@ -35,7 +35,9 @@ window.plotExpensesTimeSeries = function(perDayData) {
         yAxis: {
             title: {
                 text: 'Subtotal'
-            }
+            },
+            // Lowest allowed value on y-axis.
+            floor: 0
         },
         legend: {
             enabled: false

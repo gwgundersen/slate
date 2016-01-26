@@ -79,6 +79,7 @@ def report_default():
                            alcohol=alcohol,
                            entertainment=entertainment,
                            discretionary=discretionary,
+                           query_string=query_string,
                            expenses_json=expenses_json,
                            sums_per_day_json=sums_per_day_json)
 

@@ -49,6 +49,7 @@ h1 span {
 }
 .btn {
   border: none;
+  font-family: arial, sans-serif;
 }
 .btn.btn-primary {
   background-color: #1689E5;
@@ -92,6 +93,9 @@ h1 span {
   -ms-transition: background-color 200ms linear;
   transition: background-color 200ms linear;
 }
+.form-control {
+  font-family: arial, sans-serif;
+}
 /* Element selectors.
  * ------------------ */
 #header {
@@ -116,6 +120,10 @@ h1 span {
 }
 #index-page a.btn {
   width: 100%;
+}
+#expenses-page,
+#report-page {
+  padding-bottom: 50px;
 }
 #expenses-page table,
 #report-page table {
@@ -179,8 +187,14 @@ h1 span {
 #report-page #expense-controls #previous-expenses {
   border-right: 1px solid #ddd;
 }
-#report-page {
-  padding-bottom: 50px;
+.dataTables_wrapper {
+  font-family: arial, sans-serif;
+}
+.dataTables_wrapper th {
+  background-color: red;
+}
+.dataTables_wrapper div.dataTables_info {
+  font-weight: bold;
 }
 #expenses-all h3 {
   border-bottom: 1px solid #ddd;
