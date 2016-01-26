@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC=''>
+<html>
+
+{% include 'head.html' %}
+
+<body>
+
+{% with auth_message=auth_message %}
+    {% include 'header.html' %}
+{% endwith %}
+
+<script src="static/lib/highcharts.js"></script>
+<script src="static/js/report.js"></script>
+
+<div id='report-page'>
+    <div id='expense-controls' class='container-full'>
+        <div class='container'>
+            <div class='row'>
+                <div id='details' class='col-md-2'>
+                    {% if month_string %}
+                        <p>{{ month_string }}</p>
+                    {% endif %}
+                    <p class='highlight'>
+                        <strong>Sum: ${{ category_sum }}*</strong>
+                    </p>
+                    <p class="note">*Rent excluded</p>
+                </div>
+                <div class='col-md-2'>
+                    <a class='btn btn-info' href='/slate/expenses'>Back</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='container'>
+        <div id='bar-chart-container'></div>
+    </div>
+    <div class='container'>
+        <div id='time-series-container'></div>
+    </div>
+    <div class='container'>
+        <div class='row'>
+            <div class='col-md-6'>
+                <h3>Food</h3>
+                <table>
+                    <tr>
+                        <td><strong>Food (in)</strong></td>
+                        <td>${{ food_in }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Food (out)</strong></td>
+                        <td>${{ food_out }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Total</strong></td>
+                        <td>${{ food_in + food_out }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Per meal</strong></td>
+                        <td>${{ cost_per_meal }}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class='col-md-6'>
+                <h3>Discretionary</h3>
+                <table>
+                    <tr>
+                        <td><strong>Alcohol</strong></td>
+                        <td>${{ alcohol }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Food (out)</strong></td>
+                        <td>${{ food_out }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Entertainment</strong></td>
+                        <td>${{ entertainment }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Total</strong></td>
+                        <td>${{ discretionary }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    {% include 'footer.html' %}
+
+    <script>
+        window.plotExpenses({{ expenses_json|safe }}, {{ sums_per_day_json|safe }});
+    </script>
+
+</div>
+</body>
+</html>

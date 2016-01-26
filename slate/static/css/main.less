@@ -142,7 +142,8 @@ h1 {
   }
 }
 
-#expenses-page {
+#expenses-page,
+#report-page {
   table {
     font-size: @font-size-base;
     thead {
@@ -161,12 +162,13 @@ h1 {
       font-size: @font-size-base;
     }
   }
-  select {
-    margin-bottom: 10px;
-  }
   button,
   a.btn {
     width: 100%;
+  }
+  select,
+  #previous-expenses-btn {
+    margin-bottom: 10px;
   }
   #expense-controls {
     background-color: #f9f9f9;
@@ -191,6 +193,10 @@ h1 {
       border-right: 1px solid #ddd;
     }
   }
+}
+
+#report-page {
+  padding-bottom: 50px;
 }
 
 #expenses-all {

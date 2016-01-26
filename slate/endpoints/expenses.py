@@ -3,12 +3,12 @@
 
 import calendar
 import datetime
-import json
 
 from flask import Blueprint, redirect, render_template, request, url_for
 from flask.ext.login import current_user, login_required
 
 from slate import db
+from slate.endpoints import viewutils
 from slate import models
 from slate import dbutils
 from slate.config import config
@@ -105,31 +105,21 @@ def expenses_default():
     year = request.args.get('year')
     month = request.args.get('month')
 
-    if year and month:
-        month_str = '%s %s' % (calendar.month_name[int(month)], year)
-        query_string = '?year=%s&month=%s&' % (year, month)
-    else:
-        now = datetime.datetime.now()
-        month_str = '%s %s' % (calendar.month_name[now.month], now.year)
-        query_string = '?'
-
+    month_string, query_string = viewutils.get_date_time_strings(year, month)
     auth_message = authutils.auth_message()
     expenses = current_user.expenses(category, year, month)
+    category_sum = viewutils.get_expense_sum(expenses)
 
-    expenses_json = json.dumps(dbutils.get_category_subtotals(year, month))
-
-    sum_ = sum([e.cost for e in expenses if e.category.name != 'rent'])
     return render_template('expenses.html',
                            auth_message=auth_message,
                            categories=dbutils.get_categories(),
                            category=category,
-                           category_sum=sum_,
+                           category_sum=category_sum,
                            expenses=expenses,
                            year=year,
                            month=month,
-                           month_str=month_str,
-                           query_string=query_string,
-                           expenses_json=expenses_json)
+                           month_string=month_string,
+                           query_string=query_string)
 
 
 @expenses.route('/all', methods=['GET'])
@@ -166,9 +156,3 @@ def _validate_expense(request):
         errors.append('Comment is required')
 
     return cost, category, comment, errors
-
-
-def _date_handler(date):
-    """Formats date for JSON.
-    """
-    return [date.year, date.month, date.day]

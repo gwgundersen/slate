@@ -9,18 +9,13 @@
     {% include 'header.html' %}
 {% endwith %}
 
-{% if not category %}
-    <script src="static/lib/highcharts.js"></script>
-    <script src="static/js/expenses.js"></script>
-{% endif %}
-
 <div id='expenses-page'>
     <div id='expense-controls' class='container-full'>
         <div class='container'>
             <div class='row'>
                 <div id='details' class='col-md-2'>
-                    {% if month_str %}
-                        <p>{{ month_str }}</p>
+                    {% if month_string %}
+                        <p>{{ month_string }}</p>
                     {% endif %}
                     {% if category %}
                         <p>{{ category }}</p>
@@ -48,13 +43,11 @@
                     </form>
                 </div>
                 <div class='col-md-2'>
-                    <a class='btn btn-info' href='/slate/expenses/all'>Previous months</a>
+                    <a id='previous-expenses-btn' class='btn btn-info' href='/slate/expenses/all'>Previous months</a>
+                    <a class='btn btn-info' href='/slate/report{{ query_string }}'>Report</a>
                 </div>
             </div>
         </div>
-    </div>
-    <div class='container'>
-        <div id='bar-chart-container'></div>
     </div>
     <div class='container'>
         <div class='table-responsive'>
@@ -87,10 +80,6 @@
     </div>
 
     {% include 'footer.html' %}
-
-    <script>
-        window.plotExpenses({{ expenses_json|safe }});
-    </script>
 
 </div>
 </body>

@@ -19,7 +19,7 @@ def get_all_months():
         '  MONTH(date_time), '\
         '  YEAR(date_time) '
         'FROM expense '\
-        'JOIN `user` '
+        'JOIN `user` '\
         '  ON `user`.id = expense.user_fk '\
         'WHERE `user`.name = "%s" '\
         'ORDER BY dt DESC' % current_user.name
@@ -34,10 +34,13 @@ def get_category_subtotals(year=None, month=None):
     """Returns total expenses per category, excluding rent.
     """
     results = []
-    if not year or not month:
+    if not (year and month):
         now = datetime.datetime.now()
         year = now.year
         month = now.month
+    else:
+        year = int(year)
+        month = int(month)
     categories = get_categories()
     categories = [c for c in categories if c.name != 'rent']
     for category in categories:
@@ -50,6 +53,29 @@ def get_category_subtotals(year=None, month=None):
             'subtotal': round(sum(expenses), 2)
         })
     return results
+
+
+def get_sum_per_day(year, month):
+    conn = db.engine.connect()
+    sql = 'SELECT DATE(date_time) as DATE, SUM(cost) '\
+          '  FROM expense '\
+          'JOIN `user` ' \
+          '  ON `user`.id = expense.user_fk '\
+          'JOIN category '\
+          '  ON category.id = expense.category_fk '\
+          'WHERE `user`.name = "%s" ' \
+          '  AND category.name != "rent" '\
+          '  AND YEAR(date_time) = %s ' \
+          '  AND MONTH(date_time) = %s '\
+          'GROUP BY DATE(date_time)' % (
+              current_user.name,
+              year,
+              month
+          )
+    results = conn.execute(sql)
+    return [{
+        'date_time': c[0],
+        'total': c[1]} for c in results.fetchall()]
 
 
 def get_categories():

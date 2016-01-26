@@ -31,6 +31,7 @@ from slate import endpoints
 app.register_blueprint(endpoints.auth)
 app.register_blueprint(endpoints.expenses)
 app.register_blueprint(endpoints.index)
+app.register_blueprint(endpoints.reports)
 
 # Login session management
 from slate import models
