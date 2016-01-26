@@ -7,9 +7,6 @@ window.plotExpenses = function(rawData) {
         categories.push(obj.category);
         series.push(obj.subtotal);
     });
-    //var series = $.map(rawData, function (val, key) {
-    //    return val;
-    //});
 
     Highcharts.setOptions({
         chart: {
