@@ -106,8 +106,15 @@ window.plotExpensesTimeSeries = function(perDayData) {
         },
         tooltip: {
             formatter: function() {
+
+                function dayOfWeekAsString(dayIndex) {
+                    return ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'][dayIndex];
+                }
+
                 var idx = this.series.data.indexOf(this.point),
-                    table = '';
+                    date = new Date(this.x),
+                    day = dayOfWeekAsString(date.getDay()),
+                    table = '<strong>' + day + '</strong><br>';
 
                 // Don't show empty tooltip.
                 if (!perDayData[idx].expenses.length) {
@@ -119,7 +126,7 @@ window.plotExpensesTimeSeries = function(perDayData) {
                 // http://api.highcharts.com/highcharts#tooltip
                 $.each(perDayData[idx].expenses, function(i, e) {
                     table += '' +
-                        '<span><strong>$' + e.cost + '</strong> ' + e.comment + '</span><br>';
+                        '<span>$' + e.cost + ' - ' + e.comment + '</span><br>';
                 });
                 return table;
             }
