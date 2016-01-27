@@ -121,6 +121,23 @@ h1 span {
 #index-page a.btn {
   width: 100%;
 }
+#index-page .checkbox,
+#edit-page .checkbox {
+  font-size: 14px;
+}
+#index-page .checkbox label,
+#edit-page .checkbox label {
+  font-weight: bold;
+}
+#index-page #add-btn,
+#edit-page #add-btn,
+#index-page #edit-btn,
+#edit-page #edit-btn {
+  /* I don't want the user to accidentally click add while trying to select
+     * mandatory.
+     */
+  margin-top: 40px;
+}
 #expenses-page,
 #report-page {
   padding-bottom: 50px;
@@ -152,10 +169,12 @@ h1 span {
 #report-page a.btn {
   width: 100%;
 }
-#expenses-page select,
-#report-page select,
 #expenses-page #previous-expenses-btn,
 #report-page #previous-expenses-btn {
+  margin-bottom: 12px;
+}
+#expenses-page select,
+#report-page select {
   margin-bottom: 10px;
 }
 #expenses-page #expense-controls,
@@ -186,6 +205,17 @@ h1 span {
 #expenses-page #expense-controls #previous-expenses,
 #report-page #expense-controls #previous-expenses {
   border-right: 1px solid #ddd;
+}
+#expenses-page #breakout,
+#report-page #breakout {
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 30px;
+  padding-bottom: 30px;
+}
+@media (max-width: 992px) {
+  #expenses-page #expense-controls #previous-expenses {
+    border-right: none;
+  }
 }
 .dataTables_wrapper {
   font-family: arial, sans-serif;

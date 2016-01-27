@@ -6,7 +6,7 @@
 <body>
 
 {% include 'header.html' %}
-    
+
 <div id='index-page' class='container'>
 
     {% if error %}
@@ -30,7 +30,12 @@
                 <div class='form-group'>
                     <input class='form-control' name='comment' type='text' placeholder='Comment' autocomplete='off'/>
                 </div>
-                <div class='form-group'>
+                <div class='checkbox'>
+                    <label>
+                        <input type='checkbox' checked name='discretionary'>Discretionary
+                    </label>
+                </div>
+                <div class='form-group' id='add-btn'>
                     <button type='submit' class='form-control btn btn-primary'>Add</button>
                 </div>
             </form>

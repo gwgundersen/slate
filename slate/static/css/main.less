@@ -118,6 +118,7 @@ h1 {
   font-family: @font-family-base;
 }
 
+
 /* Element selectors.
  * ------------------ */
 #header {
@@ -147,8 +148,26 @@ h1 {
   }
 }
 
+#index-page,
+#edit-page {
+  .checkbox {
+    font-size: 14px;
+    label {
+      font-weight: bold;
+    }
+  }
+  #add-btn,
+  #edit-btn {
+    /* I don't want the user to accidentally click add while trying to select
+     * mandatory.
+     */
+    margin-top: 40px;
+  }
+}
+
 #expenses-page,
 #report-page {
+  padding-bottom: 50px;
   table {
     font-size: @font-size-base;
     thead {
@@ -171,8 +190,10 @@ h1 {
   a.btn {
     width: 100%;
   }
-  select,
   #previous-expenses-btn {
+    margin-bottom: 12px;
+  }
+  select {
     margin-bottom: 10px;
   }
   #expense-controls {
@@ -198,7 +219,21 @@ h1 {
       border-right: 1px solid #ddd;
     }
   }
-  padding-bottom: 50px;
+  #breakout {
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 30px;
+    padding-bottom: 30px;
+  }
+}
+
+@media (max-width: 992px) {
+  #expenses-page {
+    #expense-controls {
+      #previous-expenses {
+        border-right: none;
+      }
+    }
+  }
 }
 
 .dataTables_wrapper {

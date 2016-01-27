@@ -32,21 +32,25 @@
         </div>
     </div>
     <div class='container'>
-        <div class='row'>
-            <div class='col-md-6'>
-                <div id='bar-chart-container'></div>
+        <div class='row' id='breakout'>
+            <div class='col-md-4'>
+                <h3>Discretionary</h3>
+                <table>
+                    {% for category in discretionary %}
+                    <tr>
+                        <td><strong>{{ category|capitalize }}</strong></td>
+                        <td>${{ discretionary[category] }}</td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <td><strong>Total</strong></td>
+                        <td>
+                            <strong class='highlight'>${{ discretionary_sum }}</strong>
+                        </td>
+                    </tr>
+                </table>
             </div>
-            <div class='col-md-6'>
-                <div id='pie-chart-container'></div>
-            </div>
-        </div>
-    </div>
-    <div class='container'>
-        <div id='time-series-container'></div>
-    </div>
-    <div class='container'>
-        <div class='row'>
-            <div class='col-md-6'>
+            <div class='col-md-4'>
                 <h3>Food</h3>
                 <table>
                     <tr>
@@ -63,32 +67,24 @@
                     </tr>
                     <tr>
                         <td><strong>Per meal</strong></td>
-                        <td>${{ cost_per_meal }}</td>
-                    </tr>
-                </table>
-            </div>
-            <div class='col-md-6'>
-                <h3>Discretionary</h3>
-                <table>
-                    <tr>
-                        <td><strong>Alcohol</strong></td>
-                        <td>${{ alcohol }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Food (out)</strong></td>
-                        <td>${{ food_out }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Entertainment</strong></td>
-                        <td>${{ entertainment }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Total</strong></td>
-                        <td>${{ discretionary }}</td>
+                        <td><strong class='highlight'>${{ cost_per_meal }}</strong></td>
                     </tr>
                 </table>
             </div>
         </div>
+    </div>
+    <div class='container'>
+        <div class='row'>
+            <div class='col-md-6'>
+                <div id='bar-chart-container'></div>
+            </div>
+            <div class='col-md-6'>
+                <div id='pie-chart-container'></div>
+            </div>
+        </div>
+    </div>
+    <div class='container'>
+        <div id='time-series-container'></div>
     </div>
 
     {% include 'footer.html' %}

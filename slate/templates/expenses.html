@@ -61,6 +61,7 @@
                         <td>Cost ($)</td>
                         <td>Comment</td>
                         <td>Category</td>
+                        <td>Discretionary</td>
                         <td>Time</td>
                         <td></td>
                     </tr>
@@ -70,6 +71,7 @@
                     <td>{{ '%0.2f'| format(expense.cost|float) }}</td>
                     <td>{{ expense.comment }}</td>
                     <td>{{ expense.category.name|capitalize }}</td>
+                    <td>{{ 'Yes' if expense.discretionary else 'No' }}</td>
                     <td>{{ expense.date_time.strftime('%d %b %Y - %H:%M') }}</td>
                     <td>
                         <form action='expenses/edit' method='get'>

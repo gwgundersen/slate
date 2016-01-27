@@ -67,7 +67,16 @@ def report_default():
     # ------------------------------------------------------------------------
     alcohol = viewutils.get_category_sum(expenses, 'alcohol')
     entertainment = viewutils.get_category_sum(expenses, 'entertainment')
-    discretionary = food_out + alcohol + entertainment
+    discretionary = {}
+    discretionary_sum = 0
+    for e in expenses:
+        if e.discretionary:
+            c = e.category.name
+            if c in discretionary:
+                discretionary[c] += e.cost
+            else:
+                discretionary[c] = e.cost
+            discretionary_sum += e.cost
 
     return render_template('report.html',
                            auth_message=auth_message,
@@ -79,6 +88,7 @@ def report_default():
                            alcohol=alcohol,
                            entertainment=entertainment,
                            discretionary=discretionary,
+                           discretionary_sum=discretionary_sum,
                            query_string=query_string,
                            expenses_json=expenses_json,
                            sums_per_day_json=sums_per_day_json)

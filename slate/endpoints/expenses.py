@@ -28,7 +28,9 @@ expenses = Blueprint('expenses',
 def add_expense():
     """Adds expense.
     """
-    cost, category_name, comment, errors = _validate_expense(request)
+    cost, category_name, comment, errors, discretionary = \
+        _validate_expense(request)
+
     if len(errors) > 0:
         auth_message = authutils.auth_message()
         return redirect(url_for('index.index_page',
@@ -39,7 +41,8 @@ def add_expense():
         .query(models.Category)\
         .filter(models.Category.name == category_name)\
         .one()
-    expense = models.Expense(cost, category, comment, current_user)
+    expense = models.Expense(cost, category, comment, discretionary,
+                             current_user)
     db.session.add(expense)
     db.session.commit()
     return redirect(url_for('expenses.expenses_default'))
@@ -60,7 +63,8 @@ def edit_expense():
                                expense=expense)
     if request.method == 'POST':
         id_ = request.form.get('id')
-        cost, category, comment, errors = _validate_expense(request)
+        cost, category, comment, errors, discretionary = \
+            _validate_expense(request)
         if len(errors) > 0:
             url = url_for('expenses.edit_expense',
                           id=id_,
@@ -75,6 +79,7 @@ def edit_expense():
             .filter_by(name=category)\
             .one()
         expense.comment = comment
+        expense.discretionary = discretionary
         db.session.merge(expense)
         db.session.commit()
         return redirect(url_for('expenses.expenses_default'))
@@ -144,6 +149,7 @@ def _validate_expense(request):
     try:
         cost = request.form['cost']
         cost = float(cost)
+        cost = round(cost, 2)
     except ValueError:
         errors.append('Cost must be a float.')
 
@@ -155,4 +161,10 @@ def _validate_expense(request):
     if not comment:
         errors.append('Comment is required')
 
-    return cost, category, comment, errors
+    # HTML forms do not automatically POST unchecked check boxes.
+    if 'discretionary' in request.form:
+        discretionary = True
+    else:
+        discretionary = False
+
+    return cost, category, comment, errors, discretionary
