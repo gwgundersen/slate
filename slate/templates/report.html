@@ -90,7 +90,7 @@
     {% include 'footer.html' %}
 
     <script>
-        window.plotExpenses({{ expenses_json|safe }}, {{ sums_per_day_json|safe }});
+        window.plotExpenses({{ expenses_json|safe }}, {{ ordered_expenses_json|safe }});
     </script>
 
 </div>

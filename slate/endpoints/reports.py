@@ -3,7 +3,7 @@
 
 import datetime
 import json
-import time
+import collections
 
 from flask import Blueprint, render_template, request
 from flask.ext.login import current_user, login_required
@@ -42,18 +42,37 @@ def report_default():
 
     # Total expenses per day for the month
     # ------------------------------------------------------------------------
-    sums_per_day = dbutils.get_sum_per_day(year, month)
-    all_days = viewutils.get_all_days_in_month(year, month)
-    date_set = set([x['date_time'] for x in sums_per_day])
-    for day in all_days:
-        if day not in date_set:
-            sums_per_day.append({
-                'date_time': day,
-                'total': 0
-            })
 
-    sums_per_day.sort(key=lambda x: x['date_time'])
-    sums_per_day_json = json.dumps(sums_per_day, default=_date_handler)
+    # TODO: This section feels messy, but I'm rushing to finish for
+    # Hack && Tell.
+
+    all_expenses = current_user.expenses(year=year, month=month)
+    grouped_expenses = collections.OrderedDict()
+    for e in all_expenses:
+        if e.category.name == 'rent':
+            continue
+        key = e.date_time.strftime('%Y-%m-%d')
+        if key not in grouped_expenses:
+            grouped_expenses[key] = []
+        grouped_expenses[key].append({
+            'cost': e.cost,
+            'comment': e.comment
+        })
+
+    all_days = viewutils.get_all_days_in_month(year, month)
+    for d in all_days:
+        d = str(d)
+        if d not in grouped_expenses:
+            grouped_expenses[d] = []
+
+    ordered_expenses = []
+    for i,date in enumerate(sorted(grouped_expenses)):
+        ordered_expenses.append({
+            'date_time': date,
+            'expenses': grouped_expenses[date]
+        })
+
+    ordered_expenses_json = json.dumps(ordered_expenses)
 
     # Food
     # ------------------------------------------------------------------------
@@ -91,7 +110,7 @@ def report_default():
                            discretionary_sum=discretionary_sum,
                            query_string=query_string,
                            expenses_json=expenses_json,
-                           sums_per_day_json=sums_per_day_json)
+                           ordered_expenses_json=ordered_expenses_json)
 
 def _date_handler(date):
     """Formats date for JSON.

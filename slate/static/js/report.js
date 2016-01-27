@@ -1,3 +1,6 @@
+/* Generates all plots for report pages.
+ */
+
 window.plotExpenses = function(expensesData, perDayData) {
 
     Highcharts.setOptions({
@@ -36,7 +39,6 @@ window.plotExpensesPieChart = function(expensesData) {
         });
     });
 
-    // Build the chart
     $('#pie-chart-container').highcharts({
         chart: {
             plotBackgroundColor: null,
@@ -70,11 +72,18 @@ window.plotExpensesPieChart = function(expensesData) {
 
 window.plotExpensesTimeSeries = function(perDayData) {
 
-    var data = [];
-    $.each(perDayData, function(i, obj) {
-        var d = obj.date_time;
+    var data = [],
+        breakoutData = [];
+    $.each(perDayData, function(date, obj) {
+        var d = obj.date_time.split('-'),
+            total = 0;
+
+        $.each(obj.expenses, function(i, e) {
+            total += e.cost;
+        });
+
         // Subtract 1 because JavaScript counts months from 0...
-        data.push([Date.UTC(d[0], d[1]-1, d[2]), obj.total]);
+        data.push([Date.UTC(d[0], d[1]-1, d[2]), total]);
     });
 
     $('#time-series-container').highcharts({
@@ -94,6 +103,26 @@ window.plotExpensesTimeSeries = function(perDayData) {
             },
             // Lowest allowed value on y-axis.
             floor: 0
+        },
+        tooltip: {
+            formatter: function() {
+                var idx = this.series.data.indexOf(this.point),
+                    table = '';
+
+                // Don't show empty tooltip.
+                if (!perDayData[idx].expenses.length) {
+                    return false;
+                }
+
+                // Highcharts does not support tables. For a list of support
+                // HTML elements:
+                // http://api.highcharts.com/highcharts#tooltip
+                $.each(perDayData[idx].expenses, function(i, e) {
+                    table += '' +
+                        '<span><strong>$' + e.cost + '</strong> ' + e.comment + '</span><br>';
+                });
+                return table;
+            }
         },
         legend: {
             enabled: false
