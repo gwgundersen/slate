@@ -14,13 +14,13 @@ html {
   min-height: 100%;
 }
 body {
-  margin-bottom: 70px;
+  margin-bottom: 50px;
 }
 #footer {
   position: absolute;
   left: 0;
   bottom: 0;
-  height: 70px;
+  height: 50px;
   width: 100%;
 }
 /* Tag and general class selectors.
@@ -262,24 +262,10 @@ h1 span {
   margin-top: 10px;
 }
 #footer .container a {
-  font-size: 15px;
+  font-size: 14px;
 }
 #footer .container ul {
   margin-bottom: 3px;
-}
-#footer .container .credits {
-  color: #555;
-}
-#footer .container .credits p,
-#footer .container .credits a {
-  font-size: 13px;
-}
-#footer .container .credits a {
-  color: #555;
-  text-decoration: underline;
-}
-#footer .container .credits a:hover {
-  color: #888;
 }
 #account-page h2 {
   margin-top: 0;
