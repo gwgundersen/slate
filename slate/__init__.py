@@ -28,6 +28,7 @@ db.init_app(app)
 
 # Server endpoints
 from slate import endpoints
+app.register_blueprint(endpoints.account)
 app.register_blueprint(endpoints.auth)
 app.register_blueprint(endpoints.expenses)
 app.register_blueprint(endpoints.index)

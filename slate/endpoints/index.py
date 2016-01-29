@@ -15,6 +15,8 @@ index = Blueprint('index',
 
 @index.route('/', methods=['GET'])
 def index_page():
+    """Renders index page.
+    """
     categories = dbutils.get_categories()
     error = request.args.get('error')
     auth_message = authutils.auth_message()

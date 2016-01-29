@@ -115,7 +115,7 @@ h1 span {
   height: 1000px;
   width: 1000px;
 }
-#index-page {
+.page {
   margin-top: 20px;
 }
 #index-page a.btn {
@@ -238,10 +238,6 @@ h1 span {
 #edit-page #delete-button .btn {
   width: 100%;
 }
-#register-page,
-#login-page {
-  margin-top: 20px;
-}
 #register-page button,
 #login-page button {
   width: 100%;
@@ -252,4 +248,15 @@ h1 span {
 }
 #footer .container {
   margin-top: 10px;
+}
+#account-page h2 {
+  margin-top: 0;
+}
+#account-page .section {
+  border-top: 1px solid #ddd;
+  margin-bottom: 50px;
+}
+#account-page #delete-account-section {
+  margin-top: 50px;
+  padding-top: 20px;
 }

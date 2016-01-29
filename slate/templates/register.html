@@ -9,7 +9,7 @@
     {% include 'header.html' %}
 {% endwith %}
 
-<div id='register-page' class='container'>
+<div id='register-page' class='page container'>
 
     {% if error %}
     <p class='highlight'>{{ error }}</p>
@@ -19,13 +19,16 @@
         <div class='col-md-4'>
             <form action='/slate/register' method='POST'>
                 <div class='form-group'>
-                    <input type='text' class='form-control' name='username' placeholder='Username (alphanumeric)' autocomplete='off'>
+                    <label>Username (alphanumeric)</label>
+                    <input type='text' class='form-control' name='username' autocomplete='off'>
                 </div>
                 <div class='form-group'>
-                    <input type='password' class='form-control' name='password1' placeholder='Password' autocomplete='off'>
+                    <label>Password</label>
+                    <input type='password' class='form-control' name='password1' autocomplete='off'>
                 </div>
                 <div class='form-group'>
-                    <input type='password' class='form-control' name='password2' placeholder='Password (repeat)' autocomplete='off'>
+                    <label>Confirm password</label>
+                    <input type='password' class='form-control' name='password2' autocomplete='off'>
                 </div>
                 <button type='submit' class='btn btn-primary'>Register</button>
             </form>

@@ -22,7 +22,7 @@ class User(db.Model):
 
     def __init__(self, name, password, active=True):
         self.name = name
-        hashed, salt = self.hash_password(password)
+        hashed, salt = User.hash_password(password)
         self.password = hashed
         self.salt = salt
         self.active = active
@@ -66,18 +66,23 @@ class User(db.Model):
             user = db.session.query(cls).filter(cls.name == username).one()
         except NoResultFound:
             return None
-        if cls.correct_password(user.password, candidate_pw, user.salt):
+        if User._is_correct_password(user.password, candidate_pw, user.salt):
             return user
         return None
 
-    @classmethod
-    def correct_password(cls, hashed, candidate, salt):
-        """Check hashed password.
+    @staticmethod
+    def _is_correct_password(hashed, candidate, salt):
+        """Returns True if the candidate password is correct, False otherwise.
         """
         return hashlib.sha512(candidate + salt).hexdigest() == hashed
 
-    @classmethod
-    def hash_password(cls, password):
+    def is_correct_password(self, candidate):
+        """Returns True if the candidate password is correct, False otherwise.
+        """
+        return self._is_correct_password(self.password, candidate, self.salt)
+
+    @staticmethod
+    def hash_password(password):
         """Hash a password for the first time.
         """
         salt = uuid.uuid4().hex
