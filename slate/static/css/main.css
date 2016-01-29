@@ -126,7 +126,7 @@ h1 span {
 }
 #index-page .row {
   /* Prevents footer from hitting bottombutton. */
-  margin-bottom: 20px;
+  margin-bottom: 50px;
 }
 #index-page .checkbox,
 #edit-page .checkbox {
