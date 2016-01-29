@@ -218,6 +218,9 @@ h1 span {
     border-bottom: 1px solid #ddd;
     margin-bottom: 14px;
   }
+  #expenses-page .dataTables_wrapper {
+    margin-top: 10px;
+  }
 }
 .dataTables_wrapper {
   font-family: arial, sans-serif;
