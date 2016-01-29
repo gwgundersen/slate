@@ -215,6 +215,8 @@ h1 span {
 @media (max-width: 992px) {
   #expenses-page #expense-controls #previous-expenses {
     border-right: none;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 14px;
   }
 }
 .dataTables_wrapper {

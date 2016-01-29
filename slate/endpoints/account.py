@@ -1,8 +1,9 @@
 """Manages user account page.
 """
 
-import StringIO
+import calendar
 import os
+import StringIO
 import zipfile
 
 from flask import Blueprint, redirect, Response, render_template, request, url_for
@@ -116,9 +117,11 @@ def _write_files_and_return_names():
     files = []
     months = dbutils.get_all_months()
     for d in months:
-        expenses = current_user.expenses(year=d['year_num'],
-                                         month=d['month_num'])
-        filename = 'slate/static/downloads/%s.tsv' % d['view']
+        year = d['year_num']
+        month = d['month_num']
+        month_name = calendar.month_name[int(month)]
+        expenses = current_user.expenses(year=year, month=month)
+        filename = 'slate/static/downloads/%s %s.tsv' % (year, month_name)
         with open(filename, 'w+') as f:
             header = 'cost\tcomment\tcategory\tdiscretionary\ttime\n'
             f.write(header)
@@ -126,7 +129,6 @@ def _write_files_and_return_names():
                 line = [str(e.cost), e.comment, e.category.name,
                         str(e.discretionary), str(e.date_time)]
                 line = '\t'.join(line) + '\n'
-                print(line)
                 f.write(line)
         files.append(filename)
     return files
