@@ -14,13 +14,13 @@ html {
   min-height: 100%;
 }
 body {
-  margin-bottom: 90px;
+  margin-bottom: 70px;
 }
 #footer {
   position: absolute;
   left: 0;
   bottom: 0;
-  height: 90px;
+  height: 70px;
   width: 100%;
 }
 /* Tag and general class selectors.
@@ -263,6 +263,9 @@ h1 span {
 }
 #footer .container a {
   font-size: 15px;
+}
+#footer .container ul {
+  margin-bottom: 3px;
 }
 #footer .container .credits {
   color: #555;
