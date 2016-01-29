@@ -1,13 +1,14 @@
 """Manages user account page.
 """
 
-from flask import Blueprint, redirect, render_template, request, url_for
+import StringIO
+import os
+import zipfile
+
+from flask import Blueprint, redirect, Response, render_template, request, url_for
 from flask.ext.login import current_user, login_required, logout_user
 
-from slate import db
-from slate.endpoints import viewutils
-from slate import models
-from slate import dbutils
+from slate import db, dbutils, models
 from slate.config import config
 from slate.endpoints import authutils
 
@@ -24,23 +25,42 @@ def view_account():
     auth_message = authutils.auth_message()
     message = request.args.get('message')
     return render_template('account.html',
-                           user=current_user,
                            message=message,
                            auth_message=auth_message)
 
 
-@account.route('/delete', methods=['POST'])
+@account.route('/download', methods=['GET'])
 @login_required
-def delete_account():
-    """Permanently deletes a user and all associated data.
+def download_data():
+    """Returns a zip file of CSV files, one for every month.
     """
-    if current_user.name == 'gwg':
-        return 'Greg, use a fake account to test this.'
-    id_ = current_user.id
-    logout_user()
-    models.User.query.filter_by(id=id_).delete()
-    db.session.commit()
-    return render_template('account-delete-confirmation.html')
+    filenames = _write_files_and_return_names()
+    zip_subdir = 'slate'
+    zip_filename = '%s.zip' % zip_subdir
+
+    # Open StringIO to grab in-memory ZIP contents
+    s = StringIO.StringIO()
+    zf = zipfile.ZipFile(s, "w")
+
+    for fpath in filenames:
+        # Calculate path for file in zip
+        fdir, fname = os.path.split(fpath)
+        zip_path = os.path.join(zip_subdir, fname)
+        # Add file, at correct path
+        zf.write(fpath, zip_path)
+
+    zf.close()
+
+    # Grab ZIP file from in-memory, make response with correct MIME-type
+    resp = Response(s.getvalue(), mimetype='application/x-zip-compressed')
+    content_disposition = 'attachment; filename=%s' % zip_filename
+    resp.headers['Content-Disposition'] = content_disposition
+
+    # Delete files from server before sending them over the wire.
+    for f in filenames:
+        os.remove(f)
+
+    return resp
 
 
 @account.route('/update', methods=['POST'])
@@ -74,3 +94,39 @@ def update_password():
     db.session.commit()
     return redirect(url_for('account.view_account',
                             message='Password was successfully updated'))
+
+
+@account.route('/delete', methods=['POST'])
+@login_required
+def delete_account():
+    """Permanently deletes a user and all associated data.
+    """
+    if current_user.name == 'gwg':
+        return 'Greg, use a fake account to test this.'
+    id_ = current_user.id
+    logout_user()
+    models.User.query.filter_by(id=id_).delete()
+    db.session.commit()
+    return render_template('account-delete-confirmation.html')
+
+
+def _write_files_and_return_names():
+    """Writes CSV file with expenses for each monnth; returns all filenames.
+    """
+    files = []
+    months = dbutils.get_all_months()
+    for d in months:
+        expenses = current_user.expenses(year=d['year_num'],
+                                         month=d['month_num'])
+        filename = 'slate/static/downloads/%s.tsv' % d['view']
+        with open(filename, 'w+') as f:
+            header = 'cost\tcomment\tcategory\tdiscretionary\ttime\n'
+            f.write(header)
+            for e in expenses:
+                line = [str(e.cost), e.comment, e.category.name,
+                        str(e.discretionary), str(e.date_time)]
+                line = '\t'.join(line) + '\n'
+                print(line)
+                f.write(line)
+        files.append(filename)
+    return files
