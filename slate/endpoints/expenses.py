@@ -149,7 +149,7 @@ def _validate_expense(request):
 
     comment = request.form.get('comment')
     if not comment:
-        errors.append('Comment is required')
+        errors.append('Comment is required.')
 
     # HTML forms do not automatically POST unchecked check boxes.
     if 'discretionary' in request.form:

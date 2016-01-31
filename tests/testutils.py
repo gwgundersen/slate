@@ -7,6 +7,8 @@ from config import SLATE_URL, MOCK_USER, MOCK_PW
 
 
 def exists_by_xpath(browser, xpath):
+    """Returns True if element exists, False otherwise.
+    """
     try:
         browser.find_element_by_xpath(xpath)
     except NoSuchElementException:
@@ -15,6 +17,8 @@ def exists_by_xpath(browser, xpath):
 
 
 def link_href_is_correct(browser, xpath, href):
+    """Returns True if link href is the value passed in, False otherwise.
+    """
     try:
         link = browser.find_element_by_xpath(xpath)
         actual_href = link.get_attribute('href')
