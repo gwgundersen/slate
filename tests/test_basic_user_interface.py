@@ -53,13 +53,7 @@ class TestBasicUserInterface(unittest.TestCase):
 
     def test_footer_links(self):
         self.assertTrue(
-            link_href_is_correct(self.browser, '//a[text()="Account"]', 'account')
-        )
-        self.assertTrue(
             link_href_is_correct(self.browser, '//a[text()="Login"]', 'login')
-        )
-        self.assertTrue(
-            link_href_is_correct(self.browser, '//a[text()="Logout"]', 'logout')
         )
         self.assertTrue(
             link_href_is_correct(self.browser, '//a[text()="Register"]', 'register')

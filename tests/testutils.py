@@ -3,7 +3,7 @@
 
 from selenium.common.exceptions import NoSuchElementException
 
-from config import SLATE_URL
+from config import SLATE_URL, MOCK_USER, MOCK_PW
 
 
 def exists_by_xpath(browser, xpath):
@@ -26,3 +26,21 @@ def link_href_is_correct(browser, xpath, href):
         return actual_href == '/%s' % href
     except NoSuchElementException:
         return False
+
+
+def login_user(browser):
+    """Logins in user.
+    """
+    username_input = browser\
+        .find_element_by_xpath('//input[@name="username"]')
+    password_input = browser\
+        .find_element_by_xpath('//input[@name="password"]')
+    username_input.send_keys(MOCK_USER)
+    password_input.send_keys(MOCK_PW)
+    browser.find_element_by_xpath('//button[@type="submit"]').click()
+
+
+def logout_user(browser):
+    """Logs out user.
+    """
+    browser.find_element_by_xpath('//a[text()="Logout"]').click()
