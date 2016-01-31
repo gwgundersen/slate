@@ -14,5 +14,5 @@ All notable changes to this project will be documented in this file.
     SQLAlchemy
     Flask-SQLAlchemy
     nose.
-- Wrote first unit test.
+- Started unit test suite with Selenium for user interface testing.
 - Removed jargon from "Cost must be a float" error message.
