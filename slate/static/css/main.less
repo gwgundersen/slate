@@ -298,6 +298,16 @@ h1 {
     ul {
       margin-bottom: 3px;
     }
+    /* Make logout button, which uses an HTML form to POST, look like a link. */
+    input {
+      border: none;
+      background-color: transparent;
+      color: @color-blue;
+      font-size: 14px;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 }
 

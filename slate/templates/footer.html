@@ -2,19 +2,21 @@
     <div class='container-full'>
         <div class='container'>
             <ul class='list-inline'>
-                <li>
-                    <a href='/slate/account'>Account</a>
-                </li>
-                <li>
-                    <a href='/slate/login'>Login</a>
-                </li>
-                <li>
-                    <!-- TODO: Should this be a link? -->
-                    <a href='/slate/logout'>Logout</a>
-                </li>
-                <li>
-                    <a href='/slate/register'>Register</a>
-                </li>
+                {% if config.user %}
+                    <li>
+                        <a href='/slate/logout'>Logout</a>
+                    </li>
+                    <li>
+                        <a href='/slate/account'>Account</a>
+                    </li>
+                {% else %}
+                    <li>
+                        <a href='/slate/login'>Login</a>
+                    </li>
+                    <li>
+                        <a href='/slate/register'>Register</a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </div>

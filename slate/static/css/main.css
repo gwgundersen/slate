@@ -260,12 +260,22 @@ h1 span {
 }
 #footer .container {
   margin-top: 10px;
+  /* Make logout button, which uses an HTML form to POST, look like a link. */
 }
 #footer .container a {
   font-size: 14px;
 }
 #footer .container ul {
   margin-bottom: 3px;
+}
+#footer .container input {
+  border: none;
+  background-color: transparent;
+  color: #1689E5;
+  font-size: 14px;
+}
+#footer .container input:hover {
+  text-decoration: underline;
 }
 #account-page h2 {
   margin-top: 0;

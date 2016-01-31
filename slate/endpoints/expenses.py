@@ -12,7 +12,6 @@ from slate.endpoints import viewutils
 from slate import models
 from slate import dbutils
 from slate.config import config
-from slate.endpoints import authutils
 
 
 expenses = Blueprint('expenses',
@@ -32,9 +31,7 @@ def add_expense():
         _validate_expense(request)
 
     if len(errors) > 0:
-        auth_message = authutils.auth_message()
         return redirect(url_for('index.index_page',
-                                auth_message=auth_message,
                                 error=errors[0]))
 
     category = db.session\
@@ -51,13 +48,11 @@ def add_expense():
 @expenses.route('/edit', methods=['GET', 'POST'])
 @login_required
 def edit_expense():
-    auth_message = authutils.auth_message()
     id_ = request.args.get('id')
     if request.method == 'GET':
         expense = db.session.query(models.Expense).get(id_)
         error = request.args.get('error')
         return render_template('edit.html',
-                               auth_message=auth_message,
                                categories=dbutils.get_categories(),
                                error=error,
                                expense=expense)
@@ -68,7 +63,6 @@ def edit_expense():
         if len(errors) > 0:
             url = url_for('expenses.edit_expense',
                           id=id_,
-                          auth_message=auth_message,
                           error=errors[0])
             return redirect(url)
 
@@ -111,12 +105,10 @@ def expenses_default():
     month = request.args.get('month')
 
     month_string, query_string = viewutils.get_date_time_strings(year, month)
-    auth_message = authutils.auth_message()
     expenses = current_user.expenses(category, year, month)
     category_sum = viewutils.get_expense_sum(expenses)
 
     return render_template('expenses.html',
-                           auth_message=auth_message,
                            categories=dbutils.get_categories(),
                            category=category,
                            category_sum=category_sum,
@@ -133,9 +125,7 @@ def all_months():
     """Renders a list of all expenses by month.
     """
     months_all = dbutils.get_all_months()
-    auth_message = authutils.auth_message()
     return render_template('expenses-all.html',
-                           auth_message=auth_message,
                            months_all=months_all)
 
 
