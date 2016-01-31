@@ -151,7 +151,7 @@ def _validate_expense(request):
         cost = float(cost)
         cost = round(cost, 2)
     except ValueError:
-        errors.append('Cost must be a float.')
+        errors.append('Cost must be a number.')
 
     category = request.form['category']
     if category == 'select':
