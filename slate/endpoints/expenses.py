@@ -1,9 +1,6 @@
 """Manages expense endpoints.
 """
 
-import calendar
-import datetime
-
 from flask import Blueprint, redirect, render_template, request, url_for
 from flask.ext.login import current_user, login_required
 
@@ -82,6 +79,8 @@ def edit_expense():
 @expenses.route('/delete', methods=['POST'])
 @login_required
 def delete_expense():
+    """Deletes expense.
+    """
     id_ = request.form.to_dict()['id']
     expense = db.session.query(models.Expense).get(id_)
     db.session.delete(expense)

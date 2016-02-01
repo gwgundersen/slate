@@ -19,12 +19,34 @@ class User(db.Model):
     password = db.Column(db.String(255))
     salt = db.Column(db.String(255))
     _expenses = db.relationship('Expense', backref=db.backref('user'))
+    categories = db.relationship('Category')
 
     def __init__(self, name, password, active=True):
         self.name = name
         hashed, salt = User.hash_password(password)
         self.password = hashed
         self.salt = salt
+
+        categories = []
+        default_categories = ['alcohol',
+                              'food (in)',
+                              'food (out)',
+                              'transportation',
+                              'rent/mortgage',
+                              'bills',
+                              'miscellaneous',
+                              'household',
+                              'travel/vacation',
+                              'entertainment',
+                              'medical',
+                              'clothing',
+                              'savings']
+        for name in default_categories:
+            categories.append(
+                Category(name)
+            )
+
+        self.categories = categories
         self.active = active
 
     def is_active(self):

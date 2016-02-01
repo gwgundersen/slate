@@ -21,9 +21,18 @@
                         <p>{{ month_string }}</p>
                     {% endif %}
                     <p class='highlight'>
-                        <strong>Sum: ${{ category_sum }}*</strong>
+                        <strong>Sum: ${{ category_sum }}{% if excluded_categories|length > 0 %}*{% endif %}
+                        </strong>
                     </p>
-                    <p class="note">*Rent/mortgage excluded</p>
+                    {% if excluded_categories|length > 0 %}
+                    <div class='note'>*Excluded categories:
+                        <ul class='list-unstyled'>
+                            {% for category in excluded_categories %}
+                            <li>{{ category.name|capitalize }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
                 </div>
                 <div class='col-md-2'>
                     <a class='btn btn-info' href='expenses{{ query_string }}'>Back</a>
