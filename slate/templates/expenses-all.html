@@ -13,7 +13,7 @@
     {% for exp_month in months_all %}
         <li>
             <a class='btn btn-info'
-               href='/slate/expenses?year={{ exp_month.year_num }}&month={{ exp_month.month_num }}'>
+               href='expenses?year={{ exp_month.year_num }}&month={{ exp_month.month_num }}'>
                 {{ exp_month.view }}
             </a>
         </li>

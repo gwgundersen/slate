@@ -2,7 +2,8 @@
 """
 
 from flask import Flask, session, render_template
-from flask.ext.login import LoginManager
+from flask.ext.login import LoginManager, user_logged_out
+
 from flask.ext.sqlalchemy import SQLAlchemy
 
 from slate.config import config
@@ -41,9 +42,27 @@ login_manager.init_app(app)
 login_manager.login_view = 'auth.login'
 
 
+# This code executes *before* debug mode is set in run.py.
+if config.getboolean('mode', 'debug'):
+    app.config.base_url = 'slatedev'
+else:
+    app.config.base_url = 'slate'
+
+
 @login_manager.user_loader
 def load_user(user_id):
-    return db.session.query(models.User).get(user_id)
+    """
+    """
+    user = db.session.query(models.User).get(user_id)
+    app.config.user = user
+    return user
+
+
+@user_logged_out.connect_via(app)
+def unset_current_user(sender, user):
+    """When the user logs out, we need to unset this global variable.
+    """
+    app.config.user = None
 
 
 @app.errorhandler(404)

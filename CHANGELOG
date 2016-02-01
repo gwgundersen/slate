@@ -1,0 +1,20 @@
+Slate Changelog
+===============
+
+All notable changes to this project will be documented in this file.
+
+
+0.0.1 - 2016-01-31
+------------------
+
+(tweaks, testing, and refactoring)
+
+- Added change log.
+- Started unit test suite with Selenium for user interface testing.
+- Implemented authentication message using Flask's globally available config
+  object rather than authutils module.
+- Updated requirements.txt to include
+    SQLAlchemy
+    Flask-SQLAlchemy
+    nose.
+- Removed jargon from "Cost must be a float" error message.

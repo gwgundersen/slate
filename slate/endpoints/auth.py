@@ -7,7 +7,6 @@ from sqlalchemy.orm.exc import NoResultFound
 from flask import Blueprint, request, redirect, render_template, url_for
 from slate.config import config
 from slate import db, models
-from slate.endpoints import authutils
 
 auth = Blueprint('auth',
                  __name__,
@@ -16,10 +15,8 @@ auth = Blueprint('auth',
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
-    auth_message = authutils.auth_message()
     if request.method == 'GET':
-        return render_template('login.html',
-                               auth_message=auth_message)
+        return render_template('login.html')
     
     username = request.form['username']
     password = request.form['password']
@@ -28,14 +25,13 @@ def login():
     if registered_user is None:
         logout_user()
         return render_template('login.html',
-                               auth_message=auth_message,
                                error='Username or password is invalid')
 
     login_user(registered_user)
     return redirect(url_for('index.index_page'))
 
 
-@auth.route('/logout', methods=['GET'])
+@auth.route('/logout', methods=['POST'])
 @login_required
 def logout():
     logout_user()
@@ -44,16 +40,13 @@ def logout():
 
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
-    auth_message = authutils.auth_message()
     if request.method == 'GET':
-        return render_template('register.html',
-                               auth_message=auth_message)
+        return render_template('register.html')
 
     username = request.form['username']
 
     if not username or not username.isalnum():
         return render_template('register.html',
-                               auth_message=auth_message,
                                error='Username must be alphanumeric')
 
     password1 = request.form['password1']
@@ -69,17 +62,14 @@ def register():
 
     if not no_user_by_that_name:
         return render_template('register.html',
-                               auth_message=auth_message,
                                error='Username already exists')
 
     if password1 != password2:
         return render_template('register.html',
-                               auth_message=auth_message,
                                error='Passwords do not match')
 
     if not password1:
         return render_template('register.html',
-                               auth_message=auth_message,
                                error='Password is required')
 
     new_user = models.User(username, password1)

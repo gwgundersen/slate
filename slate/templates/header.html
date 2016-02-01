@@ -1,6 +1,12 @@
 <div id='header' class='container-full'>
     <div class='container'>
-        <h1><a href='/slate'>Slate</a> <span>{{ auth_message }}</span></h1>
+        <h1><a href=''>Slate</a>
+        {% if config.user %}
+            <span>{{ config.user.name }}</span>
+        {% else %}
+            <span>No user logged in.</span>
+        {% endif %}
+        </h1>
         {% if error_messages|length %}
             {{ error_messages }}
         {% endif %}

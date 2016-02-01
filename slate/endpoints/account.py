@@ -11,7 +11,6 @@ from flask.ext.login import current_user, login_required, logout_user
 
 from slate import db, dbutils, models
 from slate.config import config
-from slate.endpoints import authutils
 
 account = Blueprint('account',
                     __name__,
@@ -23,11 +22,9 @@ account = Blueprint('account',
 def view_account():
     """View account page.
     """
-    auth_message = authutils.auth_message()
     message = request.args.get('message')
     return render_template('account.html',
-                           message=message,
-                           auth_message=auth_message)
+                           message=message)
 
 
 @account.route('/download', methods=['GET'])

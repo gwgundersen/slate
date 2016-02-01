@@ -11,7 +11,6 @@ from flask.ext.login import current_user, login_required
 from slate.endpoints import viewutils
 from slate import dbutils
 from slate.config import config
-from slate.endpoints import authutils
 
 
 reports = Blueprint('reports',
@@ -36,7 +35,6 @@ def report_default():
     # ------------------------------------------------------------------------
     expenses_json = json.dumps(dbutils.get_category_subtotals(year, month))
     month_string, query_string = viewutils.get_date_time_strings(year, month)
-    auth_message = authutils.auth_message()
     expenses = current_user.expenses(year=year, month=month)
     category_sum = viewutils.get_expense_sum(expenses)
 
@@ -98,7 +96,6 @@ def report_default():
             discretionary_sum += e.cost
 
     return render_template('report.html',
-                           auth_message=auth_message,
                            month_string=month_string,
                            category_sum=category_sum,
                            food_in=food_in,
