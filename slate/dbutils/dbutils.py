@@ -42,7 +42,7 @@ def get_category_subtotals(year=None, month=None):
         year = int(year)
         month = int(month)
     categories = get_categories()
-    categories = [c for c in categories if c.name != 'rent']
+    categories = [c for c in categories if c.name != 'rent/mortgage']
     for category in categories:
         expenses = [e.cost for e in category.expenses if
                     e.user.name == current_user.name and
@@ -64,7 +64,7 @@ def get_sum_per_day(year, month):
           'JOIN category '\
           '  ON category.id = expense.category_fk '\
           'WHERE `user`.name = "%s" ' \
-          '  AND category.name != "rent" '\
+          '  AND category.name != "rent/mortgage" '\
           '  AND YEAR(date_time) = %s ' \
           '  AND MONTH(date_time) = %s '\
           'GROUP BY DATE(date_time)' % (
