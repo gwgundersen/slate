@@ -5,9 +5,8 @@ the one pipeline we never want to break.
 import unittest
 
 from selenium import webdriver
-from selenium.webdriver.support.select import Select
 
-from testutils import login_user
+from testutils import login_user, add_expense
 from config import SLATE_URL
 
 
@@ -46,18 +45,3 @@ class TestAddingExpense(unittest.TestCase):
 
     def tearDown(self):
         self.browser.quit()
-
-
-def add_expense(browser, cost, category, comment):
-    """Adds expense.
-    """
-    cost_input = browser.find_element_by_xpath('//input[@name="cost"]')
-    cost_input.send_keys(cost)
-    category_select = Select(
-        browser.find_element_by_xpath('//select[@name="category"]')
-    )
-    category_select.select_by_visible_text(category)
-    comment_input = browser\
-        .find_element_by_xpath('//input[@name="comment"]')
-    comment_input.send_keys(comment)
-    browser.find_element_by_xpath('//button[text()="Add"]').click()

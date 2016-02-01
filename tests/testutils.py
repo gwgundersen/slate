@@ -2,6 +2,7 @@
 """
 
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support.select import Select
 
 from config import SLATE_URL, MOCK_USER, MOCK_PW
 
@@ -48,3 +49,18 @@ def logout_user(browser):
     """Logs out user.
     """
     browser.find_element_by_xpath('//div[@id="footer"]//button[@type="submit"]').click()
+
+
+def add_expense(browser, cost, category, comment):
+    """Adds expense.
+    """
+    cost_input = browser.find_element_by_xpath('//input[@name="cost"]')
+    cost_input.send_keys(cost)
+    category_select = Select(
+        browser.find_element_by_xpath('//select[@name="category"]')
+    )
+    category_select.select_by_visible_text(category)
+    comment_input = browser\
+        .find_element_by_xpath('//input[@name="comment"]')
+    comment_input.send_keys(comment)
+    browser.find_element_by_xpath('//button[text()="Add"]').click()

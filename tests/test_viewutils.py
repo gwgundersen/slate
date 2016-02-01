@@ -16,7 +16,7 @@ class TestViewUtils(unittest.TestCase):
 
     def test_get_expense_sum(self):
         expense = [
-            Expense(100, Category('rent'), '', True, self.user),
+            Expense(100, Category('rent/mortgage'), '', True, self.user),
             Expense(1, Category('food (out)'), '', True, self.user),
             Expense(2, Category('food (out)'), '', True, self.user),
             Expense(3, Category('alcohol'), '', True, self.user),
