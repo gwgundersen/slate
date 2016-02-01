@@ -47,7 +47,7 @@ def report_default():
     all_expenses = current_user.expenses(year=year, month=month)
     grouped_expenses = collections.OrderedDict()
     for e in all_expenses:
-        if e.category.name == 'rent':
+        if e.category.name == 'rent/mortgage':
             continue
         key = e.date_time.strftime('%Y-%m-%d')
         if key not in grouped_expenses:
@@ -82,8 +82,6 @@ def report_default():
 
     # Discretionary
     # ------------------------------------------------------------------------
-    alcohol = viewutils.get_category_sum(expenses, 'alcohol')
-    entertainment = viewutils.get_category_sum(expenses, 'entertainment')
     discretionary = {}
     discretionary_sum = 0
     for e in expenses:
@@ -101,8 +99,6 @@ def report_default():
                            food_in=food_in,
                            food_out=food_out,
                            cost_per_meal=cost_per_meal,
-                           alcohol=alcohol,
-                           entertainment=entertainment,
                            discretionary=discretionary,
                            discretionary_sum=discretionary_sum,
                            query_string=query_string,

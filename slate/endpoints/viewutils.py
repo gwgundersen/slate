@@ -8,7 +8,7 @@ import datetime
 def get_expense_sum(expenses):
     """Returns sum of all expenses except rent.
     """
-    return sum([e.cost for e in expenses if e.category.name != 'rent'])
+    return sum([e.cost for e in expenses if e.category.name != 'rent/mortgage'])
 
 
 def get_category_sum(expenses, category):
