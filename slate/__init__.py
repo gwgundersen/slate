@@ -42,6 +42,13 @@ login_manager.init_app(app)
 login_manager.login_view = 'auth.login'
 
 
+# This code executes *before* debug mode is set in run.py.
+if config.getboolean('mode', 'debug'):
+    app.config.base_url = 'slatedev'
+else:
+    app.config.base_url = 'slate'
+
+
 @login_manager.user_loader
 def load_user(user_id):
     """
