@@ -47,4 +47,4 @@ def login_user(browser):
 def logout_user(browser):
     """Logs out user.
     """
-    browser.find_element_by_xpath('//a[text()="Logout"]').click()
+    browser.find_element_by_xpath('//div[@id="footer"]//button[@type="submit"]').click()

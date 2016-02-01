@@ -20,7 +20,7 @@ class TestAuthentication(unittest.TestCase):
         span = self.browser.find_element_by_xpath('//div[@id="header"]//span')
         self.assertEqual(span.text, MOCK_USER)
         self.assertTrue(
-            exists_by_xpath(self.browser, '//a[text()="Logout"]')
+            exists_by_xpath(self.browser, '//button[text()="Logout"]')
         )
         self.assertTrue(
             exists_by_xpath(self.browser, '//a[text()="Account"]')
@@ -38,7 +38,7 @@ class TestAuthentication(unittest.TestCase):
         span = self.browser.find_element_by_xpath('//div[@id="header"]//span')
         self.assertEqual(span.text, 'No user logged in.')
         self.assertTrue(
-            not exists_by_xpath(self.browser, '//a[text()="Logout"]')
+            not exists_by_xpath(self.browser, '//button[text()="Logout"]')
         )
         self.assertTrue(
             not exists_by_xpath(self.browser, '//a[text()="Account"]')

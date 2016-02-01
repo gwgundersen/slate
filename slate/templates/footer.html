@@ -4,7 +4,9 @@
             <ul class='list-inline'>
                 {% if config.user %}
                     <li>
-                        <a href='logout'>Logout</a>
+                        <form action='logout' method='POST'>
+                            <button name='logout' type='submit'>Logout</button>
+                        </form>
                     </li>
                     <li>
                         <a href='account'>Account</a>

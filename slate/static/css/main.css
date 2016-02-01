@@ -268,13 +268,13 @@ h1 span {
 #footer .container ul {
   margin-bottom: 3px;
 }
-#footer .container input {
+#footer .container button {
   border: none;
   background-color: transparent;
   color: #1689E5;
   font-size: 14px;
 }
-#footer .container input:hover {
+#footer .container button:hover {
   text-decoration: underline;
 }
 #account-page h2 {
