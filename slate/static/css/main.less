@@ -122,16 +122,22 @@ h1 {
   font-family: @font-family-base;
 }
 
-
 /* Element selectors.
  * ------------------ */
 #header {
   background-color: @color-navy;
-  a {
+  a,
+  .navbar-right {
     color: white;
+    font-weight: 200;
   }
   h1 {
     margin-top: 10px;
+  }
+  .pull-right {
+    font-size: 15px;
+    position: relative;
+    top: 16px;
   }
 }
 

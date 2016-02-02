@@ -13,7 +13,7 @@ from slate.config import config
 
 categories = Blueprint('categories',
                        __name__,
-                       url_prefix='%s/expenses' % config.get('url', 'base'))
+                       url_prefix='%s/categories' % config.get('url', 'base'))
 
 
 # Add, edit, delete
@@ -24,7 +24,6 @@ categories = Blueprint('categories',
 def add_category():
     """Adds category.
     """
-
     # TODO: Validation: shouldn't be an existing category name for user.
     category_name = request.args.get('category')
     category = models.Category(category_name)
@@ -36,13 +35,18 @@ def add_category():
 @categories.route('/edit', methods=['GET', 'POST'])
 @login_required
 def edit_expense():
-    pass
+    """Edits user category.
+    """
+    id_ = request.args.get('id')
+    category = db.session.query(models.Category).get(id_)
+    return render_template('category-edit.html',
+                           category=category)
 
 
 @categories.route('/delete', methods=['POST'])
 @login_required
 def delete_category():
-    """Deletes category.
+    """Deletes category and all related expenses.
     """
     id_ = request.form.to_dict()['id']
     category = db.session.query(models.Category).get(id_)

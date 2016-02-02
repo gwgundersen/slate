@@ -13,35 +13,39 @@
     <p class='highlight'>{{ error }}</p>
     {% endif %}
 
-    <div class='row'>
-        <div class='col-md-4'>
-            <form action='expenses/add' method='POST'>
-                <div class='form-group'>
-                    <input class='form-control' name='cost' type='text' placeholder='Cost ($)' autocomplete='off'/>
-                </div>
-                <div class='form-group'>
-                    <select class='form-control' name='category' autocomplete='off'>
-                        <option value='select'>(category)</option>
-                        {% for category in categories %}
-                            <option value='{{ category.name }}'>{{ category.name|capitalize }}</option>
-                        {% endfor %}
-                        </select>
-                </div>
-                <div class='form-group'>
-                    <input class='form-control' name='comment' type='text' placeholder='Comment' autocomplete='off'/>
-                </div>
-                <div class='checkbox'>
-                    <label>
-                        <input type='checkbox' checked name='discretionary'>Discretionary
-                    </label>
-                </div>
-                <div class='form-group' id='add-btn'>
-                    <button type='submit' class='form-control btn btn-primary'>Add</button>
-                </div>
-            </form>
-            <a href='expenses' class='btn btn-info'>View expenses</a>
+    {% if config.user %}
+        <div class='row'>
+            <div class='col-md-4'>
+                <form action='expenses/add' method='POST'>
+                    <div class='form-group'>
+                        <input class='form-control' name='cost' type='text' placeholder='Cost ($)' autocomplete='off'/>
+                    </div>
+                    <div class='form-group'>
+                        <select class='form-control' name='category' autocomplete='off'>
+                            <option value='select'>(category)</option>
+                            {% for category in categories %}
+                                <option value='{{ category.name }}'>{{ category.name|capitalize }}</option>
+                            {% endfor %}
+                            </select>
+                    </div>
+                    <div class='form-group'>
+                        <input class='form-control' name='comment' type='text' placeholder='Comment' autocomplete='off'/>
+                    </div>
+                    <div class='checkbox'>
+                        <label>
+                            <input type='checkbox' checked name='discretionary'>Discretionary
+                        </label>
+                    </div>
+                    <div class='form-group' id='add-btn'>
+                        <button type='submit' class='form-control btn btn-primary'>Add</button>
+                    </div>
+                </form>
+                <a href='expenses' class='btn btn-info'>View expenses</a>
+            </div>
         </div>
-    </div>
+    {% else %}
+        <p>Slate requires a login.</p>
+    {% endif %}
 
     {% include 'footer.html' %}
 

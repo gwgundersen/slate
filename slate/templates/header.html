@@ -1,14 +1,17 @@
 <div id='header' class='container-full'>
     <div class='container'>
         <h1><a href=''>Slate</a>
-        {% if config.user %}
-            <span>{{ config.user.name }}</span>
-        {% else %}
+            {% if config.user %}
+            <ul class='list-inline pull-right'>
+                <li><a href='account'>{{ config.user.name }}</a></li>
+                <li><a href='account/settings'>Settings</a></li>
+            </ul>
+            {% else %}
             <span>No user logged in.</span>
-        {% endif %}
+            {% endif %}
         </h1>
         {% if error_messages|length %}
-            {{ error_messages }}
+        {{ error_messages }}
         {% endif %}
     </div>
 </div>

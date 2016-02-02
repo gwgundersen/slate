@@ -16,7 +16,10 @@ index = Blueprint('index',
 def index_page():
     """Renders index page.
     """
-    categories = current_user.categories
+    if current_user.is_anonymous:
+        categories = None
+    else:
+        categories = current_user.categories
     error = request.args.get('error')
     return render_template('index.html',
                            categories=categories,

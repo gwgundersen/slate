@@ -49,7 +49,7 @@ def edit_expense():
     if request.method == 'GET':
         expense = db.session.query(models.Expense).get(id_)
         error = request.args.get('error')
-        return render_template('edit.html',
+        return render_template('expense-edit.html',
                                categories=dbutils.get_categories(),
                                error=error,
                                expense=expense)

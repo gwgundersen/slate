@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC=''>
+<html>
+
+{% include 'head.html' %}
+
+<body>
+
+{% with auth_message=auth_message %}
+    {% include 'header.html' %}
+{% endwith %}
+
+<div id='settings-page' class='page'>
+    <div class='container'>
+        <div class='row'>
+            <div class='col-md-12'>
+                <h2>Settings</h2>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-md-4'>
+                <div class='section'>
+                    <h4>Categories</h4>
+                    <table class='table'>
+                        {% for category in config.user.categories %}
+                        <tr>
+                            <td>{{ category.name|capitalize }}</td>
+                            <td>
+                                <form action='categories/edit' method='get'>
+                                    <input type='hidden' name='id' value='{{ category.id }}'>
+                                    <input class='btn btn-primary' type='submit' value='Edit'>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include 'footer.html' %}
+
+</div>
+</body>
+</html>

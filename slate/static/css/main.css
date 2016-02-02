@@ -104,11 +104,18 @@ h1 span {
 #header {
   background-color: #17406B;
 }
-#header a {
+#header a,
+#header .navbar-right {
   color: white;
+  font-weight: 200;
 }
 #header h1 {
   margin-top: 10px;
+}
+#header .pull-right {
+  font-size: 15px;
+  position: relative;
+  top: 16px;
 }
 #months-list li,
 #category-list li {

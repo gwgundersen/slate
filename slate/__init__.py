@@ -31,6 +31,7 @@ db.init_app(app)
 from slate import endpoints
 app.register_blueprint(endpoints.account)
 app.register_blueprint(endpoints.auth)
+app.register_blueprint(endpoints.categories)
 app.register_blueprint(endpoints.expenses)
 app.register_blueprint(endpoints.index)
 app.register_blueprint(endpoints.reports)
@@ -42,11 +43,7 @@ login_manager.init_app(app)
 login_manager.login_view = 'auth.login'
 
 
-# This code executes *before* debug mode is set in run.py.
-if config.getboolean('mode', 'debug'):
-    app.config.base_url = 'slatedev'
-else:
-    app.config.base_url = 'slate'
+app.config.base_url = config.get('url', 'base')
 
 
 @login_manager.user_loader
