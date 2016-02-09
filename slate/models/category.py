@@ -16,6 +16,6 @@ class Category(db.Model):
     user_fk = db.Column(db.Integer, db.ForeignKey('user.id'))
     hide_in_report = db.Column(db.Boolean)
 
-    def __init__(self, name, hide_in_report):
+    def __init__(self, name, hide_in_report=False):
         self.name = name
         self.hide_in_report = hide_in_report

@@ -19,7 +19,7 @@ class User(db.Model):
     password = db.Column(db.String(255))
     salt = db.Column(db.String(255))
     _expenses = db.relationship('Expense', backref=db.backref('user'))
-    categories = db.relationship('Category')
+    categories = db.relationship('Category', backref=db.backref('user'))
 
     def __init__(self, name, password, active=True):
         self.name = name
