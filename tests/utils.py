@@ -33,6 +33,22 @@ def link_href_is_correct(browser, xpath, href):
         return False
 
 
+def register_user(browser):
+    """Creates a new user.
+    """
+    browser.get('%s/register' % SLATE_URL)
+    username_input = browser\
+        .find_element_by_xpath('//input[@name="username"]')
+    password_input_1 = browser\
+        .find_element_by_xpath('//input[@name="password2"]')
+    password_input_2 = browser\
+        .find_element_by_xpath('//input[@name="password1"]')
+    username_input.send_keys(MOCK_USER)
+    password_input_1.send_keys(MOCK_PW)
+    password_input_2.send_keys(MOCK_PW)
+    browser.find_element_by_xpath('//button[@type="submit"]').click()
+
+
 def login_user(browser):
     """Logins in user.
     """
@@ -50,6 +66,19 @@ def logout_user(browser):
     """Logs out user.
     """
     browser.find_element_by_xpath('//div[@id="footer"]//button[@type="submit"]').click()
+
+
+def delete_user(browser):
+    """Delete test user.
+    """
+    try:
+        login_user(browser)
+        browser.get('%s/account' % SLATE_URL)
+        browser.find_element_by_xpath('//div[@id="delete-account-section"]//button[@type="submit"]').click()
+        alert = browser.switch_to_alert()
+        alert.accept()
+    except:
+        pass
 
 
 def add_expense(browser, cost, category, comment):

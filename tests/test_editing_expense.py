@@ -5,7 +5,7 @@ import unittest
 
 from selenium import webdriver
 
-from testutils import add_expense, exists_by_xpath, login_user
+from utils import add_expense, exists_by_xpath, login_user, delete_user, register_user
 from config import SLATE_URL
 
 
@@ -13,7 +13,7 @@ class TestEditingExpense(unittest.TestCase):
 
     def setUp(self):
         self.browser = webdriver.Firefox()
-        self.browser.get('%s/login' % SLATE_URL)
+        register_user(self.browser)
         login_user(self.browser)
 
     def test_editing_expense(self):
@@ -52,7 +52,5 @@ class TestEditingExpense(unittest.TestCase):
         )
 
     def tearDown(self):
+        delete_user(self.browser)
         self.browser.quit()
-
-
-

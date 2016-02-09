@@ -1,54 +1,29 @@
-"""Unit tests for verifying login, logout, and registration.
+"""Unit tests for verifying logging in and logging out. These utility methods
+are sprinkled throughout the unit tests, so if they fail, nearly every test
+should fail. That said, it's good to be explicit.
 """
 
 import unittest
 
 from selenium import webdriver
 
-from testutils import exists_by_xpath, login_user, logout_user
-from config import SLATE_URL, MOCK_USER
+from utils import login_user, logout_user, register_user, delete_user
 
 
 class TestAuthentication(unittest.TestCase):
 
     def setUp(self):
         self.browser = webdriver.Firefox()
-        self.browser.get('%s/login' % SLATE_URL)
+        # register_use is tested explicitly in test_create_new_user.py
+        register_user(self.browser)
 
     def test_login(self):
         login_user(self.browser)
-        span = self.browser.find_element_by_xpath('//div[@id="header"]//span')
-        self.assertEqual(span.text, MOCK_USER)
-        self.assertTrue(
-            exists_by_xpath(self.browser, '//button[text()="Logout"]')
-        )
-        self.assertTrue(
-            exists_by_xpath(self.browser, '//a[text()="Account"]')
-        )
-        self.assertTrue(
-            not exists_by_xpath(self.browser, '//a[text()="Login"]')
-        )
-        self.assertTrue(
-            not exists_by_xpath(self.browser, '//a[text()="Register"]')
-        )
 
     def test_logout(self):
         login_user(self.browser)
         logout_user(self.browser)
-        span = self.browser.find_element_by_xpath('//div[@id="header"]//span')
-        self.assertEqual(span.text, 'No user logged in.')
-        self.assertTrue(
-            not exists_by_xpath(self.browser, '//button[text()="Logout"]')
-        )
-        self.assertTrue(
-            not exists_by_xpath(self.browser, '//a[text()="Account"]')
-        )
-        self.assertTrue(
-            exists_by_xpath(self.browser, '//a[text()="Login"]')
-        )
-        self.assertTrue(
-            exists_by_xpath(self.browser, '//a[text()="Register"]')
-        )
 
     def tearDown(self):
+        delete_user(self.browser)
         self.browser.quit()
