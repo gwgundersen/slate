@@ -37,10 +37,18 @@ def add_category():
 def edit_expense():
     """Edits user category.
     """
-    id_ = request.args.get('id')
-    category = db.session.query(models.Category).get(id_)
-    return render_template('category-edit.html',
-                           category=category)
+    if request.method == 'GET':
+        id_ = request.args.get('id')
+        category = db.session.query(models.Category).get(id_)
+        return render_template('category-edit.html',
+                               category=category)
+    else:
+        id_ = request.form.get('id')
+        category = db.session.query(models.Category).get(id_)
+        category.name = request.form.get('name')
+        db.session.merge(category)
+        db.session.commit()
+        return redirect(url_for('account.view_settings'))
 
 
 @categories.route('/delete', methods=['POST'])

@@ -32,7 +32,6 @@ def view_account():
 def view_settings():
     """View account settings page.
     """
-    message = request.args.get('message')
     return render_template('settings.html')
 
 

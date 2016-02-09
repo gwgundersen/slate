@@ -12,7 +12,9 @@ class Category(db.Model):
     __tablename__ = 'category'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
-    expenses = db.relationship('Expense', backref=db.backref('category'))
+    expenses = db.relationship('Expense',
+                               cascade='all,delete',
+                               backref=db.backref('category'))
     user_fk = db.Column(db.Integer, db.ForeignKey('user.id'))
     hide_in_report = db.Column(db.Boolean)
 
