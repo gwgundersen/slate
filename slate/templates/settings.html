@@ -16,13 +16,14 @@
         </div>
         <div class='row'>
             <div class='col-md-4'>
+                <h4>Edit Categories</h4>
                 <div class='section'>
                     <table class='table'>
                         <thead>
-                            <tr>
-                                <td>Category</td>
-                                <td></td>
-                            </tr>
+                        <tr>
+                            <td>Category</td>
+                            <td></td>
+                        </tr>
                         </thead>
                         {% for category in g.user.categories %}
                         <tr>
@@ -37,6 +38,15 @@
                         {% endfor %}
                     </table>
                 </div>
+            </div>
+            <div class='col-md-4'>
+                <h4>Create Category</h4>
+                <form action='categories/add' method='post'>
+                    <div class='form-group'>
+                        <input class='form-control' type='text' name='name'>
+                    </div>
+                    <input class='btn btn-primary' type='submit' value='Create'>
+                </form>
             </div>
         </div>
     </div>

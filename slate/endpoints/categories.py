@@ -24,8 +24,12 @@ categories = Blueprint('categories',
 def add_category():
     """Adds category.
     """
-    # TODO: Validation: shouldn't be an existing category name for user.
-    category_name = request.args.get('category')
+    category_name = request.form.get('name')
+    existing_category = db.session.query(models.Category)\
+        .filter_by(name=category_name)\
+        .filter_by(user_fk=current_user.id)
+    if existing_category:
+        raise Exception('TODO')
     category = models.Category(category_name)
     db.session.add(category)
     db.session.commit()

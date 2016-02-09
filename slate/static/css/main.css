@@ -53,6 +53,7 @@ h1 span {
 .btn {
   border: none;
   font-family: arial, sans-serif;
+  font-size: 13px;
 }
 .btn.btn-primary {
   background-color: #1689E5;
