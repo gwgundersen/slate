@@ -156,27 +156,6 @@ h1 span {
 #report-page {
   padding-bottom: 50px;
 }
-#expenses-page table,
-#report-page table {
-  font-size: 13px;
-}
-#expenses-page table thead td,
-#report-page table thead td {
-  font-weight: bold;
-}
-#expenses-page table td,
-#report-page table td {
-  padding: 4px;
-  vertical-align: middle;
-}
-#expenses-page table form,
-#report-page table form {
-  margin-bottom: 0;
-}
-#expenses-page table input,
-#report-page table input {
-  font-size: 13px;
-}
 #expenses-page button,
 #report-page button,
 #expenses-page a.btn,
@@ -225,6 +204,27 @@ h1 span {
   border-bottom: 1px solid #ddd;
   margin-bottom: 30px;
   padding-bottom: 30px;
+}
+#expenses-page table,
+#settings-page table {
+  font-size: 13px;
+}
+#expenses-page table thead td,
+#settings-page table thead td {
+  font-weight: bold;
+}
+#expenses-page table td,
+#settings-page table td {
+  padding: 4px;
+  vertical-align: middle;
+}
+#expenses-page table form,
+#settings-page table form {
+  margin-bottom: 0;
+}
+#expenses-page table input,
+#settings-page table input {
+  font-size: 13px;
 }
 @media (max-width: 992px) {
   #expenses-page #expense-controls #previous-expenses {
