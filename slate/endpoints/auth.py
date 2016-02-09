@@ -1,12 +1,13 @@
 """Handles logins and logouts.
 """
 
+from flask import g
 from flask.ext.login import login_user, logout_user, login_required
 from sqlalchemy.orm.exc import NoResultFound
 
 from flask import Blueprint, request, redirect, render_template, url_for
 from slate.config import config
-from slate import db, models
+from slate import app, db, models
 
 auth = Blueprint('auth',
                  __name__,
@@ -27,6 +28,7 @@ def login():
         return render_template('login.html',
                                error='Username or password is invalid')
 
+    app.config.user = registered_user
     login_user(registered_user)
     return redirect(url_for('index.index_page'))
 
@@ -35,6 +37,7 @@ def login():
 @login_required
 def logout():
     logout_user()
+    g.user = None
     return redirect(url_for('auth.login'))
 
 

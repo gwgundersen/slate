@@ -5,9 +5,7 @@
 
 <body>
 
-{% with auth_message=auth_message %}
-    {% include 'header.html' %}
-{% endwith %}
+{% include 'header.html' %}
 
 <div id='login-page' class='page container'>
 
@@ -19,10 +17,18 @@
         <div class='col-md-4'>
             <form action='login' method='POST'>
                 <div class='form-group'>
-                    <input type='text' class='form-control' name='username' placeholder='Username' autocomplete='off'>
+                    <input type='text'
+                           class='form-control'
+                           name='username'
+                           placeholder='Username'
+                           autocomplete='off'>
                 </div>
                 <div class='form-group'>
-                    <input type='password' class='form-control' name='password' placeholder='Password' autocomplete='off'>
+                    <input type='password'
+                           class='form-control'
+                           name='password'
+                           placeholder='Password'
+                           autocomplete='off'>
                 </div>
                 <button type='submit' class='btn btn-primary'>Log in</button>
             </form>

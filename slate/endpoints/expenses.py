@@ -24,17 +24,13 @@ expenses = Blueprint('expenses',
 def add_expense():
     """Adds expense.
     """
-    cost, category_name, comment, errors, discretionary = \
+    cost, category, comment, errors, discretionary = \
         _validate_expense(request)
 
     if len(errors) > 0:
         return redirect(url_for('index.index_page',
                                 error=errors[0]))
 
-    category = db.session\
-        .query(models.Category)\
-        .filter(models.Category.name == category_name)\
-        .one()
     expense = models.Expense(cost, category, comment, discretionary,
                              current_user)
     db.session.add(expense)
@@ -65,10 +61,7 @@ def edit_expense():
 
         expense = db.session.query(models.Expense).get(id_)
         expense.cost = cost
-        expense.category = db.session\
-            .query(models.Category)\
-            .filter_by(name=category)\
-            .one()
+        expense.category = (category or expense.category)
         expense.comment = comment
         expense.discretionary = discretionary
         db.session.merge(expense)
@@ -96,19 +89,22 @@ def delete_expense():
 def expenses_default():
     """Renders expenses for current month.
     """
-    category = request.args.get('category')
-    if category == 'all':
+    category_id = request.args.get('category_id')
+    if not category_id or category_id == 'all':
         category = None
+    else:
+        category = db.session.query(models.Category).get(category_id)
 
     year = request.args.get('year')
     month = request.args.get('month')
 
     month_string, query_string = viewutils.get_date_time_strings(year, month)
     expenses = current_user.expenses(category, year, month)
+    print(expenses)
     category_sum = viewutils.get_expense_sum(expenses)
 
     return render_template('expenses.html',
-                           categories=dbutils.get_categories(),
+                           categories=current_user.categories,
                            category=category,
                            category_sum=category_sum,
                            expenses=expenses,
@@ -142,9 +138,12 @@ def _validate_expense(request):
     except ValueError:
         errors.append('Cost must be a number.')
 
-    category = request.form['category']
-    if category == 'select':
+    category_id = request.form['category_id']
+    if category_id == 'select':
         errors.append('Category is required.')
+        category = None
+    else:
+        category = db.session.query(models.Category).get(category_id)
 
     comment = request.form.get('comment')
     if not comment:

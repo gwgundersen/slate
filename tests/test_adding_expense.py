@@ -14,7 +14,6 @@ class TestAddingExpense(unittest.TestCase):
 
     def setUp(self):
         self.browser = webdriver.Firefox()
-        self.browser.get('%s/login' % SLATE_URL)
 
     def test_adding_expense(self):
         login_user(self.browser)

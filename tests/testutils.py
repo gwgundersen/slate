@@ -36,6 +36,7 @@ def link_href_is_correct(browser, xpath, href):
 def login_user(browser):
     """Logins in user.
     """
+    browser.get('%s/login' % SLATE_URL)
     username_input = browser\
         .find_element_by_xpath('//input[@name="username"]')
     password_input = browser\
@@ -57,7 +58,7 @@ def add_expense(browser, cost, category, comment):
     cost_input = browser.find_element_by_xpath('//input[@name="cost"]')
     cost_input.send_keys(cost)
     category_select = Select(
-        browser.find_element_by_xpath('//select[@name="category"]')
+        browser.find_element_by_xpath('//select[@name="category_id"]')
     )
     category_select.select_by_visible_text(category)
     comment_input = browser\

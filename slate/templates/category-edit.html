@@ -21,8 +21,9 @@
                     <input class='form-control' name='name' type='text' value='{{ category.name }}' autocomplete='off'/>
                 </div>
                 <input type='hidden' name='id' value='{{ category.id }}'>
-            </form>
-            <form action='account/settings' method='get'>
+                <div class='form-group'>
+                    <button type='submit' class='form-control btn btn-primary'>Edit</button>
+                </div>
                 <button type='submit' class='form-control btn btn-info'>Cancel</button>
             </form>
             <form id='delete-button' action='category/delete' method='post' onclick='return confirm("Are you sure you want to delete this item?");'>

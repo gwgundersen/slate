@@ -17,7 +17,7 @@ def index_page():
     """Renders index page.
     """
     if current_user.is_anonymous:
-        categories = None
+        categories = []
     else:
         categories = current_user.categories
     error = request.args.get('error')

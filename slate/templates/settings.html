@@ -5,9 +5,7 @@
 
 <body>
 
-{% with auth_message=auth_message %}
-    {% include 'header.html' %}
-{% endwith %}
+{% include 'header.html' %}
 
 <div id='settings-page' class='page'>
     <div class='container'>
@@ -21,7 +19,7 @@
                 <div class='section'>
                     <h4>Categories</h4>
                     <table class='table'>
-                        {% for category in config.user.categories %}
+                        {% for category in g.user.categories %}
                         <tr>
                             <td>{{ category.name|capitalize }}</td>
                             <td>

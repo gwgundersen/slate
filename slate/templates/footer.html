@@ -2,7 +2,7 @@
     <div class='container-full'>
         <div class='container'>
             <ul class='list-inline'>
-                {% if config.user %}
+                {% if not g.user.is_anonymous %}
                     <li>
                         <form action='logout' method='POST'>
                             <button name='logout' type='submit'>Logout</button>

@@ -22,7 +22,7 @@
                         <p>{{ month_string }}</p>
                     {% endif %}
                     {% if category %}
-                        <p>{{ category }}</p>
+                        <p>{{ category.name|capitalize }}</p>
                     {% endif %}
                     <p class='highlight'>
                         <strong>Sum: ${{ category_sum }}*</strong>
@@ -36,10 +36,12 @@
                         <input type='hidden' name='month' value='{{ month }}'>
                         {% endif %}
                         <div class='form-group'>
-                            <select class='form-control' name='category'>
-                                <option value="all">All</option>
+                            <select class='form-control' name='category_id'>
+                                <option>All</option>
                                 {% for category in categories %}
-                                <option>{{ category.name|capitalize }}</option>
+                                <option value="{{ category.id }}">
+                                    {{ category.name|capitalize }}
+                                </option>
                                 {% endfor %}
                             </select>
                             <button class='btn btn-info'>View category</button>
