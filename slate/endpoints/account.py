@@ -6,7 +6,8 @@ import os
 import StringIO
 import zipfile
 
-from flask import Blueprint, redirect, Response, render_template, request, url_for
+from flask import Blueprint, flash, redirect, Response, render_template, \
+    request, url_for
 from flask.ext.login import current_user, login_required, logout_user
 
 from slate import db, dbutils, models
@@ -22,9 +23,7 @@ account = Blueprint('account',
 def view_account():
     """View account page.
     """
-    message = request.args.get('message')
-    return render_template('account.html',
-                           message=message)
+    return render_template('account.html')
 
 
 @account.route('/settings', methods=['GET'])
@@ -89,8 +88,8 @@ def update_password():
         error = 'Password has not changed'
 
     if error:
-        return redirect(url_for('account.view_account',
-                                message=error))
+        flash(error, 'error')
+        return redirect(url_for('account.view_account'))
 
 
     hashed, salt = current_user.hash_password(new_password1)
@@ -98,8 +97,8 @@ def update_password():
     current_user.salt = salt
     db.session.merge(current_user)
     db.session.commit()
-    return redirect(url_for('account.view_account',
-                            message='Password was successfully updated'))
+    flash('Password was successfully updated', 'success')
+    return redirect(url_for('account.view_account'))
 
 
 @account.route('/delete', methods=['POST'])
@@ -113,7 +112,8 @@ def delete_account():
     logout_user()
     models.User.query.filter_by(id=id_).delete()
     db.session.commit()
-    return render_template('account-delete-confirmation.html')
+    flash('Sorry to see you go. All your data has been deleted.', 'success')
+    return redirect(url_for('index.index_page'))
 
 
 def _write_files_and_return_names():

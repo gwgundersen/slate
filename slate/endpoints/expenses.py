@@ -1,7 +1,8 @@
 """Manages expense endpoints.
 """
 
-from flask import Blueprint, redirect, render_template, request, url_for
+from flask import Blueprint, flash, redirect, render_template, request, \
+    url_for
 from flask.ext.login import current_user, login_required
 
 from slate import db
@@ -28,8 +29,8 @@ def add_expense():
         _validate_expense(request)
 
     if len(errors) > 0:
-        return redirect(url_for('index.index_page',
-                                error=errors[0]))
+        flash(errors[0], 'error')
+        return redirect(url_for('index.index_page'))
 
     expense = models.Expense(cost, category, comment, discretionary,
                              current_user)
@@ -44,20 +45,16 @@ def edit_expense():
     id_ = request.args.get('id')
     if request.method == 'GET':
         expense = db.session.query(models.Expense).get(id_)
-        error = request.args.get('error')
         return render_template('expense-edit.html',
                                categories=dbutils.get_categories(),
-                               error=error,
                                expense=expense)
     if request.method == 'POST':
         id_ = request.form.get('id')
         cost, category, comment, errors, discretionary = \
             _validate_expense(request)
         if len(errors) > 0:
-            url = url_for('expenses.edit_expense',
-                          id=id_,
-                          error=errors[0])
-            return redirect(url)
+            flash(errors[0], 'error')
+            return redirect(url_for('expenses.edit_expense', id=id_))
 
         expense = db.session.query(models.Expense).get(id_)
         expense.cost = cost
@@ -78,6 +75,7 @@ def delete_expense():
     expense = db.session.query(models.Expense).get(id_)
     db.session.delete(expense)
     db.session.commit()
+    flash('Expense successfully deleted.', 'success')
     return redirect(url_for('expenses.expenses_default'))
 
 
@@ -100,7 +98,6 @@ def expenses_default():
 
     month_string, query_string = viewutils.get_date_time_strings(year, month)
     expenses = current_user.expenses(category, year, month)
-    print(expenses)
     category_sum = viewutils.get_expense_sum(expenses)
 
     return render_template('expenses.html',

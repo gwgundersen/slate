@@ -20,8 +20,8 @@ def index_page():
         categories = []
     else:
         categories = current_user.categories
-    error = request.args.get('error')
+    #error = request.args.get('error')
     return render_template('index.html',
-                           categories=categories,
-                           error=error)
+                           categories=categories)#,
+                           #error=error)
 

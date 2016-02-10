@@ -13,8 +13,33 @@
                 {% endif %}
             </a>
         </h1>
-        {% if error %}
-            <p class='highlight'>{{ error }}</p>
-        {% endif %}
     </div>
 </div>
+
+{% with messages = get_flashed_messages(category_filter=['error']) %}
+    {% if messages %}
+    <div class=flashes>
+        <div id='error-message' class='container-full'>
+            <div class='container'>
+                {% for message in messages %}
+                <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+{% endwith %}
+
+{% with messages = get_flashed_messages(category_filter=['success']) %}
+    {% if messages %}
+    <div class=flashes>
+        <div id='success-message' class='container-full'>
+            <div class='container'>
+                {% for message in messages %}
+                <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+{% endwith %}

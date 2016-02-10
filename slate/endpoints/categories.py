@@ -1,13 +1,12 @@
 """Manages category endpoints.
 """
 
-from flask import Blueprint, redirect, render_template, request, url_for
+from flask import Blueprint, flash, redirect, render_template, request, \
+    url_for
 from flask.ext.login import current_user, login_required
 
 from slate import db
-from slate.endpoints import viewutils
 from slate import models
-from slate import dbutils
 from slate.config import config
 
 
@@ -16,29 +15,27 @@ categories = Blueprint('categories',
                        url_prefix='%s/categories' % config.get('url', 'base'))
 
 
-# Add, edit, delete
-# ----------------------------------------------------------------------------
-
 @categories.route('/add', methods=['POST'])
 @login_required
 def add_category():
-    """Adds category.
+    """Adds category if not duplicate name for user.
     """
-    category_name = request.form.get('name')
-    existing_category = db.session.query(models.Category)\
-        .filter_by(name=category_name)\
-        .filter_by(user_fk=current_user.id)
-    if existing_category:
-        raise Exception('TODO')
-    category = models.Category(category_name)
-    db.session.add(category)
+    new_name = request.form.get('name')
+    if current_user.already_has_category(new_name):
+        flash('Category by that name already exists!', 'error')
+        return redirect(url_for('account.view_settings'))
+
+    category = models.Category(new_name)
+    current_user.categories.append(category)
+    db.session.merge(current_user)
     db.session.commit()
-    return redirect(url_for('expenses.expenses_default'))
+    flash('New category successfully created.', 'success')
+    return redirect(url_for('account.view_settings'))
 
 
 @categories.route('/edit', methods=['GET', 'POST'])
 @login_required
-def edit_expense():
+def edit_category():
     """Edits user category.
     """
     if request.method == 'GET':
@@ -49,9 +46,16 @@ def edit_expense():
     else:
         id_ = request.form.get('id')
         category = db.session.query(models.Category).get(id_)
-        category.name = request.form.get('name')
+        new_name = request.form.get('name', '').lower()
+
+        if current_user.already_has_category(new_name):
+            flash('Category by that name already exists!', 'error')
+            return redirect(url_for('categories.edit_category', id=id_))
+
+        category.name = new_name
         db.session.merge(category)
         db.session.commit()
+        flash('Category successfully renamed.', 'success')
         return redirect(url_for('account.view_settings'))
 
 
@@ -64,4 +68,5 @@ def delete_category():
     category = db.session.query(models.Category).get(id_)
     db.session.delete(category)
     db.session.commit()
-    return redirect(url_for('expenses.expenses_default'))
+    flash('Category successfully deleted.', 'success')
+    return redirect(url_for('account.view_settings'))

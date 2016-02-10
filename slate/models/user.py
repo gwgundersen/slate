@@ -117,3 +117,12 @@ class User(db.Model):
         salt = uuid.uuid4().hex
         hashed = hashlib.sha512(password + salt).hexdigest()
         return hashed, salt
+
+    def already_has_category(self, new_name):
+        """Returns True if user already has category by that name, False
+        otherwise.
+        """
+        for category in self.categories:
+            if category.name == new_name:
+                return True
+        return False

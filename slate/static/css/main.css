@@ -118,6 +118,17 @@ h1 span {
   position: relative;
   top: 16px;
 }
+#error-message {
+  background-color: #ff6f6f;
+  /* Light red */
+  color: white;
+  padding-top: 10px;
+}
+#success-message {
+  background-color: #7FB800;
+  color: white;
+  padding-top: 10px;
+}
 #months-list li,
 #category-list li {
   margin-bottom: 10px;

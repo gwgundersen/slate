@@ -1,11 +1,11 @@
 """Handles logins and logouts.
 """
 
-from flask import g
+from flask import g, flash, Blueprint, request, redirect, render_template, \
+    url_for
 from flask.ext.login import login_user, logout_user, login_required
 from sqlalchemy.orm.exc import NoResultFound
 
-from flask import Blueprint, request, redirect, render_template, url_for
 from slate.config import config
 from slate import app, db, models
 
@@ -46,37 +46,37 @@ def register():
     if request.method == 'GET':
         return render_template('register.html')
 
-    username = request.form['username']
+    username = request.form.get('username')
 
     if not username or not username.isalnum():
         return render_template('register.html',
                                error='Username must be alphanumeric')
 
-    password1 = request.form['password1']
-    password2 = request.form['password2']
+    password1 = request.form.get('password1')
+    password2 = request.form.get('password2')
 
-    no_user_by_that_name = False
     try:
         db.session.query(models.User)\
             .filter(models.User.name == username)\
             .one()
-    except NoResultFound:
-        no_user_by_that_name = True
 
-    if not no_user_by_that_name:
-        return render_template('register.html',
-                               error='Username already exists')
+        # The line of code above will throw an error if the user does not
+        # exist.
+        flash('Username already exists', 'error')
+        return redirect(url_for('auth.register'))
+    except NoResultFound:
+        pass
 
     if password1 != password2:
-        return render_template('register.html',
-                               error='Passwords do not match')
-
+        flash('Passwords do not match', 'error')
+        return redirect(url_for('auth.register'))
     if not password1:
-        return render_template('register.html',
-                               error='Password is required')
+        flash('Password is required', 'error')
+        return redirect(url_for('auth.register'))
 
     new_user = models.User(username, password1)
     db.session.add(new_user)
     db.session.commit()
     login_user(new_user)
+    flash('Welcome to Slate!', 'success')
     return redirect(url_for('index.index_page'))
