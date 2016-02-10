@@ -13,8 +13,8 @@
                 {% endif %}
             </a>
         </h1>
-        {% if error_messages|length %}
-            {{ error_messages }}
+        {% if error %}
+            <p class='highlight'>{{ error }}</p>
         {% endif %}
     </div>
 </div>
