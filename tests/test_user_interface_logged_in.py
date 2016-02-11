@@ -6,7 +6,7 @@ import unittest
 from selenium import webdriver
 from selenium.webdriver.support.select import Select
 
-from utils import exists_by_xpath, login_user, register_user, delete_user, \
+from utils import exists_by_xpath, register_user, delete_user, \
     MOCK_USER, SLATE_URL
 
 
@@ -15,7 +15,6 @@ class TestBasicUserInterface(unittest.TestCase):
     def setUp(self):
         self.browser = webdriver.Firefox()
         register_user(self.browser)
-        login_user(self.browser)
         self.browser.get(SLATE_URL)
 
     def test_title(self):
@@ -70,5 +69,5 @@ class TestBasicUserInterface(unittest.TestCase):
         )
 
     def tearDown(self):
-        self.browser.quit()
         delete_user(self.browser)
+        self.browser.quit()

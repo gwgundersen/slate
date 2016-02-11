@@ -6,8 +6,8 @@ import unittest
 from selenium import webdriver
 from selenium.webdriver.support.select import Select
 
-from utils import exists_by_xpath, link_href_is_correct, login_user, \
-    MOCK_USER, SLATE_URL
+from utils import exists_by_xpath, link_href_is_correct, register_user, \
+    delete_user, MOCK_USER, SLATE_URL
 
 
 class TestBasicUserInterface(unittest.TestCase):
@@ -45,7 +45,7 @@ class TestBasicUserInterface(unittest.TestCase):
         )
 
     def test_form_fields(self):
-        login_user(self.browser)
+        register_user(self.browser)
         input_ = self.browser.find_element_by_xpath('//input[@name="cost"]')
         self.assertEqual(input_.get_attribute('placeholder'), 'Cost ($)')
 
@@ -60,15 +60,17 @@ class TestBasicUserInterface(unittest.TestCase):
         input_ = self.browser\
             .find_element_by_xpath('//input[@name="discretionary"]')
         self.assertEqual(input_.get_attribute('checked'), 'true')
+        delete_user(self.browser)
 
     def test_add_and_view_buttons(self):
-        login_user(self.browser)
+        register_user(self.browser)
         self.assertTrue(
             exists_by_xpath(self.browser, '//button[text()="Add"]')
         )
         self.assertTrue(
             exists_by_xpath(self.browser, '//a[text()="View expenses"]')
         )
+        delete_user(self.browser)
 
     def test_footer_links_logged(self):
         self.assertTrue(
@@ -80,29 +82,3 @@ class TestBasicUserInterface(unittest.TestCase):
 
     def tearDown(self):
         self.browser.quit()
-
-
-
-
-
-        # login_user(self.browser)
-        # span = self.browser.find_element_by_xpath('//div[@id="header"]//span')
-        # self.assertEqual(span.text, MOCK_USER)
-        # self.assertTrue(
-        #     exists_by_xpath(self.browser, '//a[text()="Account"]')
-        # )
-        # self.assertTrue(
-        #     exists_by_xpath(self.browser, '//a[text()="Settings"]')
-        # )
-        # self.assertTrue(
-        #     exists_by_xpath(self.browser, '//button[text()="Logout"]')
-        # )
-        # self.assertTrue(
-        #     exists_by_xpath(self.browser, '//h1[contains(text()="%s")]' % MOCK_USER)
-        # )
-        # self.assertTrue(
-        #     not exists_by_xpath(self.browser, '//a[text()="Login"]')
-        # )
-        # self.assertTrue(
-        #     not exists_by_xpath(self.browser, '//a[text()="Register"]')
-        # )

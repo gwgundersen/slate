@@ -23,7 +23,8 @@ class TestCreatingNewUser(unittest.TestCase):
         for option in select.options:
             if option.text == '(category)':
                 self.assertTrue(option.text not in DEFAULT_CATEGORIES)
-            self.assertTrue(option.text.lower() in DEFAULT_CATEGORIES)
+            else:
+                self.assertTrue(option.text.lower() in DEFAULT_CATEGORIES)
         delete_user(self.browser)
 
     def test_alphanumeric_username(self):
@@ -64,6 +65,7 @@ class TestCreatingNewUser(unittest.TestCase):
             self.browser.find_element_by_xpath('//select[@name="category_id"]')
         )
         self.assertTrue(len(select.options) == 1)
+        # No delete. User should not have been created.
 
     def tearDown(self):
         self.browser.quit()
