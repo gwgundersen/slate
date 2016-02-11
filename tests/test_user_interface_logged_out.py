@@ -7,8 +7,7 @@ from selenium import webdriver
 from selenium.webdriver.support.select import Select
 
 from utils import exists_by_xpath, link_href_is_correct, login_user, \
-    MOCK_USER
-from config import SLATE_URL
+    MOCK_USER, SLATE_URL
 
 
 class TestBasicUserInterface(unittest.TestCase):

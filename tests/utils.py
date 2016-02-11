@@ -4,7 +4,23 @@
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
 
-from config import SLATE_URL, MOCK_USER, MOCK_PW
+
+SLATE_URL = 'http://localhost:8080/slate'
+MOCK_USER = 'test'
+MOCK_PW = 'test'
+DEFAULT_CATEGORIES = ['alcohol',
+                      'food (in)',
+                      'food (out)',
+                      'transportation',
+                      'rent/mortgage',
+                      'bills',
+                      'miscellaneous',
+                      'household',
+                      'travel/vacation',
+                      'entertainment',
+                      'medical',
+                      'clothing',
+                      'savings']
 
 
 def exists_by_xpath(browser, xpath):
@@ -33,7 +49,8 @@ def link_href_is_correct(browser, xpath, href):
         return False
 
 
-def register_user(browser):
+def register_user(browser, username=MOCK_USER, password1=MOCK_PW,
+                  password2=MOCK_PW):
     """Creates a new user.
     """
     browser.get('%s/register' % SLATE_URL)
@@ -43,11 +60,25 @@ def register_user(browser):
         .find_element_by_xpath('//input[@name="password2"]')
     password_input_2 = browser\
         .find_element_by_xpath('//input[@name="password1"]')
-    username_input.send_keys(MOCK_USER)
-    password_input_1.send_keys(MOCK_PW)
-    password_input_2.send_keys(MOCK_PW)
+    username_input.send_keys(username)
+    password_input_1.send_keys(password1)
+    password_input_2.send_keys(password2)
     browser.find_element_by_xpath('//button[@type="submit"]').click()
 
+
+def update_password(browser, old_password, new_password1, new_password2):
+    browser.get('%s/account' % SLATE_URL)
+    old_password_input = browser\
+        .find_element_by_xpath('//input[@name="oldpassword"]')
+    new_password_input_1 = browser\
+        .find_element_by_xpath('//input[@name="newpassword1"]')
+    new_password_input_2 = browser\
+        .find_element_by_xpath('//input[@name="newpassword2"]')
+    old_password_input.send_keys(old_password)
+    new_password_input_1.send_keys(new_password1)
+    new_password_input_2.send_keys(new_password2)
+    browser.find_element_by_xpath('//div[@id="update-password-section"]'
+                                  '//button[@type="submit"]').click()
 
 def login_user(browser):
     """Logins in user.
@@ -94,3 +125,10 @@ def add_expense(browser, cost, category, comment):
         .find_element_by_xpath('//input[@name="comment"]')
     comment_input.send_keys(comment)
     browser.find_element_by_xpath('//button[text()="Add"]').click()
+
+
+def get_flashed_message(browser):
+    """Returns the message that has been flashed on the user's screen.
+    """
+    message = browser.find_element_by_xpath('//div[@class="flashes"]//p')
+    return message.text

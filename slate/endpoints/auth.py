@@ -49,8 +49,8 @@ def register():
     username = request.form.get('username')
 
     if not username or not username.isalnum():
-        return render_template('register.html',
-                               error='Username must be alphanumeric')
+        flash('Username must be alphanumeric.', 'error')
+        return render_template('register.html')
 
     password1 = request.form.get('password1')
     password2 = request.form.get('password2')
@@ -62,16 +62,16 @@ def register():
 
         # The line of code above will throw an error if the user does not
         # exist.
-        flash('Username already exists', 'error')
+        flash('Username already exists.', 'error')
         return redirect(url_for('auth.register'))
     except NoResultFound:
         pass
 
     if password1 != password2:
-        flash('Passwords do not match', 'error')
+        flash('Passwords do not match.', 'error')
         return redirect(url_for('auth.register'))
     if not password1:
-        flash('Password is required', 'error')
+        flash('Password is required.', 'error')
         return redirect(url_for('auth.register'))
 
     new_user = models.User(username, password1)

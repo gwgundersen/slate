@@ -46,7 +46,7 @@ def edit_expense():
     if request.method == 'GET':
         expense = db.session.query(models.Expense).get(id_)
         return render_template('expense-edit.html',
-                               categories=dbutils.get_categories(),
+                               categories=current_user.categories,
                                expense=expense)
     if request.method == 'POST':
         id_ = request.form.get('id')

@@ -79,25 +79,24 @@ def update_password():
 
     error = None
     if not current_user.is_correct_password(old_password):
-        error = 'Old password is incorrect'
+        error = 'Old password is incorrect.'
     elif new_password1 != new_password2:
-        error = 'Passwords do not match'
+        error = 'Passwords do not match.'
     elif not new_password1:
-        error = 'Password is required'
+        error = 'Password is required.'
     elif old_password == new_password1:
-        error = 'Password has not changed'
+        error = 'Password has not changed.'
 
     if error:
         flash(error, 'error')
         return redirect(url_for('account.view_account'))
-
 
     hashed, salt = current_user.hash_password(new_password1)
     current_user.password = hashed
     current_user.salt = salt
     db.session.merge(current_user)
     db.session.commit()
-    flash('Password was successfully updated', 'success')
+    flash('Password was successfully updated.', 'success')
     return redirect(url_for('account.view_account'))
 
 

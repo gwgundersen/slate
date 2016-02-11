@@ -29,17 +29,14 @@
                         <tr>
                             <td>{{ category.name|capitalize }}</td>
                             <td>
-                                <form action='categories/edit' method='get'>
-                                    <input type='hidden' name='id' value='{{ category.id }}'>
-                                    <input class='btn btn-primary' type='submit' value='Edit'>
-                                </form>
+                                <a class='btn btn-primary' href='categories/edit?id={{ category.id }}'>Edit</a>
                             </td>
                         </tr>
                         {% endfor %}
                     </table>
                 </div>
             </div>
-            <div class='col-md-4'>
+            <div class='col-md-4' id='create-category-section'>
                 <h4>Create Category</h4>
                 <form action='categories/add' method='post'>
                     <div class='form-group'>
