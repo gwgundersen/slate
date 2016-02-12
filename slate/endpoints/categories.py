@@ -20,12 +20,12 @@ categories = Blueprint('categories',
 def add_category():
     """Adds category if not duplicate name for user.
     """
-    new_name = request.form.get('name')
-    if current_user.already_has_category(new_name):
-        flash('Category by that name already exists!', 'error')
+    category_name = request.form.get('category_name')
+    if current_user.already_has_category(category_name):
+        flash('Category by that name already exists.', 'error')
         return redirect(url_for('account.view_settings'))
 
-    category = models.Category(new_name)
+    category = models.Category(category_name)
     current_user.categories.append(category)
     db.session.merge(current_user)
     db.session.commit()
