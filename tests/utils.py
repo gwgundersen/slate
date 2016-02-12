@@ -9,19 +9,17 @@ SLATE_URL = 'http://localhost:8080/slate'
 MOCK_USER = 'test'
 MOCK_PW = 'test'
 DEFAULT_CATEGORIES = ['alcohol',
+                      'bills',
+                      'clothing',
+                      'entertainment',
                       'food (in)',
                       'food (out)',
-                      'transportation',
-                      'rent/mortgage',
-                      'bills',
-                      'miscellaneous',
                       'household',
-                      'travel/vacation',
-                      'entertainment',
                       'medical',
-                      'clothing',
-                      'savings']
-
+                      'miscellaneous',
+                      'rent/mortgage',
+                      'transportation',
+                      'travel/vacation']
 
 def exists_by_xpath(browser, xpath):
     """Returns True if element exists, False otherwise.

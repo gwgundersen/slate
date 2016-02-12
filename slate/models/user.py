@@ -29,18 +29,17 @@ class User(db.Model):
 
         categories = []
         default_categories = ['alcohol',
+                              'bills',
+                              'clothing',
+                              'entertainment',
                               'food (in)',
                               'food (out)',
-                              'transportation',
-                              'rent/mortgage',
-                              'bills',
-                              'miscellaneous',
                               'household',
-                              'travel/vacation',
-                              'entertainment',
                               'medical',
-                              'clothing',
-                              'savings']
+                              'miscellaneous',
+                              'rent/mortgage',
+                              'transportation',
+                              'travel/vacation']
         for name in default_categories:
             categories.append(
                 Category(name)
