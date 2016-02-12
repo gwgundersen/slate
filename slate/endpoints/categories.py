@@ -46,10 +46,14 @@ def edit_category():
     else:
         id_ = request.form.get('id')
         category = db.session.query(models.Category).get(id_)
-        new_name = request.form.get('name', '').lower()
+        new_name = request.form.get('category_name', '').lower()
+
+        if new_name == '':
+            flash('Category name cannot be empty.', 'error')
+            return redirect(url_for('categories.edit_category', id=id_))
 
         if current_user.already_has_category(new_name):
-            flash('Category by that name already exists!', 'error')
+            flash('Category by that name already exists.', 'error')
             return redirect(url_for('categories.edit_category', id=id_))
 
         category.name = new_name
