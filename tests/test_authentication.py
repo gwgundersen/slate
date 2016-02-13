@@ -19,11 +19,13 @@ class TestAuthentication(unittest.TestCase):
 
     def test_login(self):
         login_user(self.browser)
+        delete_user(self.browser)
 
     def test_logout(self):
         login_user(self.browser)
         logout_user(self.browser)
+        login_user(self.browser)
+        delete_user(self.browser)
 
     def tearDown(self):
-        delete_user(self.browser)
         self.browser.quit()

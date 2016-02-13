@@ -78,7 +78,7 @@ def update_password(browser, old_password, new_password1, new_password2):
     browser.find_element_by_xpath('//div[@id="update-password-section"]'
                                   '//button[@type="submit"]').click()
 
-def login_user(browser):
+def login_user(browser, username=MOCK_USER, password=MOCK_PW):
     """Logins in user.
     """
     browser.get('%s/login' % SLATE_URL)
@@ -86,8 +86,8 @@ def login_user(browser):
         .find_element_by_xpath('//input[@name="username"]')
     password_input = browser\
         .find_element_by_xpath('//input[@name="password"]')
-    username_input.send_keys(MOCK_USER)
-    password_input.send_keys(MOCK_PW)
+    username_input.send_keys(username)
+    password_input.send_keys(password)
     browser.find_element_by_xpath('//button[@type="submit"]').click()
 
 
@@ -100,14 +100,10 @@ def logout_user(browser):
 def delete_user(browser):
     """Delete test user.
     """
-    try:
-        login_user(browser)
-        browser.get('%s/account' % SLATE_URL)
-        browser.find_element_by_xpath('//div[@id="delete-account-section"]//button[@type="submit"]').click()
-        alert = browser.switch_to_alert()
-        alert.accept()
-    except:
-        pass
+    browser.get('%s/account' % SLATE_URL)
+    browser.find_element_by_xpath('//div[@id="delete-account-section"]//button[@type="submit"]').click()
+    alert = browser.switch_to_alert()
+    alert.accept()
 
 
 def add_expense(browser, cost, category, comment):
