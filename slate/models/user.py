@@ -19,20 +19,43 @@ class User(db.Model):
     password = db.Column(db.String(255))
     salt = db.Column(db.String(255))
     _expenses = db.relationship('Expense', backref=db.backref('user'))
+    categories = db.relationship('Category', backref=db.backref('user'))
 
     def __init__(self, name, password, active=True):
         self.name = name
         hashed, salt = User.hash_password(password)
         self.password = hashed
         self.salt = salt
+
+        categories = []
+        default_categories = ['alcohol',
+                              'bills',
+                              'clothing',
+                              'entertainment',
+                              'food (in)',
+                              'food (out)',
+                              'household',
+                              'medical',
+                              'miscellaneous',
+                              'rent/mortgage',
+                              'transportation',
+                              'travel/vacation']
+        for name in default_categories:
+            categories.append(
+                Category(name)
+            )
+
+        self.categories = categories
         self.active = active
 
     def is_active(self):
         return self.active
 
+    @property
     def is_anonymous(self):
         return False
 
+    @property
     def is_authenticated(self):
         return True
 
@@ -40,13 +63,15 @@ class User(db.Model):
         return self.id
 
     def expenses(self, category=None, year=None, month=None):
+        """Returns list of expenses. If category is provided, filters by
+        category. If year and month are provided, filters by year and month.
+        """
         query = db.session.query(Expense)\
-            .join(User)\
-            .filter(User.name == self.name)
+            .filter(Expense.user_fk == self.id)
         if category:
             query = query\
                 .join(Category)\
-                .filter(Category.name == category.lower())
+                .filter(Category.id == category.id)
         if year and month:
             query = query\
                 .filter(db.extract('year', Expense.date_time) == int(year))\
@@ -62,6 +87,9 @@ class User(db.Model):
 
     @classmethod
     def get(cls, username, candidate_pw):
+        """Returns user by name if they exist and the provided password is
+        correct. Returns None otherwise.
+        """
         try:
             user = db.session.query(cls).filter(cls.name == username).one()
         except NoResultFound:
@@ -88,3 +116,12 @@ class User(db.Model):
         salt = uuid.uuid4().hex
         hashed = hashlib.sha512(password + salt).hexdigest()
         return hashed, salt
+
+    def already_has_category(self, new_name):
+        """Returns True if user already has category by that name, False
+        otherwise.
+        """
+        for category in self.categories:
+            if category.name == new_name:
+                return True
+        return False

@@ -5,16 +5,9 @@
 
 <body>
 
-{% with auth_message=auth_message %}
-    {% include 'header.html' %}
-{% endwith %}
+{% include 'header.html' %}
 
 <div id='register-page' class='page container'>
-
-    {% if error %}
-    <p class='highlight'>{{ error }}</p>
-    {% endif %}
-
     <div class='row'>
         <div class='col-md-4'>
             <form action='register' method='POST'>

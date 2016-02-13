@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC=''>
+<html>
+
+{% include 'head.html' %}
+
+<body>
+
+{% include 'header.html' %}
+
+<div id='settings-page' class='page'>
+    <div class='container'>
+        <div class='row'>
+            <div class='col-md-12'>
+                <h2>Settings</h2>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-md-4'>
+                <h4>Edit Categories</h4>
+                <div class='section'>
+                    <table class='table'>
+                        <thead>
+                        <tr>
+                            <td>Category</td>
+                            <td></td>
+                        </tr>
+                        </thead>
+                        {% for category in g.user.categories %}
+                        <tr>
+                            <td>{{ category.name|capitalize }}</td>
+                            <td>
+                                <a class='btn btn-primary' href='categories/edit?id={{ category.id }}'>Edit</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+            <div class='col-md-4' id='create-category-section'>
+                <h4>Create Category</h4>
+                <form action='categories/add' method='post'>
+                    <div class='form-group'>
+                        <input class='form-control' type='text' name='category_name'>
+                    </div>
+                    <input class='btn btn-primary' type='submit' value='Create'>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% include 'footer.html' %}
+
+</div>
+</body>
+</html>

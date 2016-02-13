@@ -5,9 +5,7 @@
 
 <body>
 
-{% with auth_message=auth_message %}
-    {% include 'header.html' %}
-{% endwith %}
+{% include 'header.html' %}
 
 <link href='https://cdn.datatables.net/s/bs/dt-1.10.10,r-2.0.0/datatables.min.css' rel='stylesheet' type='text/css' />
 <script src='https://cdn.datatables.net/s/bs/dt-1.10.10,r-2.0.0/datatables.min.js'></script>
@@ -22,7 +20,7 @@
                         <p>{{ month_string }}</p>
                     {% endif %}
                     {% if category %}
-                        <p>{{ category }}</p>
+                        <p>{{ category.name|capitalize }}</p>
                     {% endif %}
                     <p class='highlight'>
                         <strong>Sum: ${{ category_sum }}*</strong>
@@ -36,10 +34,12 @@
                         <input type='hidden' name='month' value='{{ month }}'>
                         {% endif %}
                         <div class='form-group'>
-                            <select class='form-control' name='category'>
-                                <option value="all">All</option>
+                            <select class='form-control' name='category_id'>
+                                <option>All</option>
                                 {% for category in categories %}
-                                <option>{{ category.name|capitalize }}</option>
+                                <option value="{{ category.id }}">
+                                    {{ category.name|capitalize }}
+                                </option>
                                 {% endfor %}
                             </select>
                             <button class='btn btn-info'>View category</button>
@@ -74,10 +74,7 @@
                     <td>{{ 'Yes' if expense.discretionary else 'No' }}</td>
                     <td>{{ expense.date_time.strftime('%d %b %Y - %H:%M') }}</td>
                     <td>
-                        <form action='expenses/edit' method='get'>
-                            <input type='hidden' name='id' value='{{ expense.id }}'>
-                            <input class='btn btn-primary' type='submit' value='Edit'>
-                        </form>
+                        <a class='btn btn-primary' href='expenses/edit?id={{ expense.id }}'>Edit</a>
                     </td>
                 </tr>
                 {% endfor %}

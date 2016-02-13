@@ -2,9 +2,9 @@
 """
 
 from flask import Blueprint, render_template, request
+from flask.ext.login import current_user
 
 from slate.config import config
-from slate import dbutils
 
 
 index = Blueprint('index',
@@ -16,9 +16,12 @@ index = Blueprint('index',
 def index_page():
     """Renders index page.
     """
-    categories = dbutils.get_categories()
-    error = request.args.get('error')
+    if current_user.is_anonymous:
+        categories = []
+    else:
+        categories = current_user.categories
+    #error = request.args.get('error')
     return render_template('index.html',
-                           categories=categories,
-                           error=error)
+                           categories=categories)#,
+                           #error=error)
 

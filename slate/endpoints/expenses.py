@@ -1,10 +1,8 @@
 """Manages expense endpoints.
 """
 
-import calendar
-import datetime
-
-from flask import Blueprint, redirect, render_template, request, url_for
+from flask import Blueprint, flash, redirect, render_template, request, \
+    url_for
 from flask.ext.login import current_user, login_required
 
 from slate import db
@@ -27,17 +25,13 @@ expenses = Blueprint('expenses',
 def add_expense():
     """Adds expense.
     """
-    cost, category_name, comment, errors, discretionary = \
+    cost, category, comment, errors, discretionary = \
         _validate_expense(request)
 
     if len(errors) > 0:
-        return redirect(url_for('index.index_page',
-                                error=errors[0]))
+        flash(errors[0], 'error')
+        return redirect(url_for('index.index_page'))
 
-    category = db.session\
-        .query(models.Category)\
-        .filter(models.Category.name == category_name)\
-        .one()
     expense = models.Expense(cost, category, comment, discretionary,
                              current_user)
     db.session.add(expense)
@@ -51,27 +45,20 @@ def edit_expense():
     id_ = request.args.get('id')
     if request.method == 'GET':
         expense = db.session.query(models.Expense).get(id_)
-        error = request.args.get('error')
-        return render_template('edit.html',
-                               categories=dbutils.get_categories(),
-                               error=error,
+        return render_template('expense-edit.html',
+                               categories=current_user.categories,
                                expense=expense)
     if request.method == 'POST':
         id_ = request.form.get('id')
         cost, category, comment, errors, discretionary = \
             _validate_expense(request)
         if len(errors) > 0:
-            url = url_for('expenses.edit_expense',
-                          id=id_,
-                          error=errors[0])
-            return redirect(url)
+            flash(errors[0], 'error')
+            return redirect(url_for('expenses.edit_expense', id=id_))
 
         expense = db.session.query(models.Expense).get(id_)
         expense.cost = cost
-        expense.category = db.session\
-            .query(models.Category)\
-            .filter_by(name=category)\
-            .one()
+        expense.category = (category or expense.category)
         expense.comment = comment
         expense.discretionary = discretionary
         db.session.merge(expense)
@@ -82,10 +69,13 @@ def edit_expense():
 @expenses.route('/delete', methods=['POST'])
 @login_required
 def delete_expense():
+    """Deletes expense.
+    """
     id_ = request.form.to_dict()['id']
     expense = db.session.query(models.Expense).get(id_)
     db.session.delete(expense)
     db.session.commit()
+    flash('Expense successfully deleted.', 'success')
     return redirect(url_for('expenses.expenses_default'))
 
 
@@ -97,9 +87,11 @@ def delete_expense():
 def expenses_default():
     """Renders expenses for current month.
     """
-    category = request.args.get('category')
-    if category == 'all':
+    category_id = request.args.get('category_id')
+    if not category_id or category_id == 'all':
         category = None
+    else:
+        category = db.session.query(models.Category).get(category_id)
 
     year = request.args.get('year')
     month = request.args.get('month')
@@ -109,7 +101,7 @@ def expenses_default():
     category_sum = viewutils.get_expense_sum(expenses)
 
     return render_template('expenses.html',
-                           categories=dbutils.get_categories(),
+                           categories=current_user.categories,
                            category=category,
                            category_sum=category_sum,
                            expenses=expenses,
@@ -143,9 +135,12 @@ def _validate_expense(request):
     except ValueError:
         errors.append('Cost must be a number.')
 
-    category = request.form['category']
-    if category == 'select':
+    category_id = request.form['category_id']
+    if category_id == 'select':
         errors.append('Category is required.')
+        category = None
+    else:
+        category = db.session.query(models.Category).get(category_id)
 
     comment = request.form.get('comment')
     if not comment:

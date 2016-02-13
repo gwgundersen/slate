@@ -47,7 +47,7 @@ def report_default():
     all_expenses = current_user.expenses(year=year, month=month)
     grouped_expenses = collections.OrderedDict()
     for e in all_expenses:
-        if e.category.name == 'rent/mortgage':
+        if e.category.hide_in_report:
             continue
         key = e.date_time.strftime('%Y-%m-%d')
         if key not in grouped_expenses:
@@ -93,9 +93,13 @@ def report_default():
                 discretionary[c] = e.cost
             discretionary_sum += e.cost
 
+    excluded_categories = [c for c in current_user.categories
+                           if c.hide_in_report]
+
     return render_template('report.html',
                            month_string=month_string,
                            category_sum=category_sum,
+                           excluded_categories=excluded_categories,
                            food_in=food_in,
                            food_out=food_out,
                            cost_per_meal=cost_per_meal,

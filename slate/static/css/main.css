@@ -53,6 +53,7 @@ h1 span {
 .btn {
   border: none;
   font-family: arial, sans-serif;
+  font-size: 13px;
 }
 .btn.btn-primary {
   background-color: #1689E5;
@@ -104,11 +105,29 @@ h1 span {
 #header {
   background-color: #17406B;
 }
-#header a {
+#header a,
+#header .navbar-right {
   color: white;
+  font-weight: 200;
 }
 #header h1 {
   margin-top: 10px;
+}
+#header .pull-right {
+  font-size: 15px;
+  position: relative;
+  top: 16px;
+}
+#error-message {
+  background-color: #ff6f6f;
+  /* Light red */
+  color: white;
+  padding-top: 10px;
+}
+#success-message {
+  background-color: #7FB800;
+  color: white;
+  padding-top: 10px;
 }
 #months-list li,
 #category-list li {
@@ -148,27 +167,6 @@ h1 span {
 #expenses-page,
 #report-page {
   padding-bottom: 50px;
-}
-#expenses-page table,
-#report-page table {
-  font-size: 13px;
-}
-#expenses-page table thead td,
-#report-page table thead td {
-  font-weight: bold;
-}
-#expenses-page table td,
-#report-page table td {
-  padding: 4px;
-  vertical-align: middle;
-}
-#expenses-page table form,
-#report-page table form {
-  margin-bottom: 0;
-}
-#expenses-page table input,
-#report-page table input {
-  font-size: 13px;
 }
 #expenses-page button,
 #report-page button,
@@ -218,6 +216,27 @@ h1 span {
   border-bottom: 1px solid #ddd;
   margin-bottom: 30px;
   padding-bottom: 30px;
+}
+#expenses-page table,
+#settings-page table {
+  font-size: 13px;
+}
+#expenses-page table thead td,
+#settings-page table thead td {
+  font-weight: bold;
+}
+#expenses-page table td,
+#settings-page table td {
+  padding: 4px;
+  vertical-align: middle;
+}
+#expenses-page table form,
+#settings-page table form {
+  margin-bottom: 0;
+}
+#expenses-page table input,
+#settings-page table input {
+  font-size: 13px;
 }
 @media (max-width: 992px) {
   #expenses-page #expense-controls #previous-expenses {
