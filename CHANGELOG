@@ -4,11 +4,20 @@ Slate Changelog
 All notable changes to this project will be documented in this file.
 
 
+0.1.0 - 2016-02-13
+------------------
+(custom categories with defaults)
+
+- When a new user is created, they are assigned default categories.
+- Existing users can create, edit, and delete their categories.
+- Significant improvement to Selenium unit tests of interface.
+
+
 0.0.2 - 2016-01-31
 ------------------
 (amending default categories)
 
--  Renaming categories in database, particularly "rent" to "rent/mortgage".
+- Renaming categories in database, particularly "rent" to "rent/mortgage".
 
 
 0.0.1 - 2016-01-31
