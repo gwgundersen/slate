@@ -4,6 +4,7 @@
 import datetime
 import json
 import collections
+from calendar import monthrange
 
 from flask import Blueprint, render_template, request
 from flask.ext.login import current_user, login_required
@@ -77,8 +78,12 @@ def report_default():
     food_in = viewutils.get_category_sum(expenses, 'food (in)')
     food_out = viewutils.get_category_sum(expenses, 'food (out)')
     food_total = food_in + food_out
-    num_days_so_far = datetime.datetime.now().day
-    cost_per_meal = round(food_total / (num_days_so_far * 3), 2)
+    now = datetime.datetime.now()
+    if now.year == year and now.month == month:
+        num_days = now.day
+    else:
+        num_days = monthrange(year, month)[1]
+    cost_per_meal = round(food_total / (num_days * 3), 2)
 
     # Discretionary
     # ------------------------------------------------------------------------
@@ -108,6 +113,7 @@ def report_default():
                            query_string=query_string,
                            expenses_json=expenses_json,
                            ordered_expenses_json=ordered_expenses_json)
+
 
 def _date_handler(date):
     """Formats date for JSON.
