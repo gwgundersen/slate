@@ -24,7 +24,7 @@ class TestTwoUsersCategoriesAreUnrelated(unittest.TestCase):
         # --------------------------------------------------------------------
         register_user(self.browser, username='userA', password1='pw',
                       password2='pw')
-        add_expense(self.browser, 7.50, 'Food (out)', 'Burrito')
+        add_expense(self.browser, '7.50', 'Food (out)', 'Burrito')
         logout_user(self.browser)
 
         # Create user B, delete "Food (out)" category.

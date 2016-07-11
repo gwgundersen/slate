@@ -34,11 +34,11 @@ class TestEditingCategory(unittest.TestCase):
     def test_deleting_expense(self):
         self.browser.get(SLATE_URL)
         # We want to verify that this expense is deleted.
-        add_expense(self.browser, 7.50, 'Food (out)', 'Burrito')
+        add_expense(self.browser, '7.50', 'Food (out)', 'Burrito')
         self.browser.get('%s/account/settings' % SLATE_URL)
         self.browser.find_element_by_xpath('//tr//td[text()="Food (out)"]/..//a[text()="Edit"]').click()
         self.browser.find_element_by_xpath('//input[@value="Delete"]').click()
-        alert = self.browser.switch_to_alert()
+        alert = self.browser.switch_to.alert()
         alert.accept()
         self.browser.get(SLATE_URL)
         select = Select(

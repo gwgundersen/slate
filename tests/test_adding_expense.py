@@ -18,9 +18,9 @@ class TestAddingExpense(unittest.TestCase):
         login_user(self.browser)
 
     def test_adding_expense(self):
-        add_expense(self.browser, 7.50, 'Food (out)', 'Burrito')
+        add_expense(self.browser, '7.50', 'Food (out)', 'Burrito')
         td = self.browser.find_element_by_xpath('//table//tbody//td[1]')
-        self.assertTrue(float(td.text), 7.50)
+        self.assertTrue(float(td.text), '7.50')
 
     def test_cost_validation(self):
         add_expense(self.browser, 'Seven fifty', 'Food (out)', 'Burrito')
@@ -28,12 +28,12 @@ class TestAddingExpense(unittest.TestCase):
         self.assertTrue(message, 'Cost must be a number.')
 
     def test_category_validation(self):
-        add_expense(self.browser, 7.50, '(category)', 'Burrito')
+        add_expense(self.browser, '7.50', '(category)', 'Burrito')
         message = get_flashed_message(self.browser)
         self.assertTrue(message, 'Category is required.')
 
     def test_comment_validation(self):
-        add_expense(self.browser, 7.50, 'Food (out)', '')
+        add_expense(self.browser, '7.50', 'Food (out)', '')
         message = get_flashed_message(self.browser)
         self.assertTrue(message, 'Comment is required.')
 
