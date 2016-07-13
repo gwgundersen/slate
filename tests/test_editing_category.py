@@ -38,8 +38,7 @@ class TestEditingCategory(unittest.TestCase):
         self.browser.get('%s/account/settings' % SLATE_URL)
         self.browser.find_element_by_xpath('//tr//td[text()="Food (out)"]/..//a[text()="Edit"]').click()
         self.browser.find_element_by_xpath('//input[@value="Delete"]').click()
-        alert = self.browser.switch_to.alert()
-        alert.accept()
+        self.browser.switch_to.alert.accept()
         self.browser.get(SLATE_URL)
         select = Select(
             self.browser.find_element_by_xpath('//select[@name="category_id"]')

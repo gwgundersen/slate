@@ -18,7 +18,6 @@ class TestTwoUsersCategoriesAreUnrelated(unittest.TestCase):
         self.browser = webdriver.Firefox()
 
     def test_two_users_categories_are_unrelated(self):
-
         # Create user A, add an expense with "Food (out)" category. We'll
         # delete this category for user B.
         # --------------------------------------------------------------------
@@ -35,8 +34,7 @@ class TestTwoUsersCategoriesAreUnrelated(unittest.TestCase):
         self.browser.get('%s/account/settings' % SLATE_URL)
         self.browser.find_element_by_xpath('//tr//td[text()="Food (out)"]/..//a[text()="Edit"]').click()
         self.browser.find_element_by_xpath('//input[@value="Delete"]').click()
-        alert = self.browser.switch_to_alert()
-        alert.accept()
+        self.browser.switch_to.alert.accept()
         logout_user(self.browser)
 
         # Verify that user A still has "Food (out)" category.

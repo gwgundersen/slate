@@ -45,8 +45,7 @@ class TestEditingExpense(unittest.TestCase):
         self.browser.find_element_by_xpath('//a[text()="Edit"][1]')\
             .click()
         self.browser.find_element_by_xpath('//input[@value="Delete"]').click()
-        alert = self.browser.switch_to_alert()
-        alert.accept()
+        self.browser.switch_to.alert.accept()
         self.assertTrue(
             not exists_by_xpath(self.browser, '//td[text()="9.00"]')
         )

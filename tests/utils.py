@@ -21,6 +21,7 @@ DEFAULT_CATEGORIES = ['alcohol',
                       'transportation',
                       'travel/vacation']
 
+
 def exists_by_xpath(browser, xpath):
     """Returns True if element exists, False otherwise.
     """
@@ -78,6 +79,7 @@ def update_password(browser, old_password, new_password1, new_password2):
     browser.find_element_by_xpath('//div[@id="update-password-section"]'
                                   '//button[@type="submit"]').click()
 
+
 def login_user(browser, username=MOCK_USER, password=MOCK_PW):
     """Logins in user.
     """
@@ -102,8 +104,7 @@ def delete_user(browser):
     """
     browser.get('%s/account' % SLATE_URL)
     browser.find_element_by_xpath('//div[@id="delete-account-section"]//button[@type="submit"]').click()
-    alert = browser.switch_to_alert()
-    alert.accept()
+    browser.switch_to.alert.accept()
 
 
 def add_expense(browser, cost, category, comment):
