@@ -4,6 +4,16 @@ Slate Changelog
 All notable changes to this project will be documented in this file.
 
 
+0.1.1 - 2016-07-14
+------------------
+(bug fixes and version updates)
+
+- Fixed calculation for cost per meal, which for previous reports used the 
+  current day of the month rather than the number of days in the month.
+- Updated version of Selenium to be compatible with latest build of Firefox;
+  amended unit tests when new Selenium API caused breaking changes.
+
+
 0.1.0 - 2016-02-13
 ------------------
 (custom categories with defaults)
