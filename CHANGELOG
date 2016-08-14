@@ -3,6 +3,15 @@ Slate Changelog
 
 All notable changes to this project will be documented in this file.
 
+0.1.2 - 2016-08-14
+------------------
+(new view for all expenses plus minor UI updates)
+
+- Created a new endpoint ("/slate/expenses/all") for viewing all expenses for
+  a single user.
+- On previous expenses page ("/slate/expenses/previous"), correctly sorted
+  months and added the total expenditures for that month.
+- Small changes to button colors, widths, etc. for visual clarity.
 
 0.1.1 - 2016-07-14
 ------------------

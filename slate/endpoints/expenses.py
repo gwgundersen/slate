@@ -111,14 +111,23 @@ def expenses_default():
                            query_string=query_string)
 
 
-@expenses.route('/all', methods=['GET'])
+@expenses.route('/previous', methods=['GET'])
 @login_required
 def all_months():
     """Renders a list of all expenses by month.
     """
     months_all = dbutils.get_all_months()
-    return render_template('expenses-all.html',
+    return render_template('months-all.html',
                            months_all=months_all)
+
+
+@expenses.route('/all', methods=['GET'])
+@login_required
+def all_expenses():
+    """Renders a list of all expenses by month.
+    """
+    expenses = current_user.all_expenses()
+    return render_template('expenses-all.html', expenses=expenses)
 
 
 # Utility methods

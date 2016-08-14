@@ -1,6 +1,7 @@
 """Utility functions for data that does not need a model.
 """
 
+import calendar
 import datetime
 
 from flask.ext.login import current_user
@@ -13,21 +14,27 @@ def get_all_months():
     """Gets all previous months with recorded transactions.
     """
     conn = db.engine.connect()
-    results = conn.execute(
-        'SELECT DISTINCT '\
-        '  CONCAT(MONTHNAME(date_time), " ", YEAR(date_time)) dt, '\
+    tuples = conn.execute(
+        'SELECT '\
         '  MONTH(date_time), '\
-        '  YEAR(date_time) '
+        '  YEAR(date_time), '\
+        '  SUM(cost) '\
         'FROM expense '\
         'JOIN `user` '\
         '  ON `user`.id = expense.user_fk '\
         'WHERE `user`.name = "%s" '\
-        'ORDER BY dt DESC' % current_user.name
+        'GROUP BY MONTH(date_time), YEAR(date_time) '\
+        'ORDER BY MONTH(date_time), YEAR(date_time) ASC' % current_user.name
     )
-    return [{
-        'view': c[0],
-        'month_num': c[1],
-        'year_num': c[2]} for c in results.fetchall()]
+
+    results = []
+    results = [{
+        'view': '%s %s' % (calendar.month_name[c[0]], c[1]),
+        'month_num': c[0],
+        'year_num': c[1],
+        'total': c[2]} for c in tuples.fetchall()]
+    conn.close()
+    return results
 
 
 def get_category_subtotals(year=None, month=None):

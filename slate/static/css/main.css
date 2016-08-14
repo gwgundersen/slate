@@ -218,25 +218,39 @@ h1 span {
   padding-bottom: 30px;
 }
 #expenses-page table,
-#settings-page table {
+#settings-page table,
+#expenses-all-page table {
   font-size: 13px;
 }
 #expenses-page table thead td,
-#settings-page table thead td {
+#settings-page table thead td,
+#expenses-all-page table thead td {
   font-weight: bold;
 }
 #expenses-page table td,
-#settings-page table td {
+#settings-page table td,
+#expenses-all-page table td {
   padding: 4px;
   vertical-align: middle;
 }
 #expenses-page table form,
-#settings-page table form {
+#settings-page table form,
+#expenses-all-page table form {
   margin-bottom: 0;
 }
 #expenses-page table input,
-#settings-page table input {
+#settings-page table input,
+#expenses-all-page table input {
   font-size: 13px;
+}
+#expenses-all-page table {
+  display: none;
+}
+#expenses-all-page .dataTables_wrapper {
+  margin: 20px 0;
+}
+#expenses-all-page #previous-button a {
+  width: 120px;
 }
 @media (max-width: 992px) {
   #expenses-page #expense-controls #previous-expenses {
@@ -251,15 +265,24 @@ h1 span {
 .dataTables_wrapper {
   font-family: arial, sans-serif;
 }
-.dataTables_wrapper th {
-  background-color: red;
-}
 .dataTables_wrapper div.dataTables_info {
   font-weight: bold;
 }
-#expenses-all h3 {
+#months-all-page h3 {
   border-bottom: 1px solid #ddd;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+}
+#months-all-page #all-button {
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+}
+#months-all-page a.btn {
+  width: 120px;
+}
+#months-all-page .total {
+  font-weight: bold;
+  padding-left: 10px;
 }
 #edit-page #delete-button {
   border-top: 1px solid #ddd;
@@ -306,4 +329,17 @@ h1 span {
 #account-page #delete-account-section {
   margin-top: 50px;
   padding-top: 20px;
+}
+.pagination > .active > a,
+.pagination > .active > a:focus,
+.pagination > .active > a:hover,
+.pagination > .active > span,
+.pagination > .active > span:focus,
+.pagination > .active > span:hover {
+  background-color: #1689E5;
+  border-color: #1689E5;
+}
+.pagination > li > a,
+.pagination > li > span {
+  color: #1689E5;
 }

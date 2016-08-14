@@ -1,0 +1,31 @@
+<!DOCTYPE HTML PUBLIC=''>
+<html>
+
+{% include 'head.html' %}
+
+<body>
+    
+{% include 'header.html' %}
+    
+<div id='months-all-page' class='container'>
+    <h3>Previous expenses</h3>
+    <div id="all-button">
+        <a href="expenses/all" class="btn btn-info">All</a>
+    </div>
+    <ul id='months-list' class='list-unstyled'>
+    {% for exp_month in months_all %}
+        <li>
+            <a class='btn btn-info'
+               href='expenses?year={{ exp_month.year_num }}&month={{ exp_month.month_num }}'>
+                {{ exp_month.view }}
+            </a>
+            <span class='total'>${{ exp_month.total }}</span>
+        </li>
+    {% endfor %}
+    </ul>
+
+    {% include 'footer.html' %}
+
+</div>
+</body>
+</html>

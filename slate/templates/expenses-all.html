@@ -6,19 +6,40 @@
 <body>
     
 {% include 'header.html' %}
-    
-<div id='expenses-all' class='container'>
-    <h3>Previous expenses</h3>
-    <ul id='months-list' class='list-unstyled'>
-    {% for exp_month in months_all %}
-        <li>
-            <a class='btn btn-info'
-               href='expenses?year={{ exp_month.year_num }}&month={{ exp_month.month_num }}'>
-                {{ exp_month.view }}
-            </a>
-        </li>
-    {% endfor %}
-    </ul>
+
+<link href='https://cdn.datatables.net/s/bs/dt-1.10.10,r-2.0.0/datatables.min.css' rel='stylesheet' type='text/css' />
+<script src='https://cdn.datatables.net/s/bs/dt-1.10.10,r-2.0.0/datatables.min.js'></script>
+<script src="static/js/all.js"></script>
+
+<div id='expenses-all-page' class='container'>
+    <h3>All expenses</h3>
+    <div id='previous-button'>
+        <a href='expenses/previous' class='btn btn-info'>Back</a>
+    </div>
+    <table class='table'>
+        <thead>
+            <tr>
+                <td>Cost ($)</td>
+                <td>Comment</td>
+                <td>Category</td>
+                <td>Discretionary</td>
+                <td>Time</td>
+                <td></td>
+            </tr>
+        </thead>
+        {% for expense in expenses %}
+        <tr>
+            <td>{{ '%0.2f'| format(expense.cost|float) }}</td>
+            <td>{{ expense.comment }}</td>
+            <td>{{ expense.category.name|capitalize }}</td>
+            <td>{{ 'Yes' if expense.discretionary else 'No' }}</td>
+            <td>{{ expense.date_time.strftime('%d %b %Y - %H:%M') }}</td>
+            <td>
+                <a class='btn btn-primary' href='expenses/edit?id={{ expense.id }}'>Edit</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
 
     {% include 'footer.html' %}
 

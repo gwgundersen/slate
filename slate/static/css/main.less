@@ -239,7 +239,8 @@ h1 {
 }
 
 #expenses-page,
-#settings-page {
+#settings-page,
+#expenses-all-page {
   table {
     font-size: @font-size-base;
     thead {
@@ -260,6 +261,18 @@ h1 {
   }
 }
 
+#expenses-all-page {
+  table {
+    display: none;
+  }
+  .dataTables_wrapper {
+    margin: 20px 0;
+  }
+  #previous-button a {
+    width: 120px;
+  }
+}
+
 @media (max-width: 992px) {
   #expenses-page {
     #expense-controls {
@@ -277,18 +290,27 @@ h1 {
 
 .dataTables_wrapper {
   font-family: @font-family-base;
-  th {
-    background-color: red;
-  }
   div.dataTables_info {
     font-weight: bold;
   }
 }
 
-#expenses-all {
+#months-all-page {
   h3 {
     border-bottom: 1px solid #ddd;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+  }
+  #all-button {
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+  }
+  a.btn {
+    width: 120px;
+  }
+  .total {
+    font-weight: bold;
+    padding-left: 10px;
   }
 }
 
@@ -346,4 +368,19 @@ h1 {
     margin-top: 50px;
     padding-top: 20px;
   }
+}
+
+.pagination > .active > a,
+.pagination > .active > a:focus,
+.pagination > .active > a:hover,
+.pagination > .active > span,
+.pagination > .active > span:focus,
+.pagination > .active > span:hover {
+  background-color: @color-blue;
+  border-color: @color-blue;
+}
+
+.pagination > li > a,
+.pagination > li > span {
+  color: @color-blue;
 }

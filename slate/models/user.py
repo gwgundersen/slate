@@ -85,6 +85,15 @@ class User(db.Model):
             .order_by(Expense.date_time.desc())\
             .all()
 
+    def all_expenses(self):
+        """Returns list of expenses. If category is provided, filters by
+        category. If year and month are provided, filters by year and month.
+        """
+        return db.session.query(Expense)\
+            .filter(Expense.user_fk == self.id)\
+            .order_by(Expense.date_time.desc())\
+            .all()
+
     @classmethod
     def get(cls, username, candidate_pw):
         """Returns user by name if they exist and the provided password is
