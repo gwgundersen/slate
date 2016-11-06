@@ -56,6 +56,8 @@ app.register_blueprint(endpoints.reports)
 # ----------------------------------------------------------------------------
 # Change this key to force all users to re-authenticate.
 app.secret_key = config.get('cookies', 'secret_key')
+# Limit "remember me" cookie to path. Default is "/".
+app.config['REMEMBER_COOKIE_PATH'] = '/slate'
 
 from slate import models
 login_manager = LoginManager()
