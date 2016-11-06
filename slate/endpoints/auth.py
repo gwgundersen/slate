@@ -77,6 +77,6 @@ def register():
     new_user = models.User(username, password1)
     db.session.add(new_user)
     db.session.commit()
-    login_user(new_user)
+    login_user(new_user, remember=True)
     flash('Welcome to Slate!', 'success')
     return redirect(url_for('index.index_page'))
