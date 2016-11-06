@@ -29,7 +29,7 @@ def login():
                                error='Username or password is invalid')
 
     app.config.user = registered_user
-    login_user(registered_user)
+    login_user(registered_user, remember=True)
     return redirect(url_for('index.index_page'))
 
 
