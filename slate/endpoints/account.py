@@ -10,7 +10,7 @@ from flask import Blueprint, flash, redirect, Response, render_template, \
     request, url_for
 from flask.ext.login import current_user, login_required, logout_user
 
-from slate import db, dbutils, models
+from slate import db, dbutils, models, crypto
 from slate.config import config
 
 account = Blueprint('account',
@@ -91,7 +91,7 @@ def update_password():
         flash(error, 'error')
         return redirect(url_for('account.view_account'))
 
-    hashed, salt = current_user.hash_password(new_password1)
+    hashed, salt = crypto.salt_and_hash_password(new_password1)
     current_user.password = hashed
     current_user.salt = salt
     db.session.merge(current_user)

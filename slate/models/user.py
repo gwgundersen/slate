@@ -2,12 +2,10 @@
 """
 
 import datetime
-import hashlib
-import uuid
 
 from sqlalchemy.orm.exc import NoResultFound
 
-from slate import db
+from slate import db, crypto
 from slate.models import Category, Expense
 
 
@@ -20,10 +18,13 @@ class User(db.Model):
     salt = db.Column(db.String(255))
     _expenses = db.relationship('Expense', backref=db.backref('user'))
     categories = db.relationship('Category', backref=db.backref('user'))
+    email = db.Column(db.String(255))
+    password_reset_token = db.Column(db.String(255))
+    password_reset_expiration = db.Column(db.Date)
 
     def __init__(self, name, password, active=True):
         self.name = name
-        hashed, salt = User.hash_password(password)
+        hashed, salt = crypto.salt_and_hash_password(password)
         self.password = hashed
         self.salt = salt
 
@@ -103,28 +104,14 @@ class User(db.Model):
             user = db.session.query(cls).filter(cls.name == username).one()
         except NoResultFound:
             return None
-        if User._is_correct_password(user.password, candidate_pw, user.salt):
+        if user.is_correct_password(candidate_pw):
             return user
         return None
-
-    @staticmethod
-    def _is_correct_password(hashed, candidate, salt):
-        """Returns True if the candidate password is correct, False otherwise.
-        """
-        return hashlib.sha512(candidate + salt).hexdigest() == hashed
 
     def is_correct_password(self, candidate):
         """Returns True if the candidate password is correct, False otherwise.
         """
-        return self._is_correct_password(self.password, candidate, self.salt)
-
-    @staticmethod
-    def hash_password(password):
-        """Hash a password for the first time.
-        """
-        salt = uuid.uuid4().hex
-        hashed = hashlib.sha512(password + salt).hexdigest()
-        return hashed, salt
+        return crypto.is_correct_password(self.password, candidate, self.salt)
 
     def already_has_category(self, new_name):
         """Returns True if user already has category by that name, False

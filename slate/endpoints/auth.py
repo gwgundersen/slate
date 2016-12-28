@@ -4,14 +4,16 @@
 from flask import g, flash, Blueprint, request, redirect, render_template, \
     url_for
 from flask.ext.login import login_user, logout_user, login_required
-from sqlalchemy.orm.exc import NoResultFound
+import datetime
 
 from slate.config import config
-from slate import app, db, models
+from slate import app, db, models, email, crypto
 
 auth = Blueprint('auth',
                  __name__,
                  url_prefix=config.get('url', 'base'))
+
+PASSWORD_RESET_LIFESPAN = 30
 
 
 @auth.route('/login', methods=['GET', 'POST'])
@@ -23,10 +25,10 @@ def login():
     password = request.form['password']
 
     registered_user = models.User.get(username, password)
-    if registered_user is None:
+    if not registered_user:
         logout_user()
-        return render_template('login.html',
-                               error='Username or password is invalid')
+        flash('Username or password is invalid', 'error')
+        return render_template('login.html')
 
     app.config.user = registered_user
     login_user(registered_user, remember=True)
@@ -55,17 +57,13 @@ def register():
     password1 = request.form.get('password1')
     password2 = request.form.get('password2')
 
-    try:
-        db.session.query(models.User)\
-            .filter(models.User.name == username)\
-            .one()
+    user = db.session.query(models.User)\
+        .filter(models.User.name == username)\
+        .one_or_none()
 
-        # The line of code above will throw an error if the user does not
-        # exist.
+    if user:
         flash('Username already exists.', 'error')
         return redirect(url_for('auth.register'))
-    except NoResultFound:
-        pass
 
     if password1 != password2:
         flash('Passwords do not match.', 'error')
@@ -79,4 +77,74 @@ def register():
     db.session.commit()
     login_user(new_user, remember=True)
     flash('Welcome to Slate!', 'success')
+    return redirect(url_for('index.index_page'))
+
+
+@auth.route('/reset', methods=['GET', 'POST'])
+def reset():
+    if request.method == 'GET':
+        return render_template('reset_request.html')
+
+    username = request.form['username']
+    address = request.form['email']
+
+    user = db.session.query(models.User)\
+        .filter(models.User.name == username)\
+        .one_or_none()
+
+    if not user or address != user.email:
+       flash('Username or email address is incorrect.', 'error')
+       return render_template('reset_request.html')
+
+    token = crypto.generate_nonce()
+    user.password_reset_token = token
+    expiration = datetime.datetime.now() + \
+                 datetime.timedelta(minutes=PASSWORD_RESET_LIFESPAN)
+    user.password_reset_expiration = expiration
+    db.session.merge(user)
+    db.session.commit()
+
+    url = '%s/slate/reset/%s' % ('http://localhost:8080', token)
+    email.send(url, 'Reset your Slate password', address)
+
+    flash('An email was sent to %s.' % address, 'Success')
+    return redirect(url_for('index.index_page'))
+
+
+@auth.route('/reset/<string:token>',  methods=['GET', 'POST'])
+def reset_form(token):
+    if request.method == 'GET':
+        return render_template('reset_form.html', token=token)
+
+    username = request.form.get('username')
+    password1 = request.form.get('password1')
+    password2 = request.form.get('password2')
+
+    user = db.session.query(models.User)\
+        .filter(models.User.name == username)\
+        .one_or_none()
+
+    early_exit_url = redirect(url_for('auth.reset_form', token=token))
+    if not user:
+        flash('Invalid username.', 'error')
+        return early_exit_url
+    if user.password_reset_token != token:
+        flash('Invalid password reset token.', 'error')
+        return early_exit_url
+    if password1 != password2:
+        flash('Passwords do not match.', 'error')
+        return early_exit_url
+    if not password1:
+        flash('Password is required.', 'error')
+        return early_exit_url
+
+    import pdb; pdb.set_trace()
+    delta = datetime.datetime.now() - user.password_reset_expiration
+    if datetime.timedelta(minutes=PASSWORD_RESET_LIFESPAN) > delta:
+        flash('Password reset token has expired.', 'error')
+        return early_exit_url
+
+    # app.config.user = user
+    # login_user(user, remember=True)
+    flash('Password was reset.', 'success')
     return redirect(url_for('index.index_page'))

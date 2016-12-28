@@ -1,0 +1,35 @@
+<!DOCTYPE HTML PUBLIC=''>
+<html>
+
+{% include 'head.html' %}
+
+<body>
+
+{% include 'header.html' %}
+
+<div id='reset-page' class='page container'>
+    <div class='row'>
+        <div class='col-md-4'>
+            <form action='reset/{{ token }}' method='POST'>
+                <div class='form-group'>
+                    <label>Username</label>
+                    <input type='text' class='form-control' name='username'>
+                </div>
+                <div class='form-group'>
+                    <label>New password</label>
+                    <input type='password' class='form-control' name='password1' autocomplete='off'>
+                </div>
+                <div class='form-group'>
+                    <label>Confirm password</label>
+                    <input type='password' class='form-control' name='password2' autocomplete='off'>
+                </div>
+                <button type='submit' class='btn btn-primary'>Reset password</button>
+            </form>
+        </div>
+    </div>
+
+    {% include 'footer.html' %}
+
+</div>
+</body>
+</html>
