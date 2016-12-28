@@ -13,7 +13,7 @@ auth = Blueprint('auth',
                  __name__,
                  url_prefix=config.get('url', 'base'))
 
-PASSWORD_RESET_LIFESPAN = 30
+TOKEN_TIMEOUT = 30
 
 
 @auth.route('/login', methods=['GET', 'POST'])
@@ -81,9 +81,9 @@ def register():
 
 
 @auth.route('/reset', methods=['GET', 'POST'])
-def reset():
+def reset_request():
     if request.method == 'GET':
-        return render_template('reset_request.html')
+        return render_template('reset_request.html', timeout=TOKEN_TIMEOUT)
 
     username = request.form['username']
     address = request.form['email']
@@ -94,12 +94,12 @@ def reset():
 
     if not user or address != user.email:
        flash('Username or email address is incorrect.', 'error')
-       return render_template('reset_request.html')
+       return render_template('reset_request.html', timeout=TOKEN_TIMEOUT)
 
     token = crypto.generate_nonce()
     user.password_reset_token = token
     expiration = datetime.datetime.now() + \
-                 datetime.timedelta(minutes=PASSWORD_RESET_LIFESPAN)
+                 datetime.timedelta(minutes=TOKEN_TIMEOUT)
     user.password_reset_expiration = expiration
     db.session.merge(user)
     db.session.commit()
@@ -138,13 +138,26 @@ def reset_form(token):
         flash('Password is required.', 'error')
         return early_exit_url
 
-    import pdb; pdb.set_trace()
-    delta = datetime.datetime.now() - user.password_reset_expiration
-    if datetime.timedelta(minutes=PASSWORD_RESET_LIFESPAN) > delta:
+    # Verify token is not expired.
+    now = datetime.datetime.now()
+    if user.password_reset_expiration < now:
         flash('Password reset token has expired.', 'error')
-        return early_exit_url
+        return redirect(url_for('auth.reset_request'))
 
-    # app.config.user = user
-    # login_user(user, remember=True)
+    # Hash, salt, and save new password.
+    hashed, salt = crypto.salt_and_hash_password(password1)
+    user.password = hashed
+    user.salt = salt
+
+    # The user should not be able to use the link more than once.
+    user.password_reset_token = None
+    user.password_reset_expiration = None
+
+    db.session.merge(user)
+    db.session.commit()
+
+    # Log user into application.
+    app.config.user = user
+    login_user(user, remember=True)
     flash('Password was reset.', 'success')
     return redirect(url_for('index.index_page'))
