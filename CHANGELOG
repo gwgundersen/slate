@@ -3,6 +3,13 @@ Slate Changelog
 
 All notable changes to this project will be documented in this file.
 
+0.1.3 - 2016-12-28
+------------------
+(password reset)
+
+- Implemented password reset feature, which requires a user email address.
+- Boyscout refactored code for authentication (auth.py and crypto.py).
+
 0.1.2 - 2016-08-14
 ------------------
 (new view for all expenses plus minor UI updates)
