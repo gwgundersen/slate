@@ -7,3 +7,6 @@ slate/config.ini
 *.pyc
 info.log
 .idea/
+
+# Output from Selenium driver
+geckodriver.log
