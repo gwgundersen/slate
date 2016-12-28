@@ -7,7 +7,7 @@ import unittest
 from selenium import webdriver
 
 from utils import add_expense, delete_user, login_user, register_user, \
-    get_flashed_message
+    get_flashed_message, wait_until
 
 
 class TestAddingExpense(unittest.TestCase):
@@ -19,7 +19,7 @@ class TestAddingExpense(unittest.TestCase):
 
     def test_adding_expense(self):
         add_expense(self.browser, '7.50', 'Food (out)', 'Burrito')
-        td = self.browser.find_element_by_xpath('//table//tbody//td[1]')
+        td = wait_until(self.browser, '//table//tbody//td[1]')
         self.assertTrue(float(td.text), '7.50')
 
     def test_cost_validation(self):

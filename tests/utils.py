@@ -1,6 +1,9 @@
 """Utility methods for unit testing.
 """
 
+import time
+
+from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.select import Select
 
@@ -20,6 +23,7 @@ DEFAULT_CATEGORIES = ['alcohol',
                       'rent/mortgage',
                       'transportation',
                       'travel/vacation']
+TIMEOUT = 5
 
 
 def exists_by_xpath(browser, xpath):
@@ -49,7 +53,7 @@ def link_href_is_correct(browser, xpath, href):
 
 
 def register_user(browser, username=MOCK_USER, password1=MOCK_PW,
-                  password2=MOCK_PW):
+                  password2=MOCK_PW, should_fail=False):
     """Creates a new user.
     """
     browser.get('%s/register' % SLATE_URL)
@@ -63,6 +67,12 @@ def register_user(browser, username=MOCK_USER, password1=MOCK_PW,
     password_input_1.send_keys(password1)
     password_input_2.send_keys(password2)
     browser.find_element_by_xpath('//button[@type="submit"]').click()
+    if should_fail:
+        # We do not want to check for successful login, i.e. the landing page,
+        # since sometimes registration should fail in our tests.
+        time.sleep(10)
+    else:
+        wait_until(browser, '//a[text()="View expenses"]')
 
 
 def update_password(browser, old_password, new_password1, new_password2):
@@ -81,7 +91,7 @@ def update_password(browser, old_password, new_password1, new_password2):
 
 
 def login_user(browser, username=MOCK_USER, password=MOCK_PW):
-    """Logins in user.
+    """Logs in user.
     """
     browser.get('%s/login' % SLATE_URL)
     username_input = browser\
@@ -91,6 +101,7 @@ def login_user(browser, username=MOCK_USER, password=MOCK_PW):
     username_input.send_keys(username)
     password_input.send_keys(password)
     browser.find_element_by_xpath('//button[@type="submit"]').click()
+    wait_until(browser, '//a[text()="View expenses"]')
 
 
 def logout_user(browser):
@@ -103,8 +114,11 @@ def delete_user(browser):
     """Delete test user.
     """
     browser.get('%s/account' % SLATE_URL)
-    browser.find_element_by_xpath('//div[@id="delete-account-section"]//button[@type="submit"]').click()
+    elem = wait_until(browser, '//div[@id="delete-account-section"]//button[@type="submit"]')
+    elem.click()
     browser.switch_to.alert.accept()
+    # Give the backend time to delete the user.
+    time.sleep(3)
 
 
 def add_expense(browser, cost, category, comment):
@@ -125,5 +139,22 @@ def add_expense(browser, cost, category, comment):
 def get_flashed_message(browser):
     """Returns the message that has been flashed on the user's screen.
     """
-    message = browser.find_element_by_xpath('//div[@class="flashes"]//p')
+    message = wait_until(browser, '//div[@class="flashes"]//p')
     return message.text
+
+
+def wait_until(browser, xpath, timeout=30):
+    """Wait until element becomes available.
+    """
+    wait = WebDriverWait(browser, timeout)
+    return wait.until(lambda b: b.find_element_by_xpath(xpath))
+
+
+def click(browser, xpath, wait_for_xpath=None):
+    """Click on an element by XPath. Wait to ensure page loads.
+    """
+    browser.find_element_by_xpath(xpath).click()
+    if wait_for_xpath:
+        wait_until(browser, wait_for_xpath)
+    else:
+        time.sleep(30)

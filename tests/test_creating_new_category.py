@@ -2,6 +2,7 @@
 """
 
 import unittest
+import time
 
 from selenium import webdriver
 
@@ -22,6 +23,7 @@ class TestCreatingNewUser(unittest.TestCase):
         self.browser.find_element_by_xpath('//input[@type="submit"]').click()
         # Notice that the user interface will capitalize the category.
         xpath = '//table//tr//td[text()="New test category"]'
+        time.sleep(2)
         self.assertTrue(exists_by_xpath(self.browser, xpath))
 
     def test_existing_category_error(self):

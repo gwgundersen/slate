@@ -1,13 +1,14 @@
 """Unit tests for verifying a new category can be created.
 """
 
+import time
 import unittest
 
 from selenium import webdriver
 from selenium.webdriver.support.select import Select
 
-from utils import delete_user, register_user, get_flashed_message, SLATE_URL, \
-    exists_by_xpath, add_expense
+from utils import delete_user, register_user, click, SLATE_URL, \
+    exists_by_xpath, add_expense, wait_until
 
 
 class TestEditingCategory(unittest.TestCase):
@@ -18,17 +19,17 @@ class TestEditingCategory(unittest.TestCase):
         self.browser.get('%s/account/settings' % SLATE_URL)
 
     def test_edit_category(self):
-        self.browser.find_element_by_xpath('//a[text()="Edit"][1]').click()
-        cost_input = self.browser\
-            .find_element_by_xpath('//input[@name="category_name"]')
+        click(self.browser, '//a[text()="Edit"][1]', '//h3[text()="Edit category"]')
+        cost_input = self.browser.find_element_by_xpath('//input[@name="category_name"]')
         cost_input.clear()
         cost_input.send_keys('edited test category')
-        self.browser.find_element_by_xpath('//button[text()="Edit"]').click()
+        click(self.browser, '//button[text()="Edit"]', '//h3[text()="Edit category"]')
+        time.sleep(2)  # No idea why this is necessary.
         self.assertTrue(exists_by_xpath(self.browser, '//tr[1]//td[text()="Edited test category"]'))
 
     def test_cancelling_edit(self):
-        self.browser.find_element_by_xpath('//tr[1]//a[text()="Edit"]').click()
-        self.browser.find_element_by_xpath('//a[text()="Cancel"]').click()
+        click(self.browser, '//a[text()="Edit"][1]', '//h3[text()="Edit category"]')
+        click(self.browser, '//a[text()="Cancel"]', '//h2[text()="Settings"]')
         self.assertTrue(exists_by_xpath(self.browser, '//tr[1]//td[text()="Alcohol"]'))
 
     def test_deleting_expense(self):
@@ -36,12 +37,12 @@ class TestEditingCategory(unittest.TestCase):
         # We want to verify that this expense is deleted.
         add_expense(self.browser, '7.50', 'Food (out)', 'Burrito')
         self.browser.get('%s/account/settings' % SLATE_URL)
-        self.browser.find_element_by_xpath('//tr//td[text()="Food (out)"]/..//a[text()="Edit"]').click()
-        self.browser.find_element_by_xpath('//input[@value="Delete"]').click()
+        click(self.browser, '//tr//td[text()="Food (out)"]/..//a[text()="Edit"]')
+        click(self.browser, '//input[@value="Delete"]', '//h3[text()="Edit category"]')
         self.browser.switch_to.alert.accept()
         self.browser.get(SLATE_URL)
         select = Select(
-            self.browser.find_element_by_xpath('//select[@name="category_id"]')
+            wait_until(self.browser, '//select[@name="category_id"]')
         )
         for option in select.options:
             self.assertTrue(option.text != 'Food (out)')
