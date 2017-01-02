@@ -47,3 +47,11 @@ def get_all_days_in_month(year, month):
         d = datetime.date(year, month, day)
         dates.add(d)
     return dates
+
+
+def get_all_days_in_year(year):
+    dates = set()
+    for day in range(1, 365+1):
+        d = datetime.date(year, month, day)
+        dates.add(d)
+    return dates

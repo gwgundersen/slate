@@ -61,29 +61,6 @@ def get_category_subtotals(year=None, month=None):
     return results
 
 
-def get_sum_per_day(year, month):
-    conn = db.engine.connect()
-    sql = 'SELECT DATE(date_time) as DATE, ROUND(SUM(cost), 2) '\
-          '  FROM expense '\
-          'JOIN `user` ' \
-          '  ON `user`.id = expense.user_fk '\
-          'JOIN category '\
-          '  ON category.id = expense.category_fk '\
-          'WHERE `user`.name = "%s" ' \
-          '  AND category.name != "rent/mortgage" '\
-          '  AND YEAR(date_time) = %s ' \
-          '  AND MONTH(date_time) = %s '\
-          'GROUP BY DATE(date_time)' % (
-              current_user.name,
-              year,
-              month
-          )
-    results = conn.execute(sql)
-    return [{
-        'date_time': c[0],
-        'total': c[1]} for c in results.fetchall()]
-
-
 def get_categories():
     """Returns all categories in descending order.
     """
@@ -91,3 +68,19 @@ def get_categories():
         .query(models.Category)\
         .order_by(models.Category.name)\
         .all()
+
+
+def get_category_subtotals_for_year(year):
+    """Returns total expenses per category.
+    """
+    results = []
+    categories = [c for c in current_user.categories if not c.hide_in_report]
+    for category in categories:
+        expenses = [e.cost for e in category.expenses if
+                    e.user.name == current_user.name and
+                    e.date_time.year == year]
+        results.append({
+            'category': category.name.capitalize(),
+            'subtotal': round(sum(expenses), 2)
+        })
+    return results

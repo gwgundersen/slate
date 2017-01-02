@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC=''>
+<html>
+
+{% include 'head.html' %}
+
+<body>
+
+{% include 'header.html' %}
+
+<script src="static/lib/highcharts.js"></script>
+<script src="static/js/report-yearly.js"></script>
+
+<div id='report-page'>
+    <div id='expense-controls' class='container-full'>
+        <div class='container'>
+            <div class='row'>
+                <div id='details' class='col-md-2'>
+                    <p>{{ year }}</p>
+                    <p class='highlight'>
+                        <strong>{{ total }}</strong>
+                    </p>
+                </div>
+                <div class='col-md-2'>
+                    <a class='btn btn-info' href='expenses{{ query_string }}'>Back</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='container'>
+        <div class='row'>
+            <div class='col-md-6'>
+                <div id='bar-chart-container'></div>
+            </div>
+            <div class='col-md-6'>
+                <div id='pie-chart-container'></div>
+            </div>
+        </div>
+    </div>
+    <div class='container'>
+        <div id='time-series-container'></div>
+    </div>
+
+    {% include 'footer.html' %}
+
+    <script>
+        window.plotExpenses({{ expenses_json|safe }}, {{ ordered_expenses_json|safe }});
+    </script>
+
+</div>
+</body>
+</html>

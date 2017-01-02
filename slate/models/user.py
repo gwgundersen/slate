@@ -73,10 +73,12 @@ class User(db.Model):
             query = query\
                 .join(Category)\
                 .filter(Category.id == category.id)
-        if year and month:
+        if year:
             query = query\
-                .filter(db.extract('year', Expense.date_time) == int(year))\
-                .filter(db.extract('month', Expense.date_time) == int(month))
+                .filter(db.extract('year', Expense.date_time) == int(year))
+            if month:
+                query = query\
+                    .filter(db.extract('month', Expense.date_time) == int(month))
         else:
             now = datetime.datetime.now()
             query = query\

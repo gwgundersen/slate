@@ -5,4 +5,4 @@ from dbutils import \
     get_categories, \
     get_all_months, \
     get_category_subtotals, \
-    get_sum_per_day
+    get_category_subtotals_for_year

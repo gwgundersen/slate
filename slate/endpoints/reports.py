@@ -1,4 +1,4 @@
-"""Views monthly reports.
+"""Views reports on expenses.
 """
 
 import datetime
@@ -21,17 +21,28 @@ reports = Blueprint('reports',
 
 @reports.route('', methods=['GET'])
 @login_required
-def report_default():
+def report_pages():
+    """Delegates to functions that build appropriate reports.
+    """
     year = request.args.get('year')
     month = request.args.get('month')
-    if year and month:
+    if year:
         year = int(year)
-        month = int(month)
+        if month:
+            month = int(month)
+            return monthly_report(year, month)
+        return yearly_report(year)
     else:
+        # Default is monthly report for current month/year.
         now = datetime.datetime.now()
         year = now.year
         month = now.month
+        return monthly_report(year, month)
 
+
+def monthly_report(year, month):
+    """Build report for month and year.
+    """
     # Basic stats
     # ------------------------------------------------------------------------
     expenses_json = json.dumps(dbutils.get_category_subtotals(year, month))
@@ -65,7 +76,7 @@ def report_default():
             grouped_expenses[d] = []
 
     ordered_expenses = []
-    for i,date in enumerate(sorted(grouped_expenses)):
+    for i, date in enumerate(sorted(grouped_expenses)):
         ordered_expenses.append({
             'date_time': date,
             'expenses': grouped_expenses[date]
@@ -101,7 +112,7 @@ def report_default():
     excluded_categories = [c for c in current_user.categories
                            if c.hide_in_report]
 
-    return render_template('report.html',
+    return render_template('report_monthly.html',
                            month_string=month_string,
                            category_sum=category_sum,
                            excluded_categories=excluded_categories,
@@ -111,6 +122,31 @@ def report_default():
                            discretionary=discretionary,
                            discretionary_sum=discretionary_sum,
                            query_string=query_string,
+                           expenses_json=expenses_json,
+                           ordered_expenses_json=ordered_expenses_json)
+
+
+def yearly_report(year):
+    """Build report for entire year.
+    """
+    expenses = current_user.expenses(year=year)
+    expenses_json = json.dumps(dbutils.get_category_subtotals_for_year(year))
+
+    all_expenses = current_user.expenses(year=year)
+    grouped_expenses = collections.OrderedDict()
+    for e in all_expenses:
+        key = e.date_time.strftime('%Y-%m-%d')
+        if key not in grouped_expenses:
+            grouped_expenses[key] = []
+        grouped_expenses[key].append({
+            'cost': e.cost,
+            'comment': e.comment
+        })
+
+    ordered_expenses_json = json.dumps(grouped_expenses)
+    total = sum([e.cost for e in expenses])
+    total = "${:,.2f}".format(total)
+    return render_template('report_yearly.html', year=year, total=total,
                            expenses_json=expenses_json,
                            ordered_expenses_json=ordered_expenses_json)
 
