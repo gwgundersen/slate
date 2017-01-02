@@ -26,14 +26,5 @@ class TestViewUtils(unittest.TestCase):
         sum_ = viewutils.get_expense_sum(expense)
         self.assertTrue(sum_ == 15)
 
-    def test_get_expense_sum_ignore_hide_from_report_categories(self):
-        expense = [
-            Expense(100, Category('rent/mortgage', hide_in_report=True), '',
-                    True, self.user),
-            Expense(1,   Category('food (out)'), '', True, self.user)
-        ]
-        sum_ = viewutils.get_expense_sum(expense)
-        self.assertTrue(sum_ == 1)
-
     def tearDown(self):
         pass

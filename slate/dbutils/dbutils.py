@@ -48,7 +48,7 @@ def get_category_subtotals(year=None, month=None):
     else:
         year = int(year)
         month = int(month)
-    categories = [c for c in current_user.categories if not c.hide_in_report]
+    categories = [c for c in current_user.categories]
     for category in categories:
         expenses = [e.cost for e in category.expenses if
                     e.user.name == current_user.name and
@@ -74,7 +74,7 @@ def get_category_subtotals_for_year(year):
     """Returns total expenses per category.
     """
     results = []
-    categories = [c for c in current_user.categories if not c.hide_in_report]
+    categories = [c for c in current_user.categories]
     for category in categories:
         expenses = [e.cost for e in category.expenses if
                     e.user.name == current_user.name and

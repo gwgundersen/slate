@@ -16,8 +16,6 @@ class Category(db.Model):
                                cascade='all,delete',
                                backref=db.backref('category'))
     user_fk = db.Column(db.Integer, db.ForeignKey('user.id'))
-    hide_in_report = db.Column(db.Boolean)
 
-    def __init__(self, name, hide_in_report=False):
+    def __init__(self, name):
         self.name = name
-        self.hide_in_report = hide_in_report

@@ -20,12 +20,11 @@
                         <p>{{ month_string }}</p>
                     {% endif %}
                     {% if category %}
-                        <p>{{ category.name|capitalize }}</p>
+                        <p><em>{{ category.name|capitalize }}</em></p>
                     {% endif %}
                     <p class='highlight'>
-                        <strong>Sum: ${{ category_sum }}*</strong>
+                        <strong>${{ category_sum }}</strong>
                     </p>
-                    <p class="note">*Rent/mortgage excluded</p>
                 </div>
                 <div id='previous-expenses' class='col-md-2'>
                     <form action='expenses' method='get'>
