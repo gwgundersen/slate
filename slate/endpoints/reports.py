@@ -10,7 +10,7 @@ from flask import Blueprint, render_template, request
 from flask.ext.login import current_user, login_required
 
 from slate.endpoints import viewutils
-from slate import dbutils
+from slate import dbutils, models
 from slate.config import config
 
 
@@ -40,52 +40,41 @@ def report_pages():
         return monthly_report(year, month)
 
 
+
+"""
+What should a report have?
+
+- description (year, month, etc.)
+- total
+- food
+  - in
+  - out, discretionary
+  - meals out
+  - per meal
+- discretionary transactions
+  - sum
+  - this should just be a function on the report class
+- jsons
+  - expenses
+  - ordered expenses
+-
+
+Non-reporting
+- query string for back button (rename?)
+
+"""
+
 def monthly_report(year, month):
     """Build report for month and year.
     """
-    # Basic stats
-    # ------------------------------------------------------------------------
-    expenses_json = json.dumps(dbutils.get_category_subtotals(year, month))
+    report = models.Report(year=year, month=month)
+
     month_string, query_string = viewutils.get_date_time_strings(year, month)
-    expenses = current_user.expenses(year=year, month=month)
-    category_sum = viewutils.get_expense_sum(expenses)
-
-    # Total expenses per day for the month
-    # ------------------------------------------------------------------------
-
-    # TODO: This section feels messy, but I'm rushing to finish for
-    # Hack && Tell.
-
-    all_expenses = current_user.expenses(year=year, month=month)
-    grouped_expenses = collections.OrderedDict()
-    for e in all_expenses:
-        key = e.date_time.strftime('%Y-%m-%d')
-        if key not in grouped_expenses:
-            grouped_expenses[key] = []
-        grouped_expenses[key].append({
-            'cost': e.cost,
-            'comment': e.comment
-        })
-
-    all_days = viewutils.get_all_days_in_month(year, month)
-    for d in all_days:
-        d = str(d)
-        if d not in grouped_expenses:
-            grouped_expenses[d] = []
-
-    ordered_expenses = []
-    for i, date in enumerate(sorted(grouped_expenses)):
-        ordered_expenses.append({
-            'date_time': date,
-            'expenses': grouped_expenses[date]
-        })
-
-    ordered_expenses_json = json.dumps(ordered_expenses)
 
     # Food
     # ------------------------------------------------------------------------
-    food_in = viewutils.get_category_sum(expenses, 'food (in)')
-    food_out = viewutils.get_category_sum(expenses, 'food (out)')
+    food_in = viewutils.get_category_sum(report.expenses, 'food (in)')
+    food_out = viewutils.get_category_sum(report.expenses, 'food (out)')
     food_total = food_in + food_out
     now = datetime.datetime.now()
     if now.year == year and now.month == month:
@@ -98,7 +87,7 @@ def monthly_report(year, month):
     # ------------------------------------------------------------------------
     discretionary = {}
     discretionary_sum = 0
-    for e in expenses:
+    for e in report.expenses:
         if e.discretionary:
             c = e.category.name
             if c in discretionary:
@@ -106,42 +95,28 @@ def monthly_report(year, month):
             else:
                 discretionary[c] = e.cost
             discretionary_sum += e.cost
+
+    #import pdb; pdb.set_trace()
     return render_template('report_monthly.html',
                            month_string=month_string,
-                           category_sum=category_sum,
+                           total=report.total,
                            food_in=food_in,
                            food_out=food_out,
                            cost_per_meal=cost_per_meal,
                            discretionary=discretionary,
                            discretionary_sum=discretionary_sum,
                            query_string=query_string,
-                           expenses_json=expenses_json,
-                           ordered_expenses_json=ordered_expenses_json)
+                           category_subtotals=report.category_subtotals_json,
+                           expenses=report.expenses_json)
 
 
 def yearly_report(year):
     """Build report for entire year.
     """
-    expenses = current_user.expenses(year=year)
-    expenses_json = json.dumps(dbutils.get_category_subtotals_for_year(year))
-
-    all_expenses = current_user.expenses(year=year)
-    grouped_expenses = collections.OrderedDict()
-    for e in all_expenses:
-        key = e.date_time.strftime('%Y-%m-%d')
-        if key not in grouped_expenses:
-            grouped_expenses[key] = []
-        grouped_expenses[key].append({
-            'cost': e.cost,
-            'comment': e.comment
-        })
-
-    ordered_expenses_json = json.dumps(grouped_expenses)
-    total = sum([e.cost for e in expenses])
-    total = "${:,.2f}".format(total)
-    return render_template('report_yearly.html', year=year, total=total,
-                           expenses_json=expenses_json,
-                           ordered_expenses_json=ordered_expenses_json)
+    report = models.Report(year=year)
+    return render_template('report_yearly.html', year=year, total=report.total,
+                           expenses_json=report.category_subtotals_json,
+                           ordered_expenses_json=report.expenses_json)
 
 
 def _date_handler(date):

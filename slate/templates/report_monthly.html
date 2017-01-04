@@ -19,7 +19,7 @@
                         <p>{{ month_string }}</p>
                     {% endif %}
                     <p class='highlight'>
-                        <strong>${{ category_sum }}</strong>
+                        <strong>{{ total }}</strong>
                     </p>
                 </div>
                 <div class='col-md-2'>
@@ -87,7 +87,7 @@
     {% include 'footer.html' %}
 
     <script>
-        window.plotExpenses({{ expenses_json|safe }}, {{ ordered_expenses_json|safe }});
+        window.plotExpenses({{ category_subtotals|safe }}, {{ expenses|safe }});
     </script>
 
 </div>

@@ -37,6 +37,15 @@ def get_all_months():
     return results
 
 
+def get_categories():
+    """Returns all categories in descending order.
+    """
+    return db.session\
+        .query(models.Category)\
+        .order_by(models.Category.name)\
+        .all()
+
+
 def get_category_subtotals(year=None, month=None):
     """Returns total expenses per category, excluding rent.
     """
@@ -59,15 +68,6 @@ def get_category_subtotals(year=None, month=None):
             'subtotal': round(sum(expenses), 2)
         })
     return results
-
-
-def get_categories():
-    """Returns all categories in descending order.
-    """
-    return db.session\
-        .query(models.Category)\
-        .order_by(models.Category.name)\
-        .all()
 
 
 def get_category_subtotals_for_year(year):

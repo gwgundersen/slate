@@ -85,7 +85,7 @@ class User(db.Model):
                 .filter(db.extract('year', Expense.date_time) == now.year)\
                 .filter(db.extract('month', Expense.date_time) == now.month)
         return query\
-            .order_by(Expense.date_time.desc())\
+            .order_by(Expense.date_time.asc())\
             .all()
 
     def all_expenses(self):

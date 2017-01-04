@@ -5,12 +5,6 @@ import calendar
 import datetime
 
 
-def get_expense_sum(expenses):
-    """Returns sum of all expenses except rent.
-    """
-    return sum([e.cost for e in expenses])
-
-
 def get_category_sum(expenses, category):
     """Returns sum of all expenses in category.
     """
@@ -34,8 +28,10 @@ def get_date_time_strings(year, month):
 def get_num_days_in_month(year, month):
     """Returns number of days in the month provided.
     """
-    now = datetime.datetime.now()
-    return now.day
+    range = calendar.monthrange(year, month)
+    # now = datetime.datetime.now()
+    # return now.day
+    return range[1]
 
 
 def get_all_days_in_month(year, month):
@@ -49,9 +45,12 @@ def get_all_days_in_month(year, month):
     return dates
 
 
-def get_all_days_in_year(year):
-    dates = set()
-    for day in range(1, 365+1):
-        d = datetime.date(year, month, day)
-        dates.add(d)
-    return dates
+def _format_monetary_value(total):
+    """Returns a properly formatted monetary value from a number.
+
+    Example
+    -------
+    >>> _format_monetary_value(3500)
+    >>> '$3,500'
+    """
+    return '$%s' % '{:,.2f}'.format(total)

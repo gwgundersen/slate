@@ -1,7 +1,7 @@
 /* Generates all plots for report pages.
  */
 
-window.plotExpenses = function(expensesData, perDayData) {
+window.plotExpenses = function(categorySubtotals, expenses) {
 
     Highcharts.setOptions({
         chart: {
@@ -24,15 +24,15 @@ window.plotExpenses = function(expensesData, perDayData) {
         ]
     });
 
-    plotExpensesPieChart(expensesData);
-    plotExpensesByCategory(expensesData);
-    plotExpensesTimeSeries(perDayData);
+    plotExpensesPieChart(categorySubtotals);
+    plotExpensesByCategory(categorySubtotals);
+    plotExpensesTimeSeries(expenses);
 };
 
-window.plotExpensesPieChart = function(expensesData) {
+window.plotExpensesPieChart = function(categorySubtotals) {
 
     var data = [];
-    $.each(expensesData, function(i, obj) {
+    $.each(categorySubtotals, function(i, obj) {
         data.push({
             name: obj.category,
             y: obj.subtotal
@@ -70,99 +70,12 @@ window.plotExpensesPieChart = function(expensesData) {
     });
 };
 
-window.plotExpensesTimeSeries = function(perDayData) {
-
-    var data = [],
-        breakoutData = [];
-    $.each(perDayData, function(date, obj) {
-        var d = obj.date_time.split('-'),
-            total = 0;
-
-        $.each(obj.expenses, function(i, e) {
-            total += e.cost;
-        });
-
-        // Subtract 1 because JavaScript counts months from 0...
-        data.push([Date.UTC(d[0], d[1]-1, d[2]), total]);
-    });
-
-    $('#time-series-container').highcharts({
-        chart: {
-            zoomType: 'x'
-        },
-        colors: ['#1689E5'],
-        title: {
-            text: '$ expenses by day'
-        },
-        xAxis: {
-            type: 'datetime'
-        },
-        yAxis: {
-            title: {
-                text: 'Subtotal'
-            },
-            // Lowest allowed value on y-axis.
-            floor: 0
-        },
-        tooltip: {
-            formatter: function() {
-
-                function dayOfWeekAsString(dayIndex) {
-                    return ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'][dayIndex];
-                }
-
-                var idx = this.series.data.indexOf(this.point),
-                    date = new Date(this.x),
-                    day = dayOfWeekAsString(date.getDay()),
-                    table = '<strong>' + day + '</strong><br>';
-
-                // Don't show empty tooltip.
-                if (!perDayData[idx].expenses.length) {
-                    return false;
-                }
-
-                // Highcharts does not support tables. For a list of support
-                // HTML elements:
-                // http://api.highcharts.com/highcharts#tooltip
-                $.each(perDayData[idx].expenses, function(i, e) {
-                    table += '' +
-                        '<span>$' + e.cost + ' - ' + e.comment + '</span><br>';
-                });
-                return table;
-            }
-        },
-        legend: {
-            enabled: false
-        },
-        plotOptions: {
-            area: {
-                marker: {
-                    radius: 2
-                },
-                lineWidth: 1,
-                states: {
-                    hover: {
-                        lineWidth: 1
-                    }
-                },
-                threshold: null
-            }
-        },
-
-        series: [{
-            type: 'area',
-            name: 'Subtotal',
-            data: data
-        }]
-    });
-};
-
-window.plotExpensesByCategory = function(expensesData) {
+window.plotExpensesByCategory = function(categorySubtotals) {
 
     var categories = [],
         series = [];
 
-    $.each(expensesData, function (i, obj) {
+    $.each(categorySubtotals, function (i, obj) {
         categories.push(obj.category);
         series.push(obj.subtotal);
     });
@@ -221,6 +134,95 @@ window.plotExpensesByCategory = function(expensesData) {
         series: [{
             name: 'Expenses',
             data: series
+        }]
+    });
+};
+
+window.plotExpensesTimeSeries = function(expenses) {
+
+    debugger;
+
+    var data = [];
+    $.each(expenses, function(dateStr, expenses) {
+        var total = 0;
+        $.each(expenses, function(i, e) {
+            total += e.cost;
+        });
+
+        var t = new Date(dateStr);
+        var d = dateStr.split('-');
+        var seconds = Date.UTC(d[0], d[1], d[2]);
+        data.push([seconds, total]);
+    });
+
+    $('#time-series-container').highcharts({
+        chart: {
+            zoomType: 'x'
+        },
+        colors: ['#1689E5'],
+        title: {
+            text: '$ expenses by day'
+        },
+        xAxis: {
+            type: 'datetime'
+        },
+        yAxis: {
+            title: {
+                text: 'Subtotal'
+            },
+            // Lowest allowed value on y-axis.
+            floor: 0
+        },
+        tooltip: {
+            formatter: function() {
+
+                function dayOfWeekAsString(dayIndex) {
+                    return ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'][dayIndex];
+                }
+
+                debugger;
+                var idx = this.series.data.indexOf(this.point),
+                    d = new Date(this.key),
+                    dayString = dayOfWeekAsString(d.getDay()),
+                    table = '<strong>' + dayString + '</strong><br>';
+
+                // Don't show empty tooltip.
+                if (!expenses[this.key].length) {
+                    return false;
+                }
+
+                // Highcharts does not support tables. For a list of support
+                // HTML elements:
+                // http://api.highcharts.com/highcharts#tooltip
+                $.each(expenses[this.key], function(i, e) {
+                    table += '' +
+                        '<span>$' + e.cost + ' - ' + e.comment + '</span><br>';
+                });
+                return table;
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        plotOptions: {
+            area: {
+                marker: {
+                    radius: 2
+                },
+                lineWidth: 1,
+                states: {
+                    hover: {
+                        lineWidth: 1
+                    }
+                },
+                threshold: null
+            }
+        },
+
+        series: [{
+            type: 'area',
+            name: 'Subtotal',
+            data: data
         }]
     });
 };
