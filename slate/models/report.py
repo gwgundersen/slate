@@ -1,6 +1,7 @@
 """Represents a dynamically generated report.
 """
 
+import calendar
 import collections
 import datetime
 import json
@@ -17,14 +18,29 @@ class Report(object):
         just year.
         """
         self.expenses = current_user.expenses(year=year, month=month)
-        if not (year and month):
+        if not year and not month:
             now = datetime.datetime.now()
             self.year = now.year
             self.month = now.month
         else:
             self.year = int(year)
-            if month:
-                self.month = int(month)
+            self.month = int(month) if month else None
+
+    @property
+    def description(self):
+        """Returns text description for report view.
+        """
+        if self.month:
+            return '%s %s' % (calendar.month_name[self.month], self.year)
+        elif self.year:
+            return self.year
+
+    @property
+    def total(self):
+        """Returns sum of all expenses except rent.
+        """
+        total = sum([e.cost for e in self.expenses])
+        return _format_monetary_value(total)
 
     @property
     def category_subtotals_json(self):
@@ -44,6 +60,7 @@ class Report(object):
     def expenses_json(self):
         """
         """
+        #import pdb; pdb.set_trace()
         if self.month:
             all_days = dates.get_ordered_dates_in_month(self.year, self.month)
         else:
@@ -62,13 +79,6 @@ class Report(object):
                     'comment': e.comment
                 })
         return json.dumps(expenses)
-
-    @property
-    def total(self):
-        """Returns sum of all expenses except rent.
-        """
-        total = sum([e.cost for e in self.expenses])
-        return _format_monetary_value(total)
 
 
 def _format_monetary_value(total):

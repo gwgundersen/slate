@@ -15,11 +15,9 @@
         <div class='container'>
             <div class='row'>
                 <div id='details' class='col-md-2'>
-                    {% if month_string %}
-                        <p>{{ month_string }}</p>
-                    {% endif %}
+                    <p>{{ report.description }}</p>
                     <p class='highlight'>
-                        <strong>{{ total }}</strong>
+                        <strong>{{ report.total }}</strong>
                     </p>
                 </div>
                 <div class='col-md-2'>
@@ -87,7 +85,7 @@
     {% include 'footer.html' %}
 
     <script>
-        window.plotExpenses({{ category_subtotals|safe }}, {{ expenses|safe }});
+        window.plotExpenses({{ report.category_subtotals_json|safe }}, {{ report.expenses_json|safe }});
     </script>
 
 </div>

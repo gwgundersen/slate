@@ -69,7 +69,7 @@ def monthly_report(year, month):
     """
     report = models.Report(year=year, month=month)
 
-    month_string, query_string = viewutils.get_date_time_strings(year, month)
+    _, query_string = viewutils.get_date_time_strings(year, month)
 
     # Food
     # ------------------------------------------------------------------------
@@ -96,16 +96,16 @@ def monthly_report(year, month):
                 discretionary[c] = e.cost
             discretionary_sum += e.cost
 
-    #import pdb; pdb.set_trace()
     return render_template('report_monthly.html',
-                           month_string=month_string,
-                           total=report.total,
+                           report=report,
+
                            food_in=food_in,
                            food_out=food_out,
                            cost_per_meal=cost_per_meal,
                            discretionary=discretionary,
                            discretionary_sum=discretionary_sum,
                            query_string=query_string,
+
                            category_subtotals=report.category_subtotals_json,
                            expenses=report.expenses_json)
 
@@ -114,9 +114,7 @@ def yearly_report(year):
     """Build report for entire year.
     """
     report = models.Report(year=year)
-    return render_template('report_yearly.html', year=year, total=report.total,
-                           expenses_json=report.category_subtotals_json,
-                           ordered_expenses_json=report.expenses_json)
+    return render_template('report_yearly.html', report=report)
 
 
 def _date_handler(date):

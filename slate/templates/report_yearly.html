@@ -8,16 +8,16 @@
 {% include 'header.html' %}
 
 <script src="static/lib/highcharts.js"></script>
-<script src="static/js/report-yearly.js"></script>
+<script src="static/js/report-monthly.js"></script>
 
 <div id='report-page'>
     <div id='expense-controls' class='container-full'>
         <div class='container'>
             <div class='row'>
                 <div id='details' class='col-md-2'>
-                    <p>{{ year }}</p>
+                    <p>{{ report.description }}</p>
                     <p class='highlight'>
-                        <strong>{{ total }}</strong>
+                        <strong>{{ report.total }}</strong>
                     </p>
                 </div>
                 <div class='col-md-2'>
@@ -26,6 +26,48 @@
             </div>
         </div>
     </div>
+{#    <div class='container'>#}
+{#        <div class='row' id='breakout'>#}
+{#            <div class='col-md-4'>#}
+{#                <h3>Discretionary</h3>#}
+{#                <table>#}
+{#                    {% for category in discretionary %}#}
+{#                    <tr>#}
+{#                        <td><strong>{{ category|capitalize }}</strong></td>#}
+{#                        <td>${{ discretionary[category] }}</td>#}
+{#                    </tr>#}
+{#                    {% endfor %}#}
+{#                    <tr>#}
+{#                        <td><strong>Total</strong></td>#}
+{#                        <td>#}
+{#                            <strong class='highlight'>${{ discretionary_sum }}</strong>#}
+{#                        </td>#}
+{#                    </tr>#}
+{#                </table>#}
+{#            </div>#}
+{#            <div class='col-md-4'>#}
+{#                <h3>Food</h3>#}
+{#                <table>#}
+{#                    <tr>#}
+{#                        <td><strong>Food (in)</strong></td>#}
+{#                        <td>${{ food_in }}</td>#}
+{#                    </tr>#}
+{#                    <tr>#}
+{#                        <td><strong>Food (out)</strong></td>#}
+{#                        <td>${{ food_out }}</td>#}
+{#                    </tr>#}
+{#                    <tr>#}
+{#                        <td><strong>Total</strong></td>#}
+{#                        <td>${{ food_in + food_out }}</td>#}
+{#                    </tr>#}
+{#                    <tr>#}
+{#                        <td><strong>Per meal</strong></td>#}
+{#                        <td><strong class='highlight'>${{ cost_per_meal }}</strong></td>#}
+{#                    </tr>#}
+{#                </table>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
     <div class='container'>
         <div class='row'>
             <div class='col-md-6'>
@@ -43,7 +85,7 @@
     {% include 'footer.html' %}
 
     <script>
-        window.plotExpenses({{ expenses_json|safe }}, {{ ordered_expenses_json|safe }});
+        window.plotExpenses({{ report.category_subtotals_json|safe }}, {{ report.expenses_json|safe }});
     </script>
 
 </div>

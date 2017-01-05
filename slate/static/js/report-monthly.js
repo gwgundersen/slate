@@ -142,12 +142,10 @@ window.plotExpensesTimeSeries = function(days) {
 
     var data = [];
     $.each(days, function(dateStr, expenses) {
-        console.log(dateStr);
         var total = 0;
         $.each(expenses, function(i, e) {
             total += e.cost;
         });
-
         var t = new Date(dateStr);
         var d = dateStr.split('-');
         var seconds = Date.UTC(d[0], d[1], d[2]);
@@ -179,21 +177,23 @@ window.plotExpensesTimeSeries = function(days) {
                     return ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'][dayIndex];
                 }
 
-                debugger;
                 var idx = this.series.data.indexOf(this.point),
                     d = new Date(this.key),
+                    // Highcharts wants a UTC date in seconds. This converts it
+                    // back to a Python datetime, e.g. 2017-01-01
+                    key = d.toISOString().substr(0, 10),
                     dayString = dayOfWeekAsString(d.getDay()),
                     table = '<strong>' + dayString + '</strong><br>';
 
                 // Don't show empty tooltip.
-                if (!expenses[this.key].length) {
+                if (!days[key].length) {
                     return false;
                 }
 
                 // Highcharts does not support tables. For a list of support
                 // HTML elements:
                 // http://api.highcharts.com/highcharts#tooltip
-                $.each(expenses[this.key], function(i, e) {
+                $.each(days[key], function(i, e) {
                     table += '' +
                         '<span>$' + e.cost + ' - ' + e.comment + '</span><br>';
                 });

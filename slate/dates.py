@@ -13,9 +13,7 @@ def get_ordered_dates_in_year(year):
     dates = []
     for month in range(1, 13):
         days_in_month = get_ordered_dates_in_month(year, month)
-        for day in range(1, days_in_month+1):
-            d = datetime.date(year, month, day)
-            dates.append(d)
+        dates += days_in_month
     return dates
 
 
