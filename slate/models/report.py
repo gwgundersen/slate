@@ -58,7 +58,6 @@ class Report(object):
                 if e.date_time.date() != day:
                     continue
                 expenses[key].append({
-                    'highcharts_date': e.date_time.isoformat(),
                     'cost': e.cost,
                     'comment': e.comment
                 })
