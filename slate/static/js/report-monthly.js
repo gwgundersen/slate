@@ -138,12 +138,11 @@ window.plotExpensesByCategory = function(categorySubtotals) {
     });
 };
 
-window.plotExpensesTimeSeries = function(expenses) {
-
-    debugger;
+window.plotExpensesTimeSeries = function(days) {
 
     var data = [];
-    $.each(expenses, function(dateStr, expenses) {
+    $.each(days, function(dateStr, expenses) {
+        console.log(dateStr);
         var total = 0;
         $.each(expenses, function(i, e) {
             total += e.cost;
