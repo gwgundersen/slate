@@ -92,23 +92,13 @@ def expenses_default():
         category = None
     else:
         category = db.session.query(models.Category).get(category_id)
-
     year = request.args.get('year')
     month = request.args.get('month')
 
-    month_string, query_string = viewutils.get_date_time_strings(year, month)
-    expenses = current_user.expenses(category, year, month)
-    category_sum = viewutils.get_expense_sum(expenses)
-
+    report = models.Report(year=year, month=month, category=category)
     return render_template('expenses.html',
-                           categories=current_user.categories,
-                           category=category,
-                           category_sum=category_sum,
-                           expenses=expenses,
-                           year=year,
-                           month=month,
-                           month_string=month_string,
-                           query_string=query_string)
+                           report=report,
+                           categories=current_user.categories)
 
 
 @expenses.route('/previous', methods=['GET'])

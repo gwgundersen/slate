@@ -5,10 +5,14 @@ import calendar
 import datetime
 
 
-def get_category_sum(expenses, category):
-    """Returns sum of all expenses in category.
+def get_category_sum(expenses, category=None):
+    """Returns sum of all expenses with optional category filter.
     """
-    return sum([e.cost for e in expenses if e.category.name == category])
+    if category:
+        vals = [e.cost for e in expenses if e.category.name == category]
+    else:
+        vals = [e.cost for e in expenses]
+    return sum(vals)
 
 
 def get_date_time_strings(year, month):
