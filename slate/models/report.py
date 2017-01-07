@@ -51,6 +51,16 @@ class Report(object):
             costs = [e.cost for e in self.expenses]
         return _format_monetary_value(sum(costs))
 
+    @property
+    def query_string(self):
+        """Returns a query string that properly references report itself.
+        """
+        qs = '?year=%s' % self.year
+        if self.month:
+            qs += '&month=%s' % self.month
+        return qs
+
+
     def get_category_subtotals(self, format='json'):
         """Returns total expenses per category, excluding rent.
         """
@@ -87,15 +97,6 @@ class Report(object):
                 else:
                     expenses[key].append(e)
         return json.dumps(expenses) if format == 'json' else expenses
-
-    @property
-    def query_string(self):
-        """
-        """
-        qs = '?year=%s' % self.year
-        if self.month:
-            qs += '&month=%s' % self.month
-        return qs
 
 
 def _format_monetary_value(total):

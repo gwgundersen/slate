@@ -1,4 +1,4 @@
-/* Generates all plots for report pages.
+/* Generates plots that show up on all report pages.
  */
 
 window.plotExpenses = function(categorySubtotals, expenses) {
@@ -148,7 +148,7 @@ window.plotExpensesTimeSeries = function(days) {
         });
         var t = new Date(dateStr);
         var d = dateStr.split('-');
-        var seconds = Date.UTC(d[0], d[1], d[2]);
+        var seconds = Date.UTC(d[0], d[1]-1, d[2]);
         data.push([seconds, total]);
     });
 
@@ -177,8 +177,7 @@ window.plotExpensesTimeSeries = function(days) {
                     return ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'][dayIndex];
                 }
 
-                var idx = this.series.data.indexOf(this.point),
-                    d = new Date(this.key),
+                var d = new Date(this.key),
                     // Highcharts wants a UTC date in seconds. This converts it
                     // back to a Python datetime, e.g. 2017-01-01
                     key = d.toISOString().substr(0, 10),
