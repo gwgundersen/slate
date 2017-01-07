@@ -85,7 +85,7 @@
     {% include 'footer.html' %}
 
     <script>
-        window.plotExpenses({{ report.category_subtotals_json|safe }}, {{ report.expenses_json|safe }});
+        window.plotExpenses({{ report.get_category_subtotals()|safe }}, {{ report.get_ordered_expenses()|safe }});
     </script>
 
 </div>

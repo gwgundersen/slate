@@ -98,16 +98,11 @@ def monthly_report(year, month):
 
     return render_template('report_monthly.html',
                            report=report,
-
                            food_in=food_in,
                            food_out=food_out,
                            cost_per_meal=cost_per_meal,
                            discretionary=discretionary,
-                           discretionary_sum=discretionary_sum,
-                           query_string=query_string,
-
-                           category_subtotals=report.category_subtotals_json,
-                           expenses=report.expenses_json)
+                           discretionary_sum=discretionary_sum)
 
 
 def yearly_report(year):

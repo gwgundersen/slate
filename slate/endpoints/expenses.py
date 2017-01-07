@@ -94,7 +94,6 @@ def expenses_default():
         category = db.session.query(models.Category).get(category_id)
     year = request.args.get('year')
     month = request.args.get('month')
-
     report = models.Report(year=year, month=month, category=category)
     return render_template('expenses.html',
                            report=report,

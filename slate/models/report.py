@@ -30,7 +30,7 @@ class Report(object):
 
     @property
     def description(self):
-        """Returns text description for report view.
+        """Returns text description of report.
         """
         if self.month:
             desc = '%s %s' % (calendar.month_name[self.month], self.year)
@@ -51,8 +51,7 @@ class Report(object):
             costs = [e.cost for e in self.expenses]
         return _format_monetary_value(sum(costs))
 
-    @property
-    def category_subtotals_json(self):
+    def get_category_subtotals(self, format='json'):
         """Returns total expenses per category, excluding rent.
         """
         subtotals = []
@@ -63,18 +62,15 @@ class Report(object):
                 'category': category.name.capitalize(),
                 'subtotal': round(sum(expenses), 2)
             })
-        return json.dumps(subtotals)
+        return json.dumps(subtotals) if format == 'json' else subtotals
 
-    @property
-    def expenses_json(self):
+    def get_ordered_expenses(self, format='json'):
+        """Returns expenses as JSON.
         """
-        """
-        #import pdb; pdb.set_trace()
         if self.month:
             all_days = dates.get_ordered_dates_in_month(self.year, self.month)
         else:
             all_days = dates.get_ordered_dates_in_year(self.year)
-
         expenses = collections.OrderedDict()
         for day in all_days:
             for e in self.expenses:
@@ -83,11 +79,14 @@ class Report(object):
                     expenses[key] = []
                 if e.date_time.date() != day:
                     continue
-                expenses[key].append({
-                    'cost': e.cost,
-                    'comment': e.comment
-                })
-        return json.dumps(expenses)
+                if format == 'json':
+                    expenses[key].append({
+                        'cost': e.cost,
+                        'comment': e.comment
+                    })
+                else:
+                    expenses[key].append(e)
+        return json.dumps(expenses) if format == 'json' else expenses
 
     @property
     def query_string(self):
