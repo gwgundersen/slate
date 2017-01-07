@@ -27,6 +27,7 @@ window.plotExpenses = function(categorySubtotals, expenses) {
     plotExpensesPieChart(categorySubtotals);
     plotExpensesByCategory(categorySubtotals);
     plotExpensesTimeSeries(expenses);
+    plotExpensesByCategoryAsTimeseries(expenses, categorySubtotals);
 };
 
 window.plotExpensesPieChart = function(categorySubtotals) {
@@ -216,11 +217,74 @@ window.plotExpensesTimeSeries = function(days) {
                 threshold: null
             }
         },
-
         series: [{
             type: 'area',
             name: 'Subtotal',
             data: data
         }]
+    });
+};
+
+window.plotExpensesByCategoryAsTimeseries = function(days, categorySubtotals) {
+
+    var series = [],
+        categories = [];
+
+    $.each(categorySubtotals, function(i, obj) {
+        categories.push(obj.category.toLowerCase());
+    });
+    categories.sort();
+
+    $.each(categories, function(i, category) {
+        var data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $.each(days, function(date, expenses) {
+            $.each(expenses, function(_, e) {
+                // -1 to convert month to array index.
+                if (e.category == category) {
+                    var month = parseInt(date.split('-')[1]) - 1;
+                    data[month] += e.cost;
+                }
+            });
+        });
+        series.push({
+            name: category,
+            data: data
+        });
+    });
+    
+    $('#categories-timeseries-container').highcharts({
+        chart: {
+            type: 'column'
+        },
+        //colors: ['#1689E5'],
+        title: {
+            text: 'Expenses by category by month'
+        },
+        xAxis: {
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Total monthly expenses'
+            },
+            stackLabels: {
+                enabled: true,
+                style: {
+                    fontWeight: 'bold',
+                    color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                }
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        plotOptions: {
+            column: {
+                stacking: 'normal',
+                lineWidth: 1
+            }
+        },
+        series: series
     });
 };

@@ -92,7 +92,8 @@ class Report(object):
                 if format == 'json':
                     expenses[key].append({
                         'cost': e.cost,
-                        'comment': e.comment
+                        'comment': e.comment,
+                        'category': e.category.name
                     })
                 else:
                     expenses[key].append(e)

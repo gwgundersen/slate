@@ -217,6 +217,9 @@ h1 span {
   margin-bottom: 30px;
   padding-bottom: 30px;
 }
+#report-page #categories-timeseries-container {
+  height: 500px;
+}
 #expenses-page table,
 #settings-page table,
 #expenses-all-page table {
