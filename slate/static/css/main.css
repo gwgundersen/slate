@@ -220,6 +220,22 @@ h1 span {
 #report-page #categories-timeseries-container {
   height: 500px;
 }
+#report-page #category-sparklines {
+  border-top: 1px solid #ddd;
+  padding-top: 20px;
+  margin-top: 20px;
+}
+#report-page #category-sparklines .sparkline-container {
+  float: left;
+  width: 33.33333333%;
+}
+#report-page #category-sparklines .sparkline-container .sparkline-border {
+  border: 1px solid #eee;
+  margin: 5px;
+}
+#report-page #category-sparklines .sparkline-container .sparkline-border .sparkline {
+  height: 200px;
+}
 #expenses-page table,
 #settings-page table,
 #expenses-all-page table {

@@ -9,6 +9,7 @@
 
 <script src="static/lib/highcharts.js"></script>
 <script src="static/js/report-base.js"></script>
+<script src="static/js/report-yearly.js"></script>
 
 <div id='report-page'>
     <div id='expense-controls' class='container-full'>
@@ -79,10 +80,13 @@
         </div>
     </div>
     <div class='container'>
+        <div id='categories-by-month-container'></div>
+    </div>
+    <div class='container'>
         <div id='time-series-container'></div>
     </div>
     <div class='container'>
-        <div id='categories-timeseries-container'></div>
+        <div id='category-sparklines'></div>
     </div>
 
     {% include 'footer.html' %}

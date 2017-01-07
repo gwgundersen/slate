@@ -3,31 +3,41 @@
 
 window.plotExpenses = function(categorySubtotals, expenses) {
 
+    var colors = [
+        '#D40000', // alcohol
+        '#395200', // bills
+        '#41a1ed', // clothing
+        '#FFE11A', // entertainment
+        '#0b4370', // food (in)
+        '#FD7400', // food (out)
+        '#7FB800', // household
+        '#1689E5', // medical
+        '#5c8500', // miscellaneous
+        '#0f5f9f', // transportation (away)
+        '#2980B9'  // transportation (local)
+    ]
+
     Highcharts.setOptions({
         chart: {
             style: {
                 fontFamily: 'Arial, sans-serif'
             }
         },
-        colors: [
-            '#D40000', // alcohol
-            '#395200', // bills
-            '#41a1ed', // clothing
-            '#FFE11A', // entertainment
-            '#0b4370', // food (in)
-            '#FD7400', // food (out)
-            '#7FB800', // household
-            '#1689E5', // medical
-            '#5c8500', // miscellaneous
-            '#0f5f9f', // transportation (away)
-            '#2980B9'  // transportation (local)
-        ]
+        credits: {
+            enabled: false
+        },
+        colors: colors
     });
 
     plotExpensesPieChart(categorySubtotals);
     plotExpensesByCategory(categorySubtotals);
     plotExpensesTimeSeries(expenses);
-    plotExpensesByCategoryAsTimeseries(expenses, categorySubtotals);
+    plotCategorySubtotalsPerMonth(expenses, categorySubtotals);
+    try {
+        plotCategorySparklines(expenses, categorySubtotals);
+    } catch(e) {
+        // Not on yearly report page.
+    }
 };
 
 window.plotExpensesPieChart = function(categorySubtotals) {
@@ -147,9 +157,8 @@ window.plotExpensesTimeSeries = function(days) {
         $.each(expenses, function(i, e) {
             total += e.cost;
         });
-        var t = new Date(dateStr);
-        var d = dateStr.split('-');
-        var seconds = Date.UTC(d[0], d[1]-1, d[2]);
+        var d = dateStr.split('-'),
+            seconds = Date.UTC(d[0], d[1]-1, d[2]);
         data.push([seconds, total]);
     });
 
@@ -159,14 +168,14 @@ window.plotExpensesTimeSeries = function(days) {
         },
         colors: ['#1689E5'],
         title: {
-            text: '$ expenses by day'
+            text: 'Expenses'
         },
         xAxis: {
             type: 'datetime'
         },
         yAxis: {
             title: {
-                text: 'Subtotal'
+                text: 'Daily subtotal'
             },
             // Lowest allowed value on y-axis.
             floor: 0
@@ -225,20 +234,124 @@ window.plotExpensesTimeSeries = function(days) {
     });
 };
 
-window.plotExpensesByCategoryAsTimeseries = function(days, categorySubtotals) {
+window.plotCategorySparklines = function (days, categorySubtotals) {
+    var $parent = $('#category-sparklines');
+    $.each(categorySubtotals, function (i, obj) {
+        createSparkline(i, obj.category.toLowerCase());
+    });
+
+    function dataForCategory(category) {
+        //var data = [],
+        //    i = 0;
+        //$.each(days, function(dateStr, expenses) {
+        //    var d = dateStr.split('-'),
+        //        seconds = Date.UTC(d[0], d[1]-1, d[2]),
+        //        total = 0;
+        //    $.each(expenses, function(j, e) {
+        //        if (e.category === category) {
+        //            total += e.cost;
+        //        }
+        //    });
+        //    data.push([seconds, total]);
+        //});
+        //return data;
+        var data = [],
+            monthToData = {};
+        $.each(days, function(dateStr, expenses) {
+            var d = dateStr.split('-'),
+                month = d[1]- 1,
+                total = 0;
+            if (typeof monthToData[month] === 'undefined') {
+                monthToData[month] = 0;
+            }
+            $.each(expenses, function(j, e) {
+                if (e.category === category) {
+                    monthToData[month] += parseFloat(e.cost);
+                }
+            });
+        });
+
+        $.each(monthToData, function(month, total) {
+            data[month] = total;
+        });
+
+        return data;
+    }
+
+    function createSparkline(i, category) {
+        var id = 'cat-sparkline-' + i,
+            data = dataForCategory(category);
+
+        $parent.append('' +
+            '<div class="sparkline-container">' +
+                '<div class="sparkline-border">' +
+                    '<div id="' + id + '" class="sparkline"></div>' +
+                '</div>' +
+            '</div>'
+        );
+        $parent.find('#' + id).highcharts({
+            chart: {
+                type: 'area'
+            },
+            colors: ['#1689E5'],
+            title: {
+                text: category
+            },
+            xAxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+            },
+            yAxis: {
+                title: {
+                    text: 'Monthly $'
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            tooltip: {
+                enabled: false
+            },
+            plotOptions: {
+                series: {
+                    lineWidth: 1,
+                    states: {
+                        hover: {
+                            lineWidth: 1
+                        }
+                    },
+                    marker: {
+                        enabled:false,
+                        radius: 0,
+                        states: {
+                            hover: {
+                                radius: 2
+                            }
+                        }
+                    }
+                }
+            },
+            series: [{
+                type: 'area',
+                data: data
+            }]
+        });
+    }
+};
+
+window.plotCategorySubtotalsPerMonth = function (days, categorySubtotals) {
 
     var series = [],
         categories = [];
 
-    $.each(categorySubtotals, function(i, obj) {
+    $.each(categorySubtotals, function (i, obj) {
         categories.push(obj.category.toLowerCase());
     });
     categories.sort();
 
-    $.each(categories, function(i, category) {
+    $.each(categories, function (i, category) {
         var data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-        $.each(days, function(date, expenses) {
-            $.each(expenses, function(_, e) {
+        $.each(days, function (date, expenses) {
+            $.each(expenses, function (_, e) {
                 // -1 to convert month to array index.
                 if (e.category == category) {
                     var month = parseInt(date.split('-')[1]) - 1;
@@ -251,12 +364,11 @@ window.plotExpensesByCategoryAsTimeseries = function(days, categorySubtotals) {
             data: data
         });
     });
-    
-    $('#categories-timeseries-container').highcharts({
+
+    $('#categories-by-month-container').highcharts({
         chart: {
             type: 'column'
         },
-        //colors: ['#1689E5'],
         title: {
             text: 'Expenses by category by month'
         },
