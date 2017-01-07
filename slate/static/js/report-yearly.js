@@ -7,13 +7,16 @@ window.plotCategorySparklines = function (days, categorySubtotals) {
         createSparkline(i, obj.category.toLowerCase());
     });
 
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
     function dataForCategory(category) {
         var data = [],
             monthToData = {};
         $.each(days, function(dateStr, expenses) {
             var d = dateStr.split('-'),
-                month = d[1]- 1,
-                total = 0;
+                month = d[1]- 1;
             if (typeof monthToData[month] === 'undefined') {
                 monthToData[month] = 0;
             }
@@ -48,7 +51,7 @@ window.plotCategorySparklines = function (days, categorySubtotals) {
             },
             colors: ['#1689E5'],
             title: {
-                text: category
+                text: capitalizeFirstLetter(category)
             },
             xAxis: {
                 categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']

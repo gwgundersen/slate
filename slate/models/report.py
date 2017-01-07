@@ -9,6 +9,7 @@ import json
 from flask_login import current_user
 
 from slate import dates
+from slate.endpoints import viewutils
 
 
 class Report(object):
@@ -138,6 +139,49 @@ class Report(object):
                 else:
                     expenses[key].append(e)
         return json.dumps(expenses) if format == 'json' else expenses
+
+    @property
+    def discretionary(self):
+        """Returns a dictionary mapping categories to subtotals for only
+        discretionary expenses.
+        """
+        expenses = {}
+        total = 0
+        for e in self.expenses:
+            if not e.discretionary:
+                continue
+            category = e.category.name
+            if category in expenses:
+                expenses[category] += e.cost
+            else:
+                expenses[category] = e.cost
+            total += e.cost
+        expenses = {k:_format_monetary_value(v) for k,v in expenses.items()}
+        return expenses, _format_monetary_value(total)
+
+    @property
+    def food(self):
+        """Returns analysis of food expenditures.
+        """
+        food_categories = {}
+        total = 0
+        for category in current_user.categories:
+            if 'food' not in category.name:
+                continue
+            subtotal = viewutils.get_category_sum(self.expenses, category.name)
+            food_categories[category.name] = _format_monetary_value(subtotal)
+            total += subtotal
+        per_meal = _format_monetary_value(total / (self.days * 3))
+        return _format_monetary_value(total), food_categories, per_meal
+
+    @property
+    def supports_food_analysis(self):
+        """Returns True if any user category includes the word food.
+        """
+        for category in current_user.categories:
+            if 'food' in category.name:
+                return True
+        return False
 
     @property
     def _total(self):
