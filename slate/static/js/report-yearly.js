@@ -58,7 +58,7 @@ window.plotCategorySparklines = function (days, categorySubtotals) {
             },
             yAxis: {
                 title: {
-                    text: 'Monthly $'
+                    text: 'Dollars ($)'
                 }
             },
             legend: {
