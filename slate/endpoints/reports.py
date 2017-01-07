@@ -43,9 +43,6 @@ def report_pages():
 
 """
 What should a report have?
-
-- description (year, month, etc.)
-- total
 - food
   - in
   - out, discretionary
@@ -54,14 +51,6 @@ What should a report have?
 - discretionary transactions
   - sum
   - this should just be a function on the report class
-- jsons
-  - expenses
-  - ordered expenses
--
-
-Non-reporting
-- query string for back button (rename?)
-
 """
 
 def monthly_report(year, month):

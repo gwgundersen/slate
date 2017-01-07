@@ -17,9 +17,6 @@
             <div class='row'>
                 <div id='details' class='col-md-2'>
                     <p>{{ report.description }}</p>
-                    <p class='highlight'>
-                        <strong>{{ report.total }}</strong>
-                    </p>
                 </div>
                 <div class='col-md-2'>
                     <a class='btn btn-info' href='expenses{{ query_string }}'>Back</a>
@@ -27,10 +24,39 @@
             </div>
         </div>
     </div>
-{#    <div class='container'>#}
-{#        <div class='row' id='breakout'>#}
-{#            <div class='col-md-4'>#}
-{#                <h3>Discretionary</h3>#}
+    <div class='container'>
+        <div class='row' id='breakout'>
+            <div class='col-md-4'>
+                <h3>Data</h3>
+                <table>
+                    <tr>
+                        <td><strong>Total</strong></td>
+                        <td><strong class='highlight'>{{ report.total }}</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Average</strong></td>
+                        <td>${{ report.average }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Median</strong></td>
+                        <td>${{ report.median }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Max</strong></td>
+                        <td>${{ report.max_ }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Transactions</strong></td>
+                        <td>{{ report.count }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Per day</strong></td>
+                        <td>{{ report.num_expenses_per_day }}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class='col-md-4'>
+                <h3>Discretionary</h3>
 {#                <table>#}
 {#                    {% for category in discretionary %}#}
 {#                    <tr>#}
@@ -45,9 +71,9 @@
 {#                        </td>#}
 {#                    </tr>#}
 {#                </table>#}
-{#            </div>#}
-{#            <div class='col-md-4'>#}
-{#                <h3>Food</h3>#}
+            </div>
+            <div class='col-md-4'>
+                <h3>Food</h3>
 {#                <table>#}
 {#                    <tr>#}
 {#                        <td><strong>Food (in)</strong></td>#}
@@ -66,9 +92,9 @@
 {#                        <td><strong class='highlight'>${{ cost_per_meal }}</strong></td>#}
 {#                    </tr>#}
 {#                </table>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
+            </div>
+        </div>
+    </div>
     <div class='container'>
         <div class='row'>
             <div class='col-md-6'>

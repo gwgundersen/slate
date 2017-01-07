@@ -42,14 +42,55 @@ class Report(object):
 
     @property
     def total(self):
-        """Returns sum of all expenses except rent.
+        """Returns the sum of all expenses, formatted as a monetary value.
         """
-        if self.category:
-            costs = [e.cost for e in self.expenses
-                     if e.category.name == self.category.name]
+        return _format_monetary_value(self._total)
+
+    @property
+    def count(self):
+        """Returns the number of expenses.
+        """
+        return len(self.expenses)
+
+    @property
+    def num_expenses_per_day(self):
+        """Returns the number of expenses per day.
+        """
+        value = self.count / float(self.days)
+        return round(value, 3)
+
+    @property
+    def average(self):
+        """Returns the average cost of an expense.
+        """
+        value = self._total / float(self.days)
+        return round(value, 2)
+
+    @property
+    def median(self):
+        """Returns the median cost of an expense.
+        """
+        numbers = [e.cost for e in self.expenses]
+        numbers = sorted(numbers)
+        center = len(numbers) / 2
+        if len(numbers) % 2 == 0:
+            # Return the average of the middle two numbers.
+            value = sum(numbers[center - 1:center + 1]) / 2.0
+            return round(value, 2)
         else:
-            costs = [e.cost for e in self.expenses]
-        return _format_monetary_value(sum(costs))
+            return numbers[center]
+
+    @property
+    def max_(self):
+        """Returns the max expense in the reporting time period.
+        """
+        return max([e.cost for e in self.expenses])
+
+    @property
+    def days(self):
+        """Returns the number of days in the reporting time period.
+        """
+        return dates.get_num_days_in_time_period(self.year, self.month)
 
     @property
     def query_string(self):
@@ -59,7 +100,6 @@ class Report(object):
         if self.month:
             qs += '&month=%s' % self.month
         return qs
-
 
     def get_category_subtotals(self, format='json'):
         """Returns total expenses per category, excluding rent.
@@ -98,6 +138,17 @@ class Report(object):
                 else:
                     expenses[key].append(e)
         return json.dumps(expenses) if format == 'json' else expenses
+
+    @property
+    def _total(self):
+        """Returns sum of all expenses.
+        """
+        if self.category:
+            costs = [e.cost for e in self.expenses
+                     if e.category.name == self.category.name]
+        else:
+            costs = [e.cost for e in self.expenses]
+        return sum(costs)
 
 
 def _format_monetary_value(total):

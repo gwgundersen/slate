@@ -217,6 +217,10 @@ h1 span {
   margin-bottom: 30px;
   padding-bottom: 30px;
 }
+#expenses-page #breakout table td,
+#report-page #breakout table td {
+  padding-right: 10px;
+}
 #report-page #categories-timeseries-container {
   height: 500px;
 }
