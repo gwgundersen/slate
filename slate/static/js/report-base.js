@@ -93,8 +93,7 @@ window.plotExpensesByCategory = function(categorySubtotals) {
 
     $('#bar-chart-container').highcharts({
         chart: {
-            type: 'bar',
-            height: 350
+            type: 'bar'
         },
         colors: ['#1689E5'],
         title: {
