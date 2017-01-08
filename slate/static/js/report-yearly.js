@@ -146,6 +146,11 @@ window.plotCategorySubtotalsPerMonth = function (days, categorySubtotals) {
                 }
             }
         },
+        tooltip: {
+            formatter: function() {
+                return '<strong>' + this.x + '</strong><br>$' + this.y.toFixed(2);
+            }
+        },
         legend: {
             enabled: false
         },
