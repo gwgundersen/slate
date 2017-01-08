@@ -106,8 +106,12 @@ def all_months():
     """Renders a list of all expenses by month.
     """
     months_all = dbutils.get_all_months()
+    years = set()
+    for obj in months_all:
+        years.add(obj['year_num'])
     return render_template('months-all.html',
-                           months_all=months_all)
+                           months_all=months_all,
+                           years_all=sorted(years))
 
 
 @expenses.route('/all', methods=['GET'])
