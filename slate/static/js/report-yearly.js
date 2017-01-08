@@ -148,7 +148,7 @@ window.plotCategorySubtotalsPerMonth = function (days, categorySubtotals) {
         },
         tooltip: {
             formatter: function() {
-                return '<strong>' + this.x + '</strong><br>$' + this.y.toFixed(2);
+                return '<strong>' + this.series.name + '</strong><br>$' + this.y.toFixed(2);
             }
         },
         legend: {
