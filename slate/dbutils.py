@@ -8,8 +8,6 @@ from flask.ext.login import current_user
 
 from slate import db
 
-REPEATED_EXPENSES_MIN = 5
-
 
 def get_all_months():
     """Gets all previous months with recorded transactions.
@@ -76,7 +74,7 @@ def get_category_subtotals_for_year(year):
     return results
 
 
-def get_repeated_expenses(year, min_=REPEATED_EXPENSES_MIN):
+def get_repeated_expenses(year, min_num_repeated):
     """Returns expenses with repeated comments, lower bound of min_.
     """
     conn = db.engine.connect()
@@ -90,7 +88,7 @@ def get_repeated_expenses(year, min_=REPEATED_EXPENSES_MIN):
         '  user.name = "%s" '\
         '  AND YEAR(expense.date_time) = %s '\
         'GROUP BY expense.comment '\
-        'HAVING COUNT(expense.comment) >= %s' % (current_user.name, year, min_)
+        'HAVING COUNT(expense.comment) >= %s' % (current_user.name, year, min_num_repeated)
     )
     results = {}
     for comment, cost in tuples.fetchall():

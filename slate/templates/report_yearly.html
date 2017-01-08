@@ -99,7 +99,7 @@
             <div class='col-md-4' id='repeated-expenses-container'>
                 <h3>Repeated Expenses*</h3>
                 <p>
-                    <em>* Repeated {{ REPEATED_EXPENSES_MIN }}x or more</em>
+                    <em>* Repeated {{ MIN_NUM_REPEATED }}x or more</em>
                 </p>
                 <table>
                     {% for comment, subtotal in report.get_repeated_expenses().items() %}

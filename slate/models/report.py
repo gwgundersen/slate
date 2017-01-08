@@ -12,6 +12,9 @@ from slate import dates, dbutils
 from slate.endpoints import viewutils
 
 
+MIN_NUM_REPEATED = 5
+
+
 class Report(object):
 
     def __init__(self, year=None, month=None, category=None):
@@ -140,10 +143,11 @@ class Report(object):
                     expenses[key].append(e)
         return json.dumps(expenses) if format == 'json' else expenses
 
-    def get_repeated_expenses(self, format='json'):
+    def get_repeated_expenses(self, min_num_repeated=MIN_NUM_REPEATED):
+        """Returns comments and subtotals for expenses that are repeated at
+        least `min_num_repeated` times.
         """
-        """
-        expenses = dbutils.get_repeated_expenses(self.year)
+        expenses = dbutils.get_repeated_expenses(self.year, min_num_repeated)
         expenses = {comment: _format_monetary_value(cost)
                     for comment, cost in expenses.items()}
         return expenses

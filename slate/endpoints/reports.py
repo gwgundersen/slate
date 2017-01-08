@@ -8,7 +8,7 @@ from flask.ext.login import login_required
 
 from slate import models
 from slate.config import config
-from slate.dbutils import REPEATED_EXPENSES_MIN
+from slate.models.report import MIN_NUM_REPEATED
 
 
 reports = Blueprint('reports',
@@ -50,7 +50,7 @@ def yearly_report(year):
     """
     report = models.Report(year=year)
     return render_template('report_yearly.html', report=report,
-                           REPEATED_EXPENSES_MIN=REPEATED_EXPENSES_MIN)
+                           MIN_NUM_REPEATED=MIN_NUM_REPEATED)
 
 
 def _date_handler(date):
