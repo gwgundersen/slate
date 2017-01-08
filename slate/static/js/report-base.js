@@ -237,20 +237,6 @@ window.plotCategorySparklines = function (days, categorySubtotals) {
     });
 
     function dataForCategory(category) {
-        //var data = [],
-        //    i = 0;
-        //$.each(days, function(dateStr, expenses) {
-        //    var d = dateStr.split('-'),
-        //        seconds = Date.UTC(d[0], d[1]-1, d[2]),
-        //        total = 0;
-        //    $.each(expenses, function(j, e) {
-        //        if (e.category === category) {
-        //            total += e.cost;
-        //        }
-        //    });
-        //    data.push([seconds, total]);
-        //});
-        //return data;
         var data = [],
             monthToData = {};
         $.each(days, function(dateStr, expenses) {
