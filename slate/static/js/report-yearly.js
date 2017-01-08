@@ -65,7 +65,9 @@ window.plotCategorySparklines = function (days, categorySubtotals) {
                 enabled: false
             },
             tooltip: {
-                enabled: false
+                formatter: function() {
+                    return '<strong>' + this.x + '</strong><br>$' + this.y.toFixed(2);
+                }
             },
             plotOptions: {
                 series: {

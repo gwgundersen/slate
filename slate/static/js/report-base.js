@@ -66,7 +66,6 @@ window.plotExpensesPieChart = function(categorySubtotals) {
         plotOptions: {
             pie: {
                 allowPointSelect: true,
-                cursor: 'pointer',
                 dataLabels: {
                     enabled: false
                 },

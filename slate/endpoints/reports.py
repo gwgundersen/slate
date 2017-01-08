@@ -4,10 +4,11 @@
 import datetime
 
 from flask import Blueprint, render_template, request
-from flask.ext.login import current_user, login_required
+from flask.ext.login import login_required
 
 from slate import models
 from slate.config import config
+from slate.dbutils import REPEATED_EXPENSES_MIN
 
 
 reports = Blueprint('reports',
@@ -48,7 +49,8 @@ def yearly_report(year):
     """Build report for entire year.
     """
     report = models.Report(year=year)
-    return render_template('report_yearly.html', report=report)
+    return render_template('report_yearly.html', report=report,
+                           REPEATED_EXPENSES_MIN=REPEATED_EXPENSES_MIN)
 
 
 def _date_handler(date):
