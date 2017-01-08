@@ -23,7 +23,6 @@ DEFAULT_CATEGORIES = ['alcohol',
                       'rent/mortgage',
                       'transportation',
                       'travel/vacation']
-TIMEOUT = 5
 
 
 def exists_by_xpath(browser, xpath):
@@ -143,7 +142,7 @@ def get_flashed_message(browser):
     return message.text
 
 
-def wait_until(browser, xpath, timeout=30):
+def wait_until(browser, xpath, timeout=60):
     """Wait until element becomes available.
     """
     wait = WebDriverWait(browser, timeout)
