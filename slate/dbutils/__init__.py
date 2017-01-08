@@ -2,7 +2,7 @@
 """
 
 from dbutils import \
-    get_categories, \
+    get_repeated_expenses, \
     get_all_months, \
     get_category_subtotals, \
     get_category_subtotals_for_year

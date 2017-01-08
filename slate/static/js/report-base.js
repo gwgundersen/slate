@@ -15,7 +15,7 @@ window.plotExpenses = function(categorySubtotals, expenses) {
         '#5c8500', // miscellaneous
         '#0f5f9f', // transportation (away)
         '#2980B9'  // transportation (local)
-    ]
+    ];
 
     Highcharts.setOptions({
         chart: {
@@ -32,8 +32,8 @@ window.plotExpenses = function(categorySubtotals, expenses) {
     plotExpensesPieChart(categorySubtotals);
     plotExpensesByCategory(categorySubtotals);
     plotExpensesTimeSeries(expenses);
-    plotCategorySubtotalsPerMonth(expenses, categorySubtotals);
     try {
+        plotCategorySubtotalsPerMonth(expenses, categorySubtotals);
         plotCategorySparklines(expenses, categorySubtotals);
     } catch(e) {
         // Not on yearly report page.
@@ -127,11 +127,9 @@ window.plotExpensesByCategory = function(categorySubtotals) {
         },
         plotOptions: {
             bar: {
-                //height: 10,
                 dataLabels: {
                     enabled: true
-                }//,
-                //pointWidth: 14
+                }
             },
             series: {
                 pointPadding: 0,

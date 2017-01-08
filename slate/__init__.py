@@ -67,25 +67,17 @@ login_manager.login_view = 'auth.login'
 
 @app.before_request
 def before_request():
-    """
+    """Set current user to globally accessible `g` object for Jinja2.
     """
     g.user = current_user
 
 
 @login_manager.user_loader
 def load_user(user_id):
-    """
+    """Loads user for Flask_Login.
     """
     user = db.session.query(models.User).get(user_id)
     return user
-
-
-# @user_logged_out.connect_via(app)
-# def unset_current_user(sender, user):
-#     """When the user logs out, we need to unset this global variable.
-#     """
-#     print('logging user out')
-#     app.config.user = None
 
 
 @app.before_request

@@ -21,7 +21,7 @@ window.plotCategorySparklines = function (days, categorySubtotals) {
                 monthToData[month] = 0;
             }
             $.each(expenses, function(j, e) {
-                if (e.category === category) {
+                if (e.category.toLowerCase() === category) {
                     monthToData[month] += parseFloat(e.cost);
                 }
             });

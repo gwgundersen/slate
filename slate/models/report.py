@@ -8,7 +8,7 @@ import json
 
 from flask_login import current_user
 
-from slate import dates
+from slate import dates, dbutils
 from slate.endpoints import viewutils
 
 
@@ -139,6 +139,14 @@ class Report(object):
                 else:
                     expenses[key].append(e)
         return json.dumps(expenses) if format == 'json' else expenses
+
+    def get_repeated_expenses(self, format='json'):
+        """
+        """
+        expenses = dbutils.get_repeated_expenses(self.year)
+        expenses = {comment: _format_monetary_value(cost)
+                    for comment, cost in expenses.items()}
+        return expenses
 
     @property
     def discretionary(self):

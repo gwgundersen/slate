@@ -54,6 +54,29 @@
                         <td>{{ report.num_expenses_per_day }}</td>
                     </tr>
                 </table>
+
+                {% if report.supports_food_analysis %}
+                    <div>
+                        <h3>Food</h3>
+                        {% set food_total, food_categories, food_cost_per_meal = report.food %}
+                        <table>
+                            <tr>
+                                <td><strong>Total</strong></td>
+                                <td><strong class='highlight'>{{ food_total }}</strong></td>
+                            </tr>
+                            {% for category, subtotal in food_categories.items() %}
+                                </tr>
+                                    <td><strong>{{ category|capitalize }}</strong></td>
+                                    <td>{{ subtotal }}</td>
+                                <tr>
+                            {% endfor %}
+                            <tr>
+                                <td><strong>Per meal</strong></td>
+                                <td>{{ food_cost_per_meal }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                {% endif %}
             </div>
             <div class='col-md-4'>
                 <h3>Discretionary</h3>
@@ -73,28 +96,18 @@
                     {% endfor %}
                 </table>
             </div>
-            {% if report.supports_food_analysis %}
-                <div class='col-md-4'>
-                    <h3>Food</h3>
-                    {% set food_total, food_categories, food_cost_per_meal = report.food %}
-                    <table>
+            <div class='col-md-4' id='repeated-expenses-container'>
+                <h3>Repeated Expenses</h3>
+                <table>
+                    {% for comment, subtotal in report.get_repeated_expenses().items() %}
                         <tr>
-                            <td><strong>Total</strong></td>
-                            <td><strong class='highlight'>{{ food_total }}</strong></td>
+                            <td><strong>{{ comment }}</strong></td>
+                            <td>{{ subtotal }}</td>
                         </tr>
-                        {% for category, subtotal in food_categories.items() %}
-                            </tr>
-                                <td><strong>{{ category|capitalize }}</strong></td>
-                                <td>{{ subtotal }}</td>
-                            <tr>
-                        {% endfor %}
-                        <tr>
-                            <td><strong>Per meal</strong></td>
-                            <td>{{ food_cost_per_meal }}</td>
-                        </tr>
-                    </table>
-                </div>
-            {% endif %}
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
     </div>
     <div class='container'>
         <div class='row'>
@@ -114,6 +127,9 @@
     </div>
     <div class='container'>
         <div id='category-sparklines'></div>
+    </div>
+    <div class='container'>
+
     </div>
 
     {% include 'footer.html' %}

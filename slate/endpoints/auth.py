@@ -30,7 +30,6 @@ def login():
         flash('Username or password is invalid', 'error')
         return render_template('login.html')
 
-    app.config.user = registered_user
     login_user(registered_user, remember=True)
     return redirect(url_for('index.index_page'))
 
@@ -159,7 +158,6 @@ def reset_form(token):
     db.session.commit()
 
     # Log user into application.
-    app.config.user = user
     login_user(user, remember=True)
     flash('Password was reset.', 'success')
     return redirect(url_for('index.index_page'))

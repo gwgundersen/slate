@@ -7,7 +7,6 @@ import datetime
 from flask.ext.login import current_user
 
 from slate import db
-from slate import models
 
 
 def get_all_months():
@@ -24,10 +23,8 @@ def get_all_months():
         '  ON `user`.id = expense.user_fk '\
         'WHERE `user`.name = "%s" '\
         'GROUP BY MONTH(date_time), YEAR(date_time) '\
-        'ORDER BY MONTH(date_time), YEAR(date_time) ASC' % current_user.name
+        'ORDER BY date_time ASC' % current_user.name
     )
-
-    results = []
     results = [{
         'view': '%s %s' % (calendar.month_name[c[0]], c[1]),
         'month_num': c[0],
@@ -35,15 +32,6 @@ def get_all_months():
         'total': c[2]} for c in tuples.fetchall()]
     conn.close()
     return results
-
-
-def get_categories():
-    """Returns all categories in descending order.
-    """
-    return db.session\
-        .query(models.Category)\
-        .order_by(models.Category.name)\
-        .all()
 
 
 def get_category_subtotals(year=None, month=None):
@@ -83,4 +71,29 @@ def get_category_subtotals_for_year(year):
             'category': category.name.capitalize(),
             'subtotal': round(sum(expenses), 2)
         })
+    return results
+
+
+def get_repeated_expenses(year, min_=3):
+    """Returns expenses with repeated comments, lower bound of min_.
+    """
+    conn = db.engine.connect()
+    tuples = conn.execute(
+        'SELECT '\
+        '  expense.comment, SUM(expense.cost) '\
+        'FROM expense '\
+        'JOIN user '\
+        '  ON user.id = expense.user_fk '\
+        'WHERE '\
+        '  user.name = "%s" '\
+        '  AND YEAR(expense.date_time) = %s '\
+        'GROUP BY expense.comment '\
+        'HAVING COUNT(expense.comment) > %s' % (current_user.name, year, min_)
+    )
+    results = {}
+    for comment, cost in tuples.fetchall():
+        if comment not in results:
+            results[comment] = 0
+        results[comment] += cost
+    conn.close()
     return results
