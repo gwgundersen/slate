@@ -28,17 +28,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy()
 db.init_app(app)
 
-
-if config.getboolean('mode', 'debug'):
-    # Add a trailing slash, so the base tag URL will be "/slate/"
-    app.config.base_tag_url = '%s/' % config.get('url', 'base')
-else:
-    # Manually set the base tag URL to "/slate/". Why can't we use the config
-    # value? Because in production, the application runs on the server in the
-    # `slate` directory. To the application in production, "/" is this
-    # directory, so "/slate" would result in a URL mapping to "/slate/slate".
-    # Yes, this is annoying.
-    app.config.base_tag_url = '/slate/'
+app.config.base_tag_url = '/'
 
 
 # Server endpoints
