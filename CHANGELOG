@@ -3,6 +3,13 @@ Slate Changelog
 
 All notable changes to this project will be documented in this file.
 
+0.2.0 - 2017-06-12
+------------------
+(subdomain)
+
+- Moved application to gregorygundersen.com subdomain to mimic other programs.
+
+
 0.2.0 - 2017-01-08
 ------------------
 (yearly reports)
