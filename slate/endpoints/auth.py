@@ -104,7 +104,9 @@ def reset_request():
     db.session.commit()
 
     is_debug = config.getboolean('mode', 'debug')
-    base = 'http://localhost:8080' if is_debug else 'http://gregorygundersen.com'
+    LOCAL = 'http://localhost:8080'
+    REMOTE = 'http://slate.gregorygundersen.com'
+    base = LOCAL if is_debug else REMOTE
     url = '%s/slate/reset/%s' % (base, token)
     email.send(url, 'Reset your Slate password', address)
 
