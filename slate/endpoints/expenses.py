@@ -6,7 +6,6 @@ from flask import Blueprint, flash, redirect, render_template, request, \
 from flask.ext.login import current_user, login_required
 
 from slate import db
-from slate.endpoints import viewutils
 from slate import models
 from slate import dbutils
 from slate.config import config
@@ -15,6 +14,8 @@ from slate.config import config
 expenses = Blueprint('expenses',
                      __name__,
                      url_prefix='%s/expenses' % config.get('url', 'base'))
+
+GBP_TO_USD = 1.26
 
 
 # Add, edit, delete
@@ -25,15 +26,16 @@ expenses = Blueprint('expenses',
 def add_expense():
     """Adds expense.
     """
-    cost, category, comment, errors, discretionary = \
-        _validate_expense(request)
+    cost, category, comment, errors, gbp = _validate_expense(request)
 
     if len(errors) > 0:
         flash(errors[0], 'error')
         return redirect(url_for('index.index_page'))
 
-    expense = models.Expense(cost, category, comment, discretionary,
-                             current_user)
+    if gbp:
+        cost *= GBP_TO_USD
+
+    expense = models.Expense(cost, category, comment, current_user)
     db.session.add(expense)
     db.session.commit()
     return redirect(url_for('expenses.expenses_default'))
@@ -50,8 +52,7 @@ def edit_expense():
                                expense=expense)
     if request.method == 'POST':
         id_ = request.form.get('id')
-        cost, category, comment, errors, discretionary = \
-            _validate_expense(request)
+        cost, category, comment, errors, _ = _validate_expense(request)
         if len(errors) > 0:
             flash(errors[0], 'error')
             return redirect(url_for('expenses.edit_expense', id=id_))
@@ -60,7 +61,6 @@ def edit_expense():
         expense.cost = cost
         expense.category = (category or expense.category)
         expense.comment = comment
-        expense.discretionary = discretionary
         db.session.merge(expense)
         db.session.commit()
         return redirect(url_for('expenses.expenses_default'))
@@ -149,9 +149,9 @@ def _validate_expense(request):
         errors.append('Comment is required.')
 
     # HTML forms do not automatically POST unchecked check boxes.
-    if 'discretionary' in request.form:
-        discretionary = True
+    if 'gbp' in request.form:
+        gbp = True
     else:
-        discretionary = False
+        gbp = False
 
-    return cost, category, comment, errors, discretionary
+    return cost, category, comment, errors, gbp

@@ -153,25 +153,6 @@ class Report(object):
         return expenses
 
     @property
-    def discretionary(self):
-        """Returns a dictionary mapping categories to subtotals for only
-        discretionary expenses.
-        """
-        expenses = {}
-        total = 0
-        for e in self.expenses:
-            if not e.discretionary:
-                continue
-            category = e.category.name
-            if category in expenses:
-                expenses[category] += e.cost
-            else:
-                expenses[category] = e.cost
-            total += e.cost
-        expenses = {k:_format_monetary_value(v) for k,v in expenses.items()}
-        return expenses, _format_monetary_value(total)
-
-    @property
     def food(self):
         """Returns analysis of food expenditures.
         """

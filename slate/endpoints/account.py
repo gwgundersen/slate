@@ -127,11 +127,11 @@ def _write_files_and_return_names():
         expenses = current_user.expenses(year=year, month=month)
         filename = 'slate/static/downloads/%s %s.tsv' % (year, month_name)
         with open(filename, 'w+') as f:
-            header = 'cost\tcomment\tcategory\tdiscretionary\ttime\n'
+            header = 'cost\tcomment\tcategory\ttime\n'
             f.write(header)
             for e in expenses:
                 line = [str(e.cost), e.comment, e.category.name,
-                        str(e.discretionary), str(e.date_time)]
+                        str(e.date_time)]
                 line = '\t'.join(line) + '\n'
                 f.write(line)
         files.append(filename)

@@ -78,24 +78,6 @@
                     </div>
                 {% endif %}
             </div>
-            <div class='col-md-4'>
-                <h3>Discretionary</h3>
-                <table>
-                    {% set discretionary, discretionary_total = report.discretionary  %}
-                    <tr>
-                        <td><strong>Total</strong></td>
-                        <td>
-                            <strong class='highlight'>{{ discretionary_total }}</strong>
-                        </td>
-                    </tr>
-                    {% for category, subtotal in discretionary.items() %}
-                    <tr>
-                        <td><strong>{{ category|capitalize }}</strong></td>
-                        <td>{{ subtotal }}</td>
-                    </tr>
-                    {% endfor %}
-                </table>
-            </div>
             <div class='col-md-4' id='repeated-expenses-container'>
                 <h3>Repeated Expenses*</h3>
                 <p>
