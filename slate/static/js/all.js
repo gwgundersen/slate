@@ -9,7 +9,7 @@ $(function() {
         },
         // Disables sorting on load while allowing column sorting.
         aaSorting: [],
-        order: [[ 4, 'desc' ]],
+        order: [[ 3, 'desc' ]],
         fnInitComplete: function() {
             // Set width to 100% because DataTables cannot seem to correctly
             // set the width when table is hidden.
