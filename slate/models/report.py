@@ -88,6 +88,8 @@ class Report(object):
     def max_(self):
         """Returns the max expense in the reporting time period.
         """
+        if not self.expenses:
+            return 0.0
         return max([e.cost for e in self.expenses])
 
     @property

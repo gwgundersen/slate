@@ -14,16 +14,18 @@ def get_all_months():
     """
     conn = db.engine.connect()
     tuples = conn.execute(
-        'SELECT '\
-        '  MONTH(date_time), '\
-        '  YEAR(date_time), '\
-        '  SUM(cost) '\
-        'FROM expense '\
-        'JOIN `user` '\
-        '  ON `user`.id = expense.user_fk '\
-        'WHERE `user`.name = "%s" '\
-        'GROUP BY MONTH(date_time), YEAR(date_time) '\
-        'ORDER BY date_time ASC' % current_user.name
+        'SELECT '
+        '  MONTH(date_time), '
+        '  YEAR(date_time), '
+        '  SUM(cost) '
+        'FROM expense '
+        'JOIN `user` '
+        '  ON `user`.id = expense.user_fk '
+        'WHERE `user`.name = "%s" '
+        'GROUP BY '
+        '  MONTH(date_time), '
+        '  YEAR(date_time) '
+        'ORDER BY `date_time` ASC' % current_user.name
     )
     results = [{
         'view': '%s %s' % (calendar.month_name[c[0]], c[1]),
