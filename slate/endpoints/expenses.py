@@ -15,8 +15,6 @@ expenses = Blueprint('expenses',
                      __name__,
                      url_prefix='%s/expenses' % config.get('url', 'base'))
 
-GBP_TO_USD = 1.26
-
 
 # Add, edit, delete
 # ----------------------------------------------------------------------------
@@ -26,14 +24,11 @@ GBP_TO_USD = 1.26
 def add_expense():
     """Adds expense.
     """
-    cost, category, comment, errors, gbp = _validate_expense(request)
+    cost, category, comment, errors = _validate_expense(request)
 
     if len(errors) > 0:
         flash(errors[0], 'error')
         return redirect(url_for('index.index_page'))
-
-    if gbp:
-        cost *= GBP_TO_USD
 
     expense = models.Expense(cost, category, comment, current_user)
     db.session.add(expense)
@@ -52,7 +47,7 @@ def edit_expense():
                                expense=expense)
     if request.method == 'POST':
         id_ = request.form.get('id')
-        cost, category, comment, errors, _ = _validate_expense(request)
+        cost, category, comment, errors = _validate_expense(request)
         if len(errors) > 0:
             flash(errors[0], 'error')
             return redirect(url_for('expenses.edit_expense', id=id_))
@@ -148,10 +143,4 @@ def _validate_expense(request):
     if not comment:
         errors.append('Comment is required.')
 
-    # HTML forms do not automatically POST unchecked check boxes.
-    if 'gbp' in request.form:
-        gbp = True
-    else:
-        gbp = False
-
-    return cost, category, comment, errors, gbp
+    return cost, category, comment, errors
