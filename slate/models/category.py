@@ -16,6 +16,7 @@ class Category(db.Model):
                                cascade='all,delete',
                                backref=db.backref('category'))
     user_fk = db.Column(db.Integer, db.ForeignKey('user.id'))
+    budget = db.Column(db.Integer())
 
     def __init__(self, name):
         self.name = name

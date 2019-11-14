@@ -33,7 +33,7 @@ def add_expense():
     expense = models.Expense(cost, category, comment, current_user)
     db.session.add(expense)
     db.session.commit()
-    return redirect(url_for('expenses.expenses_default'))
+    return redirect(url_for('reports.report_pages'))
 
 
 @expenses.route('/edit', methods=['GET', 'POST'])

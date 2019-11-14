@@ -147,6 +147,9 @@ h1 span {
   /* Prevents footer from hitting bottombutton. */
   margin-bottom: 50px;
 }
+#index-page #report-btn {
+  margin-bottom: 15px;
+}
 #index-page .checkbox,
 #edit-page .checkbox {
   font-size: 14px;
@@ -213,9 +216,7 @@ h1 span {
 }
 #expenses-page #breakout,
 #report-page #breakout {
-  border-bottom: 1px solid #ddd;
-  margin-bottom: 30px;
-  padding-bottom: 30px;
+  margin-top: 30px;
 }
 #report-page table td {
   padding-right: 10px;
@@ -365,3 +366,4 @@ h1 span {
 .pagination > li > span {
   color: #1689E5;
 }
+/*# sourceMappingURL=main.css.map */

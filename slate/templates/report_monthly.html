@@ -26,70 +26,19 @@
     <div class='container'>
         <div class='row' id='breakout'>
             <div class='col-md-4'>
-                <h3>Overview</h3>
                 <table>
                     <tr>
                         <td><strong>Total</strong></td>
                         <td><strong class='highlight'>{{ report.total }}</strong></td>
                     </tr>
+                    {% for item in report.get_category_subtotals() %}
                     <tr>
-                        <td><strong>$ per day</strong></td>
-                        <td>${{ report.average }}</td>
+                        <td><strong>{{ item['category'] }}</strong></td><td>{{ item['subtotal'] }}</td><td>{{ item['budget'] }}</td>
                     </tr>
-                    <tr>
-                        <td><strong>Median</strong></td>
-                        <td>${{ report.median }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Max</strong></td>
-                        <td>${{ report.max_ }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Transactions</strong></td>
-                        <td>{{ report.count }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Transactions per day</strong></td>
-                        <td>{{ report.num_expenses_per_day }}</td>
-                    </tr>
+                    {% endfor %}
                 </table>
             </div>
-            {% if report.supports_food_analysis %}
-                <div class='col-md-4'>
-                    <h3>Food</h3>
-                    {% set food_total, food_categories, food_cost_per_meal = report.food %}
-                    <table>
-                        <tr>
-                            <td><strong>Total</strong></td>
-                            <td><strong class='highlight'>{{ food_total }}</strong></td>
-                        </tr>
-                        {% for category, subtotal in food_categories.items() %}
-                            </tr>
-                                <td><strong>{{ category|capitalize }}</strong></td>
-                                <td>{{ subtotal }}</td>
-                            <tr>
-                        {% endfor %}
-                        <tr>
-                            <td><strong>Per meal</strong></td>
-                            <td>{{ food_cost_per_meal }}</td>
-                        </tr>
-                    </table>
-                </div>
-            {% endif %}
         </div>
-    </div>
-    <div class='container'>
-        <div class='row'>
-            <div class='col-md-6'>
-                <div id='bar-chart-container'></div>
-            </div>
-            <div class='col-md-6'>
-                <div id='pie-chart-container'></div>
-            </div>
-        </div>
-    </div>
-    <div class='container'>
-        <div id='time-series-container'></div>
     </div>
 
     {% include 'footer.html' %}

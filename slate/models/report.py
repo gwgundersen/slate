@@ -116,9 +116,10 @@ class Report(object):
                         if e.category.name == category.name]
             subtotals.append({
                 'category': category.name.capitalize(),
-                'subtotal': round(sum(expenses), 2)
+                'subtotal': round(sum(expenses), 2),
+                'budget': category.budget
             })
-        return json.dumps(subtotals) if format == 'json' else subtotals
+        return subtotals
 
     def get_ordered_expenses(self, format='json'):
         """Returns expenses as JSON.
