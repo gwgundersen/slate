@@ -26,7 +26,7 @@ body {
 /* Tag and general class selectors.
  * -------------------------------- */
 a {
-  color: #1689E5;
+  color: #0066cc;
 }
 a:hover {
   color: #006eb3;
@@ -48,7 +48,7 @@ h1 span {
   font-size: 14px;
 }
 .highlight {
-  color: #D40000;
+  color: #b95e04;
 }
 .btn {
   border: none;
@@ -56,7 +56,7 @@ h1 span {
   font-size: 13px;
 }
 .btn.btn-primary {
-  background-color: #1689E5;
+  background-color: #0066cc;
 }
 .btn.btn-primary:active {
   background-color: #126db6;
@@ -70,7 +70,7 @@ h1 span {
   transition: background-color 200ms linear;
 }
 .btn.btn-info {
-  background-color: #7FB800;
+  background-color: #1aa1dd;
 }
 .btn.btn-info:active {
   background-color: #5c8500;
@@ -84,7 +84,7 @@ h1 span {
   transition: background-color 200ms linear;
 }
 .btn.btn-danger {
-  background-color: #D40000;
+  background-color: #b95e04;
 }
 .btn.btn-danger:active {
   background-color: #a10000;
@@ -103,7 +103,7 @@ h1 span {
 /* Element selectors.
  * ------------------ */
 #header {
-  background-color: #17406B;
+  background-color: #435562;
 }
 #header a,
 #header .navbar-right {
@@ -125,7 +125,7 @@ h1 span {
   padding-top: 10px;
 }
 #success-message {
-  background-color: #7FB800;
+  background-color: #1aa1dd;
   color: white;
   padding-top: 10px;
 }
@@ -336,7 +336,7 @@ h1 span {
 #footer .container button {
   border: none;
   background-color: transparent;
-  color: #1689E5;
+  color: #0066cc;
   font-size: 14px;
 }
 #footer .container button:hover {
@@ -359,11 +359,11 @@ h1 span {
 .pagination > .active > span,
 .pagination > .active > span:focus,
 .pagination > .active > span:hover {
-  background-color: #1689E5;
-  border-color: #1689E5;
+  background-color: #0066cc;
+  border-color: #0066cc;
 }
 .pagination > li > a,
 .pagination > li > span {
-  color: #1689E5;
+  color: #0066cc;
 }
 /*# sourceMappingURL=main.css.map */

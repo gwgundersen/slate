@@ -23,6 +23,7 @@ def get_all_months():
         '  ON `user`.id = expense.user_fk '
         'WHERE `user`.name = "%s" '
         'GROUP BY '
+        '  date_time, '
         '  MONTH(date_time), '
         '  YEAR(date_time) '
         'ORDER BY `date_time` ASC' % current_user.name

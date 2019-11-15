@@ -320,7 +320,7 @@ window.plotCategorySparklines = function (days, categorySubtotals) {
     }
 };
 
-window.plotCategorySubtotalsPerMonth = function (days, categorySubtotals) {
+window.m = function (days, categorySubtotals) {
 
     var series = [],
         categories = [];
