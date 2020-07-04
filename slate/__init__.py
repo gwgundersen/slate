@@ -2,7 +2,7 @@
 """
 
 from flask import Flask, g, session as flask_session, render_template
-from flask.ext.login import LoginManager, current_user, user_logged_out
+from flask.ext.login import LoginManager, current_user
 
 from flask.ext.sqlalchemy import SQLAlchemy
 

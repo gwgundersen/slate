@@ -1,7 +1,7 @@
 """Serves index page.
 """
 
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template
 from flask.ext.login import current_user
 
 from slate.config import config
@@ -20,8 +20,6 @@ def index_page():
         categories = []
     else:
         categories = current_user.categories
-    #error = request.args.get('error')
     return render_template('index.html',
-                           categories=categories)#,
-                           #error=error)
+                           categories=categories)
 

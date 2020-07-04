@@ -1,10 +1,15 @@
 /* Colors
  * ------ */
-@color-navy: #435562;
-@color-blue: #0066cc;
-@color-blue-dark: #006eb3;
-@color-green: #1aa1dd;
-@color-red: rgb(185, 94, 4);
+@color-shale: #435562;
+
+@btn-main: #1aa1dd;
+@btn-main-hover: #0170a0;
+
+@btn-secondary: #0066cc;
+@btn-secondary-hover: #00468c;
+
+@color-red: rgb(185, 94, 4, 0.5);
+@color-red-dark: rgb(185, 94, 4, 1);
 
 @font-family-base: arial, sans-serif;
 @font-family-accent: 'Roboto';
@@ -44,9 +49,9 @@ body {
 /* Tag and general class selectors.
  * -------------------------------- */
 a {
-  color: @color-blue;
-  &:hover {
-    color: @color-blue-dark;
+  color: @btn-main;
+          &:hover {
+    color: @btn-main-hover;
   }
 }
 
@@ -76,12 +81,12 @@ h1 {
   font-family: @font-family-base;
   font-size: @font-size-base;
   &.btn-primary {
-    background-color: @color-blue;
+    background-color: @btn-main;
     &:active {
-      background-color: #126db6;
+      background-color: @btn-main-hover;
     }
     &:hover {
-      background-color: #126db6;
+      background-color: @btn-main-hover;
       -webkit-transition: @background-transition;
       -moz-transition: @background-transition;
       -o-transition: @background-transition;
@@ -90,12 +95,12 @@ h1 {
     }
   }
   &.btn-info {
-    background-color: @color-green;
+    background-color: @btn-secondary;
     &:active {
-      background-color: #5c8500;
+      background-color: @btn-secondary-hover;
     }
     &:hover {
-      background-color: #4C6E00;
+      background-color: @btn-secondary-hover;
       -webkit-transition: @background-transition;
       -moz-transition: @background-transition;
       -o-transition: @background-transition;
@@ -106,10 +111,10 @@ h1 {
   &.btn-danger {
     background-color: @color-red;
     &:active {
-      background-color: #a10000;
+      background-color: @color-red-dark;
     }
     &:hover {
-      background-color: #a10000;
+      background-color: @color-red-dark;
       -webkit-transition: @background-transition;
       -moz-transition: @background-transition;
       -o-transition: @background-transition;
@@ -126,7 +131,7 @@ h1 {
 /* Element selectors.
  * ------------------ */
 #header {
-  background-color: @color-navy;
+  background-color: @color-shale;
   a,
   .navbar-right {
     color: white;
@@ -149,7 +154,7 @@ h1 {
 }
 
 #success-message {
-  background-color: @color-green;
+  background-color: @btn-secondary;
   color: white;
   padding-top: 10px;
 }
@@ -241,9 +246,18 @@ h1 {
 
 #report-page {
   table {
+    thead {
+      font-weight: bold;
+      td {
+        padding-bottom: 7px;
+      }
+    }
     td {
       padding-right: 10px;
     }
+  }
+  #total {
+    font-size: 18px;
   }
   #categories-timeseries-container {
     height: 500px;
@@ -378,7 +392,7 @@ h1 {
     button {
       border: none;
       background-color: transparent;
-      color: @color-blue;
+      color: @btn-main;
       font-size: 14px;
       &:hover {
         text-decoration: underline;
@@ -407,11 +421,11 @@ h1 {
 .pagination > .active > span,
 .pagination > .active > span:focus,
 .pagination > .active > span:hover {
-  background-color: @color-blue;
-  border-color: @color-blue;
+  background-color: @btn-main;
+  border-color: @btn-main;
 }
 
 .pagination > li > a,
 .pagination > li > span {
-  color: @color-blue;
+  color: @btn-main;
 }

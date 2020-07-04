@@ -26,10 +26,10 @@ body {
 /* Tag and general class selectors.
  * -------------------------------- */
 a {
-  color: #0066cc;
+  color: #1aa1dd;
 }
 a:hover {
-  color: #006eb3;
+  color: #0170a0;
 }
 h1 {
   /*border-bottom: 1px solid #eee;*/
@@ -56,13 +56,13 @@ h1 span {
   font-size: 13px;
 }
 .btn.btn-primary {
-  background-color: #0066cc;
+  background-color: #1aa1dd;
 }
 .btn.btn-primary:active {
-  background-color: #126db6;
+  background-color: #0170a0;
 }
 .btn.btn-primary:hover {
-  background-color: #126db6;
+  background-color: #0170a0;
   -webkit-transition: background-color 200ms linear;
   -moz-transition: background-color 200ms linear;
   -o-transition: background-color 200ms linear;
@@ -70,13 +70,13 @@ h1 span {
   transition: background-color 200ms linear;
 }
 .btn.btn-info {
-  background-color: #1aa1dd;
+  background-color: #0066cc;
 }
 .btn.btn-info:active {
-  background-color: #5c8500;
+  background-color: #00468c;
 }
 .btn.btn-info:hover {
-  background-color: #4C6E00;
+  background-color: #00468c;
   -webkit-transition: background-color 200ms linear;
   -moz-transition: background-color 200ms linear;
   -o-transition: background-color 200ms linear;
@@ -87,10 +87,10 @@ h1 span {
   background-color: #b95e04;
 }
 .btn.btn-danger:active {
-  background-color: #a10000;
+  background-color: #b95e04;
 }
 .btn.btn-danger:hover {
-  background-color: #a10000;
+  background-color: #b95e04;
   -webkit-transition: background-color 200ms linear;
   -moz-transition: background-color 200ms linear;
   -o-transition: background-color 200ms linear;
@@ -125,7 +125,7 @@ h1 span {
   padding-top: 10px;
 }
 #success-message {
-  background-color: #1aa1dd;
+  background-color: #0066cc;
   color: white;
   padding-top: 10px;
 }
@@ -218,8 +218,17 @@ h1 span {
 #report-page #breakout {
   margin-top: 30px;
 }
+#report-page table thead {
+  font-weight: bold;
+}
+#report-page table thead td {
+  padding-bottom: 7px;
+}
 #report-page table td {
   padding-right: 10px;
+}
+#report-page #total {
+  font-size: 18px;
 }
 #report-page #categories-timeseries-container {
   height: 500px;
@@ -336,7 +345,7 @@ h1 span {
 #footer .container button {
   border: none;
   background-color: transparent;
-  color: #0066cc;
+  color: #1aa1dd;
   font-size: 14px;
 }
 #footer .container button:hover {
@@ -359,11 +368,11 @@ h1 span {
 .pagination > .active > span,
 .pagination > .active > span:focus,
 .pagination > .active > span:hover {
-  background-color: #0066cc;
-  border-color: #0066cc;
+  background-color: #1aa1dd;
+  border-color: #1aa1dd;
 }
 .pagination > li > a,
 .pagination > li > span {
-  color: #0066cc;
+  color: #1aa1dd;
 }
 /*# sourceMappingURL=main.css.map */

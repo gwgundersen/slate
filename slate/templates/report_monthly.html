@@ -7,7 +7,6 @@
 
 {% include 'header.html' %}
 
-<script src="static/lib/highcharts.js"></script>
 <script src="static/js/report-base.js"></script>
 
 <div id='report-page'>
@@ -18,7 +17,7 @@
                     <p>{{ report.description }}</p>
                 </div>
                 <div class='col-md-2'>
-                    <a class='btn btn-info' href='expenses{{ report.query_string }}'>Back</a>
+                    <a class='btn btn-info' href='expenses{{ report.query_string }}'>Expenses</a>
                 </div>
             </div>
         </div>
@@ -26,27 +25,31 @@
     <div class='container'>
         <div class='row' id='breakout'>
             <div class='col-md-4'>
+                <p id='total'>
+                    <strong class='highlight'>Total spent: {{ report.total }}</strong>
+                </p>
                 <table>
-                    <tr>
-                        <td><strong>Total</strong></td>
-                        <td><strong class='highlight'>{{ report.total }}</strong></td>
-                    </tr>
+                    <thead>
+                        <td>Category</td>
+                        <td>Spent</td>
+                        <td>Remaining</td>
+                    </thead>
                     {% for item in report.get_category_subtotals() %}
                     <tr>
-                        <td><strong>{{ item['category'] }}</strong></td><td>{{ item['subtotal'] }}</td><td>{{ item['budget'] }}</td>
+                        <td>{{ item['category'] }}</td>
+                        <td>{{ item['subtotal'] }}</td>
+                        {% if item['budget'] %}
+                            <td>{{ item['budget'] - item['subtotal'] }} / {{ item['budget'] }}</td>
+                        {% else %}
+                            <td>N/A</td>
+                        {% endif %}
                     </tr>
                     {% endfor %}
                 </table>
             </div>
         </div>
     </div>
-
     {% include 'footer.html' %}
-
-    <script>
-        window.plotExpenses({{ report.get_category_subtotals()|safe }}, {{ report.get_ordered_expenses()|safe }});
-    </script>
-
 </div>
 </body>
 </html>
