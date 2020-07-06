@@ -24,7 +24,7 @@
     </div>
     <div class='container'>
         <div class='row' id='breakout'>
-            <div class='col-md-4'>
+            <div class='col-md-12'>
                 <p id='total'>
                     <strong class='highlight'>Total spent: {{ report.total }}</strong>
                 </p>
@@ -39,7 +39,7 @@
                         <td>{{ item['category'] }}</td>
                         <td>{{ item['subtotal'] }}</td>
                         {% if item['budget'] %}
-                            <td>{{ item['budget'] - item['subtotal'] }} / {{ item['budget'] }}</td>
+                            <td>{{ item['budget'] - item['subtotal'] }} ({{ item['budget'] }})</td>
                         {% else %}
                             <td>N/A</td>
                         {% endif %}
