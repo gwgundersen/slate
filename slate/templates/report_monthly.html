@@ -33,15 +33,18 @@
                         <td>Category</td>
                         <td>Spent</td>
                         <td>Remaining</td>
+                        <td>Budgeted</td>
                     </thead>
                     {% for item in report.get_category_subtotals() %}
                     <tr>
                         <td>{{ item['category'] }}</td>
                         <td>{{ item['subtotal'] }}</td>
                         {% if item['budget'] %}
-                            <td>{{ item['budget'] - item['subtotal'] }} ({{ item['budget'] }})</td>
+                            <td>{{ item['budget'] - item['subtotal'] }}</td>
+                            <td>{{ item['budget'] }}</td>
                         {% else %}
-                            <td>0</td>
+                            <td></td>
+                            <td></td>
                         {% endif %}
                     </tr>
                     {% endfor %}

@@ -2,7 +2,7 @@
 """
 
 import calendar
-import datetime
+from   datetime import datetime
 
 from flask.ext.login import current_user
 
@@ -15,18 +15,17 @@ def get_all_months():
     conn = db.engine.connect()
     tuples = conn.execute(
         'SELECT '
-        '  MONTH(date_time), '
-        '  YEAR(date_time), '
-        '  SUM(cost) '
-        'FROM expense '
+        '  MONTH(`date_time`), '
+        '  YEAR(`date_time`), '
+        '  SUM(`cost`) '
+        'FROM `expense` '
         'JOIN `user` '
-        '  ON `user`.id = expense.user_fk '
+        '  ON `user`.`id` = `expense`.`user_fk` '
         'WHERE `user`.name = "%s" '
         'GROUP BY '
-        '  date_time, '
-        '  MONTH(date_time), '
-        '  YEAR(date_time) '
-        'ORDER BY `date_time` ASC' % current_user.name
+        '  MONTH(`date_time`), '
+        '  YEAR(`date_time`) '
+        'ORDER BY MONTH(`date_time`) ASC' % current_user.name
     )
     results = [{
         'view': '%s %s' % (calendar.month_name[c[0]], c[1]),
@@ -34,7 +33,8 @@ def get_all_months():
         'year_num': c[1],
         'total': c[2]} for c in tuples.fetchall()]
     conn.close()
-    return results
+    return sorted(results,
+                  key=lambda obj: datetime.strptime(obj['view'], '%B %Y'))
 
 
 def get_category_subtotals(year=None, month=None):
@@ -42,7 +42,7 @@ def get_category_subtotals(year=None, month=None):
     """
     results = []
     if not (year and month):
-        now = datetime.datetime.now()
+        now = datetime.now()
         year = now.year
         month = now.month
     else:

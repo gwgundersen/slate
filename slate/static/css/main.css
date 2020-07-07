@@ -300,6 +300,9 @@ h1 span {
 .dataTables_wrapper div.dataTables_info {
   font-weight: bold;
 }
+#months-all-page {
+  padding-bottom: 50px;
+}
 #months-all-page h3 {
   border-bottom: 1px solid #ddd;
   margin-bottom: 10px;
