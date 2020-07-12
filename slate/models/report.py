@@ -31,6 +31,7 @@ class Report(object):
             self.year = int(year)
             self.month = int(month) if month else None
         self.category = category
+        self._BUDGET = 2632
 
     @property
     def description(self):
@@ -49,6 +50,12 @@ class Report(object):
         """Returns the sum of all expenses, formatted as a monetary value.
         """
         return _format_monetary_value(self._total)
+
+    @property
+    def remaining(self):
+        """Returns the remaining budget, formatted as a monetary value.
+        """
+        return _format_monetary_value(self._BUDGET - self._total)
 
     @property
     def count(self):
