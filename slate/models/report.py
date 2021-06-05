@@ -9,6 +9,7 @@ import json
 from flask_login import current_user
 
 from slate import dates, dbutils
+from slate.config import config
 from slate.endpoints import viewutils
 
 
@@ -30,8 +31,14 @@ class Report(object):
         else:
             self.year = int(year)
             self.month = int(month) if month else None
+
+            pre_2021 = self.year < 2021
+            pre_june2021 = True if self.month is None else self.month < 6
+            if pre_2021 or pre_june2021:
+                self._BUDGET = int(config.get('budgets', 'budget_phd'))
+            else:
+                self._BUDGET = int(config.get('budgets', 'budget_dc'))
         self.category = category
-        self._BUDGET = 2632
 
     @property
     def description(self):
