@@ -33,7 +33,7 @@ class Report(object):
             self.month = int(month) if month else None
 
             pre_2021 = self.year < 2021
-            pre_june2021 = True if self.month is None else self.month < 6
+            pre_june2021 = False if self.month is None else self.month < 6
             if pre_2021 or pre_june2021:
                 self._BUDGET = int(config.get('budgets', 'budget_phd'))
             else:
