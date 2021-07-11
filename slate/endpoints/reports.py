@@ -4,7 +4,7 @@
 import datetime
 
 from flask import Blueprint, render_template, request
-from flask.ext.login import login_required
+from flask_login import login_required
 
 from slate import models
 from slate.config import config

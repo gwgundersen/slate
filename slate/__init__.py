@@ -2,9 +2,9 @@
 """
 
 from flask import Flask, g, session as flask_session, render_template
-from flask.ext.login import LoginManager, current_user
+from flask_login import LoginManager, current_user
 
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 
 from slate.config import config
 

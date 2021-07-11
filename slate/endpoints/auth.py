@@ -3,7 +3,7 @@
 
 from flask import g, flash, Blueprint, request, redirect, render_template, \
     url_for
-from flask.ext.login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required
 import datetime
 
 from slate.config import config

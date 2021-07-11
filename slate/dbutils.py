@@ -4,7 +4,7 @@
 import calendar
 from   datetime import datetime
 
-from flask.ext.login import current_user
+from flask_login import current_user
 
 from slate import db
 

@@ -8,7 +8,7 @@ import zipfile
 
 from flask import Blueprint, flash, redirect, Response, render_template, \
     request, url_for
-from flask.ext.login import current_user, login_required, logout_user
+from flask_login import current_user, login_required, logout_user
 
 from slate import db, dbutils, models, crypto
 from slate.config import config
